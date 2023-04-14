@@ -1,0 +1,212 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+  <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+  <section class="promo-primary">
+    <picture>
+      <source srcset="assets/img/create_campanha.jpg" media="(min-width: 992px)"/><img class="img--bg" src="assets/img/create_campanha.jpg" alt="img"/>
+    </picture>
+    <div class="promo-primary__description"> <span>Nós podemos</span></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-auto">
+          <div class="align-container">
+            <div class="align-container__item"><span class="promo-primary__pre-title">Crie</span>
+              <h1 class="promo-primary__title"><span>Sua</span> <span> Campanha</span></h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- section start-->
+  <section class="section" style="text-align: center; padding-top: 100px;">
+    <div class="container">
+      <div class="row margin-bottom">
+        <div class="col-12">
+          <h2 class="heading__title"><span>Crie</span> <span> sua campanha</span></h2>
+        </div>
+      </div>
+      <!-- FORM START HERE-->
+      <section class="section contacts no-padding-top no-padding-bottom">
+        <div class="contacts-wrapper">
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-xl-10">
+                <form class="form message-form" [formGroup]="campanhaForm" autocomplete="on" (ngSubmit)="adicionarCampanha()">
+                  <!-- INÍCIO DO FORMULÁRIO -->
+                  <h6 class="form__title">Preencha com todas as informações</h6><span class="form__text">* campos obrigatórios</span>
+                  
+                  <!-- LINHA 1 -->
+                  <div class="row">
+                    <div class="col-lg-8">
+                      <input class="form__field" formControlName="titulo" placeholder="Título *" required="required" maxlength="100"/>
+                      <div class="text-danger" *ngIf="this.campanhaForm.get('titulo')?.hasError('required') && this.campanhaForm.get('titulo')?.touched">
+                        Campo obrigatório
+                      </div>
+                      <div class="text-danger" *ngIf="this.campanhaForm.get('titulo')?.hasError('minlength') && this.campanhaForm.get('titulo')?.touched">
+                        Mínimo 3 caracteres
+                      </div>
+                      <div class="text-danger" *ngIf="this.campanhaForm.get('titulo')?.hasError('maxlength') && this.campanhaForm.get('titulo')?.touched">
+                        Máximo 100 caracteres
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <select class="form__field" formControlName="tipo_campanha"  style="color: #6e6e6e;" required="required" (change)="tipoCampanhaSelected($event)">
+                        <option value="" disabled selected hidden>Tipo da Campanha *</option>
+                        <option value=1>Única</option>
+                        <option value=2>Recorrente</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <!-- LINHA 2 -->
+                  <div class="row">
+                    <div class="col-lg-3" *ngIf="!campanhaRecorrente">
+                      <select formControlName="duracao_dias" class="form__field" style="color: #6e6e6e;">
+                        <option value="" disabled selected hidden>Duração *</option>
+                        <option value=30>30 dias</option>
+                        <option value=60>60 dias</option>
+                        <option value=90>90 dias</option>
+                        <option value=120>120 dias</option>
+                        <option value=150>150 dias</option>
+                        <option value=180>180 dias</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-3" [ngClass]="{ 'col-lg-4': campanhaRecorrente}">
+                      <input class="form__field" formControlName="valor_desejado" placeholder="Valor Desejado *" required="required"/>
+                    </div>
+                    <div class="col-lg-6" [ngClass]="{ 'col-lg-8': campanhaRecorrente}">
+                      <input class="form__field" formControlName="descricao_curta" placeholder="Descrição Curta *" required="required"  maxlength="200">
+                    </div>
+                  </div> 
+                  
+                  <!-- LINHA 3 -->
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <textarea class="form__message form__field" name="descricao_longa" placeholder="Descrição Completa *" cols="40" rows="10" maxlength="5000"></textarea>
+                    </div>
+                  </div>
+                  
+                  <!-- LINHA 4 -->
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <input class="form__field" formControlName="video_url" placeholder="Link do vídeo (opcional)" maxlength="100">
+                    </div>
+                  </div>
+                  
+                  <!-- LINHA 5 -->
+                  <div class="row" style="text-align: left;">
+                    <div class="col-lg-12"> 
+                      <label class="form__checkbox-label"><span class="form__label-text">Li e aceito os <a href="#">Termos</a></span>
+                        <input class="form__input-checkbox" type="checkbox" formControlName="termos" (change)="onCheckboxChange($event)"/><span class="form__checkbox-mask form__checkbox-mask"></span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <!-- LINHA 6 -->
+                  <div class="row" style="text-align: left;">
+                    <div class="col-lg-12"> 
+                      <label class="form__checkbox-label"><span class="form__label-text">Quero realizar campanha <a href="#">Premium</a></span>
+                        <input class="form__input-checkbox" type="checkbox" formControlName="premium" (change)="onCheckboxChange($event)"/><span class="form__checkbox-mask form__checkbox-mask"></span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <h6 class="form__title" style="margin: 40px 0 30px;">Dados do Beneficiário</h6>
+                  
+                  <!-- LINHA 7 -->
+                  <div class="row" [formGroup]="beneficiarioForm">
+                    <div class="col-lg-6">
+                      <input class="form__field" formControlName="nome" placeholder="Nome Completo *" maxlength="100">
+                    </div>
+                    
+                    <div class="col-lg-3">
+                      <select class="form__field" formControlName="tipo" style="color: #6e6e6e;" required="required" (change)="documentSelected($event)">
+                        <option value="" disabled selected hidden>Documento *</option>
+                        <option value="CPF">CPF</option>
+                        <option value="CNPJ">CNPJ</option>
+                      </select>
+                    </div>
+                    
+                    <div class="col-lg-3">
+                      <input class="form__field" formControlName="documento" mask={{document_mask}}  required="required" placeholder="Número *"/>
+                    </div>
+                  </div>
+                  
+                  <h6 class="form__title" style="margin: 40px 0 30px;">Conta Bancária do Beneficiário</h6>
+                  
+                  <!-- LINHA 8 -->
+                  <div class="row" [formGroup]="beneficiarioForm">
+                    <div class="col-lg-8">
+                      <select class="form__field" formControlName="codigo_banco" style="color: #6e6e6e;" required="required">
+                        <option value="" disabled selected hidden>Código do Banco *</option>
+                        <option *ngFor="let banco of bancos" value="{{banco.value}}">{{banco.value}} - {{banco.label}}</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-4">
+                      <select class="form__field" formControlName="tipo_conta" style="color: #6e6e6e;" required="required">
+                        <option value="" disabled selected hidden>Tipo Conta *</option>
+                        <option value="checking">Corrente</option>
+                        <option value="savings">Poupança</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <!-- LINHA 9 -->
+                  <div class="row" [formGroup]="beneficiarioForm">
+                    <div class="col-lg-3">
+                      <input class="form__field" formControlName="numero_agencia" required="required" placeholder="Agência *" maxlength="4"/>
+                    </div>
+                    <div class="col-lg-3">
+                      <input class="form__field" formControlName="digito_agencia" required="required" placeholder="Dígito *" maxlength="1"/>
+                    </div>
+                    <div class="col-lg-3">
+                      <input class="form__field" formControlName="numero_conta" required="required" placeholder="Conta *" maxlength="13"/>
+                    </div>
+                    <div class="col-lg-3">
+                      <input class="form__field" formControlName="digito_conta" required="required" placeholder="Dígito *" maxlength="2"/>
+                    </div>
+                  </div>
+                  
+                  <!-- LINHA 10 -->
+                  <div class="row" style="margin-top: 20px;">
+                    <div class="col-lg-12">
+                      <h6 class="form__title" style="text-align: left;">Imagem de Capa</h6>
+                      <div class="custom-file">
+                        <input type="file" accept="image/jpeg,image/png" class="custom-file-input" id="arquivo" formControlName="arquivo" (change)="fileChangeEvent($event)">
+                        <label data-browse="Procurar" style="width: 400px" class="custom-file-label"></label>
+                        
+                        <div *ngIf='imagemNome' style="text-align: left;"><br><strong>Arquivo selecionado:</strong> {{ imagemNome }} <br></div>
+                      </div>
+                      
+                      <div *ngIf='imagemNome' class="row">
+                        <div class="col-lg-12">
+                          <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 2" [resizeToWidth]="800" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false"
+                          [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'center'" [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)"
+                          (loadImageFailed)="loadImageFailed()"></image-cropper>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- BOTÕES -->
+                  <div class="col-12" style="text-align: center; margin-top: 30px;">
+                    <input type="submit" value="Criar" class="form__submit">
+                    <button class="form__submit" type="reset" style="margin-left: 10px;">Limpar</button>
+                  </div>
+                  
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- FORM END HERE-->
+    </div>
+  </section>
+  <!-- section end-->
+  
+  
+</main>

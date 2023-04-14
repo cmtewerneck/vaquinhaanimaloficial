@@ -1,0 +1,165 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+    <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<main class="main">
+    <!-- section start-->
+    <section class="section" style="text-align: center; padding-top: 100px;">
+        <div class="container">
+            <div class="row margin-bottom">
+                <div class="col-12">
+                    <h2 class="heading__title"><span>Crie</span> <span> sua conta</span></h2>
+                </div>
+            </div>
+            <!-- FORM START HERE-->
+            <section class="section contacts no-padding-top">
+                <div class="contacts-wrapper">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-xl-10">
+                                <form class="form message-form" [formGroup]="registerForm" autocomplete="on">
+                                    <h6 class="form__title">Preencha com suas informações</h6><span class="form__text">* campos obrigatórios</span>
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <input class="form__field" formControlName="name" placeholder="Nome Completo *" required="required"/>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <input class="form__field" type="email" formControlName="email" placeholder="E-mail *" required="required"/>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <select formControlName="gender" required="required" class="form__field" style="color: #6e6e6e;">
+                                                <option value="" disabled selected hidden>Gênero *</option>
+                                                <option value="male">Masculino</option>
+                                                <option value="female">Feminino</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <select formControlName="type" required="required" class="form__field" style="color: #6e6e6e;">
+                                                <option value="" disabled selected hidden>Tipo *</option>
+                                                <option value="individual">Pessoa Física</option>
+                                                <option value="company">Pessoa Jurídica</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <select formControlName="document_type" (change)="documentSelected($event)" required="required" class="form__field" style="color: #6e6e6e;">
+                                                <option value="" disabled selected hidden>Documento *</option>
+                                                <option value="CPF">CPF</option>
+                                                <option value="CNPJ">CNPJ</option>
+                                                <option value="PASSPORT">Passaporte</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <input class="form__field" mask={{document_mask}} formControlName="document" required="required" placeholder="Número *"/>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <input class="form__field" type="date" formControlName="birthdate" required="required" style="color: #6e6e6e;"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <input class="form__field" formControlName="zip_code" mask="00000-000" placeholder="CEP *" required="required"/>
+                                        </div>
+                                        <div class="col-lg-9">
+                                            <input class="form__field" formControlName="line_1" placeholder="Endereço *" required="required"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <input class="form__field" formControlName="line_2" placeholder="Complemento"/>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <select formControlName="country" required="required" class="form__field" style="color: #6e6e6e;">
+                                                <option value="" disabled selected hidden>País *</option>
+                                                <option value="BR">Brasil</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <select formControlName="state" required="required" class="form__field" style="color: #6e6e6e;">
+                                                <option value="" disabled selected hidden>Estado *</option>
+                                                <option value="AC">Acre</option>
+                                                <option value="AL">Alagoas</option>
+                                                <option value="AP">Amapá</option>
+                                                <option value="AM">Amazonas</option>
+                                                <option value="BA">Bahia</option>
+                                                <option value="CE">Ceará</option>
+                                                <option value="DF">Distrito Federal</option>
+                                                <option value="ES">Espírito Santo</option>
+                                                <option value="GO">Goiás</option>
+                                                <option value="MA">Maranhão</option>
+                                                <option value="MT">Mato Grosso</option>
+                                                <option value="MS">Mato Grosso do Sul</option>
+                                                <option value="MG">Minas Gerais</option>
+                                                <option value="PA">Pará</option>
+                                                <option value="PB">Paraíba</option>
+                                                <option value="PR">Paraná</option>
+                                                <option value="PE">Pernambuco</option>
+                                                <option value="PI">Piauí</option>
+                                                <option value="RJ">Rio de Janeiro</option>
+                                                <option value="RN">Rio Grande do Norte</option>
+                                                <option value="RS">Rio Grande do Sul</option>
+                                                <option value="RO">Rondônia</option>
+                                                <option value="RR">Roraima</option>
+                                                <option value="SC">Santa Catarina</option>
+                                                <option value="SP">São Paulo</option>
+                                                <option value="SE">Sergipe</option>
+                                                <option value="TO">Tocantins</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <input class="form__field" formControlName="city" placeholder="Cidade *" required="required"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <h6 class="form__title" style="margin: 30px 0 20px 0;">Dados de usuário</h6>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <input class="form__field" formControlName="password" type={{passwordInputType}} placeholder="Senha *" required="required"/>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <input class="form__field" formControlName="confirmPassword" type={{passwordInputType}} placeholder="Confirmação de Senha *" required="required"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-12"> 
+                                            <label class="form__checkbox-label"><span class="form__label-text">Mostrar Senha</span>
+                                                <input class="form__input-checkbox" type="checkbox" name="value-select" (change)="onCheckboxChange($event)"/><span class="form__checkbox-mask form__checkbox-mask"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- BOTÕES -->
+                                    <div class="col-12" style="text-align: center; margin-top: 30px;">
+                                        <button class="form__submit" (click)="register()">Cadastrar</button>
+                                        <button class="form__submit" (click)="resetForm()" style="margin-left: 10px;">Limpar</button>
+                                    </div>
+                                    
+                                    <!-- Divider Text -->
+                                    <div class="form-group col-lg-12 mx-auto d-flex align-items-center" style="margin-top: 60px;">
+                                        <div class="border-bottom w-100 ml-5"></div>
+                                        <span class="px-2 text-muted font-weight-bold text-muted">OU</span>
+                                        <div class="border-bottom w-100 mr-5"></div>
+                                    </div>
+                                    
+                                    <h6 class="form__title" style="margin: 30px 0 20px 0;">Já possui conta?</h6>
+                                    <div class="col-12" style="text-align: center;">
+                                        <button class="form__submit" [routerLink]="['/auth/login']">Fazer Login</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- FORM END HERE-->
+        </div>
+    </section>
+    <!-- section end-->
+    
+    
+</main>

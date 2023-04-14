@@ -1,0 +1,78 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
+  <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<div class="container" data-aos="fade-up">
+    <div class="section-title" style="padding-top: 170px;">
+        <h2>Wallet</h2>
+    </div>
+</div>
+
+<section class="content">
+  <div class="container-fluid" style="padding-left: 50px; padding-right: 50px; margin-top: -50px;">
+      
+    <div *ngIf="cartoes && cartoes.data.length" class="table-responsive">
+          <table class="table table-hover" style="white-space: nowrap">
+            <thead class="thead-dark">
+              <tr>
+                <th>Numeração</th>
+                <th>Bandeira</th>
+                <th>Expira</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody *ngIf="cartoes && cartoes.data.length">
+              <tr *ngFor="let cartao of cartoes.data">
+                <td>{{ cartao.first_six_digits }}********{{ cartao.last_four_digits }}</td>
+                <td>{{ cartao.brand }}</td>
+                <td>{{ cartao.exp_month }}/{{ cartao.exp_year }}</td>
+                <td *ngIf="cartao.status == 'active'">Ativo</td>
+                <td *ngIf="cartao.status == 'inactive'">Inativo</td>
+                
+                <td>
+                  <a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deletar" (click)="salvarId(cartao.id)">
+                    <span>Remover</span>
+                  </a>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+      </div>
+
+      <div *ngIf="cartoes && cartoes.data.length != 0" style="text-align: center;">
+        <a [routerLink]="['/auth/add-card']" style="cursor: pointer; margin-top: 25px;" class="get-started-btn-success">Adicionar Cartão</a>
+      </div>
+
+      <div *ngIf="!cartoes || cartoes.data.length == 0" style="text-align: center;">
+        <h3 style="text-align: center;">Você não possui cartões cadastrados!</h3>
+        <a [routerLink]="['/auth/add-card']" style="cursor: pointer; margin-top: 25px;" class="get-started-btn-success">Adicionar Cartão</a>
+      </div>
+
+  </div>
+</section>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="deletar" tabindex="-1" role="dialog" aria-labelledby="deletar" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirma?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Seu cartão será removido!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="limparId()">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="deletarCartao()" data-dismiss="modal">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
