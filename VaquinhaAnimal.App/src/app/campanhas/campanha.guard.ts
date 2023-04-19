@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute } from '@angular/router';
+import { Router, CanActivate, ActivatedRoute, CanDeactivate } from '@angular/router';
 import { LocalStorageUtils } from '../_utils/localStorage';
+import { CriarComponent } from './criar/criar.component';
+import { FormGroup } from '@angular/forms';
 
 @Injectable()
-export class CampanhaGuard implements CanActivate {
+export class CampanhaGuard implements CanDeactivate<CriarComponent>, CanActivate {
 
     localStorageUtils = new LocalStorageUtils();
 
@@ -15,5 +17,13 @@ export class CampanhaGuard implements CanActivate {
         }
 
         return true;  
+    }
+
+    canDeactivate(component: CriarComponent): boolean {
+        if(component.campanhaForm.dirty){
+            return window.confirm('Eiii, não desista dessa campanha. Estamos aqui pra te ajudar!');
+        }
+
+        return true;
     }
 }

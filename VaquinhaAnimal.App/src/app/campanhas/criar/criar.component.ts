@@ -8,21 +8,24 @@ import { Campanha } from '../model/Campanha';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Bancos } from '../model/Bancos';
+import { CampanhaService } from '../campanha.service';
 
 @Component({
   selector: 'app-criar-campanhas',
   templateUrl: './criar.component.html'
 })
 export class CriarComponent implements OnInit {
-
+  
+  descricao_curta_card: string = "";
+  titulo_card: string = "";
   private _jsonURL = '../../../assets/bancos.json';
   document_mask: string = "000.000.000-00";
   document_toggle: string = "CPF";
-
+  
   get imagensArray(): FormArray {
     return <FormArray>this.campanhaForm.get('imagens');
   }
-
+  
   // VARIÁVEIS PARA IMAGEM
   imageChangedEvent: any = '';
   croppedImage: any = '';
@@ -35,27 +38,27 @@ export class CriarComponent implements OnInit {
   imageUrl!: string;
   imagemNome!: string;
   // FIM DA IMAGEM
-
+  
   errors: any[] = [];
   campanhaForm!: FormGroup;
   beneficiarioForm!: FormGroup;
   campanha!: Campanha;
   campanhaRecorrente: boolean = false;
   bancos: Bancos[] = [];
-
+  
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    // private campanhaService: CampanhaService,
+    private campanhaService: CampanhaService,
     private spinner: NgxSpinnerService, 
     private router: Router,
     private toastr: ToastrService) { 
       this.getJSON().subscribe(data => {
         this.bancos = data;
         console.log(data);
-       });
+      });
     }
-
+    
     public getJSON(): Observable<any> {
       return this.http.get(this._jsonURL);
     }
@@ -63,12 +66,12 @@ export class CriarComponent implements OnInit {
     ngOnInit(): void {
       this.createForm();
     }
-
+    
     createForm(){
       this.campanhaForm = this.fb.group({
         titulo: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
         tipo_campanha: ['', Validators.required],
-        duracao_dias: ['', Validators.required],
+        duracao_dias: [''],
         valor_desejado: ['', Validators.required],
         descricao_curta: ['', [Validators.required, Validators.maxLength(200), Validators.minLength(5)]],
         descricao_longa: ['', [Validators.required, Validators.maxLength(5000), Validators.minLength(500)]],
@@ -92,21 +95,21 @@ export class CriarComponent implements OnInit {
         })
       });
     }
-
+    
     documentSelected(event: any){
       console.log(event.target.value);
       
-      if(event.target.value == "CPF"){
+      if(event.target.value == "individual"){
         this.document_mask = "000.000.000-00";
         this.document_toggle = "CPF";
-      } else if(event.target.value == "CNPJ"){
+      } else if(event.target.value == "company"){
         this.document_mask = "00.000.000/0000-00"
         this.document_toggle = "CNPJ";
       } 
       
       this.setDocumentValidation();
     }
-
+    
     setDocumentValidation(){
       this.beneficiarioForm.controls['documento'].clearValidators();
       this.beneficiarioForm.controls['documento'].setValue("");
@@ -121,15 +124,24 @@ export class CriarComponent implements OnInit {
       
       console.log(this.beneficiarioForm);
     }
-
-    onCheckboxChange(event: any) {
-      if(event.target.checked){
-        
-      } else {
-        
-      }
+    
+    setTestForm(){
+      this.campanhaForm.controls['titulo'].setValue("Campanha Teste");
+      this.campanhaForm.controls['valor_desejado'].setValue(1000);
+      this.campanhaForm.controls['descricao_curta'].setValue("Campanha teste para a plataforma");
+      this.campanhaForm.controls['descricao_longa'].setValue("Campanha teste para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha testedasd para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha tasdasdasdasdasdasdasdasdasadasdasdadaseste para a plataformaCampanha teste para teste para a plataformaCampanha teste para a plataforma");
+      this.campanhaForm.controls['termos'].setValue(true);
+      this.campanhaForm.controls['premium'].setValue(false);
+      this.beneficiarioForm.controls['nome'].setValue("Thiago");
+      this.beneficiarioForm.controls['documento'].setValue("14043032781");
+      this.beneficiarioForm.controls['codigo_banco'].setValue("237");
+      this.beneficiarioForm.controls['tipo'].setValue("individual");
+      this.beneficiarioForm.controls['tipo_conta'].setValue("savings");
+      this.beneficiarioForm.controls['numero_agencia'].setValue("1234");
+      this.beneficiarioForm.controls['numero_conta'].setValue("1234");
+      this.beneficiarioForm.controls['digito_conta'].setValue("12");
     }
-
+    
     criaImagem(documento: any): FormGroup {
       return this.fb.group({
         id: [documento.id],
@@ -138,18 +150,23 @@ export class CriarComponent implements OnInit {
         arquivo_upload: ['']
       });
     }
-
+    
     adicionarImagem(){
       this.imagensArray.push(this.criaImagem({ id: "00000000-0000-0000-0000-000000000000" }));
     }
-
+    
     removerImagem(id: number){
       this.imagensArray.removeAt(id);
     }
     
     adicionarCampanha() {
       this.spinner.show();
-
+      
+      if(!this.campanhaForm.valid){
+        this.spinner.hide();
+        this.toastr.error("Preencha todos os campos requeridos", "Formulário inválido!");
+      }
+      
       if (this.campanhaForm.dirty && this.campanhaForm.valid) {
         this.campanha = Object.assign({}, this.campanha, this.campanhaForm.value);
         
@@ -157,18 +174,19 @@ export class CriarComponent implements OnInit {
           imagem.arquivo_upload = this.croppedImage.split(',')[1];
           imagem.arquivo = this.imagemNome;
         });
-
+        
         // CONVERSÕES
         if (this.campanha.data_inicio) { this.campanha.data_inicio = new Date(this.campanha.data_inicio); } else { this.campanha.data_inicio = null!; }
         if (this.campanha.data_encerramento) { this.campanha.data_encerramento = new Date(this.campanha.data_encerramento); } else { this.campanha.data_encerramento = null!; }
         this.campanha.termos = this.campanha.termos.toString() == "true";
         this.campanha.premium = this.campanha.premium.toString() == "true";
-
-        // this.campanhaService.novaCampanha(this.campanha)
-        // .subscribe(
-        //   sucesso => { this.processarSucesso(sucesso) },
-        //   falha => { this.processarFalha(falha) }
-        //   );
+        this.campanha.tipo_campanha = Number(this.campanha.tipo_campanha)
+        
+        this.campanhaService.novaCampanha(this.campanha)
+        .subscribe(
+          sucesso => { this.processarSucesso(sucesso) },
+          falha => { this.processarFalha(falha) }
+          );
         }
       }
       
@@ -190,11 +208,16 @@ export class CriarComponent implements OnInit {
         this.errors = fail.error.errors;
         this.toastr.error(this.errors[0], "Erro!");
       }
-
+      
       fileChangeEvent(event: any): void {
         this.imageChangedEvent = event;
         this.imagemNome = event.currentTarget.files[0].name;
         this.adicionarImagem();
+      }
+      
+      removerFoto(){
+        this.imagemNome = "";
+        this.removerImagem(0);
       }
       
       imageCropped(event: ImageCroppedEvent) {
@@ -212,15 +235,31 @@ export class CriarComponent implements OnInit {
       loadImageFailed() {
         this.errors.push('O formato do arquivo ' + this.imagemNome + ' não é aceito.');
       }
-
+      
       tipoCampanhaSelected(event: any){
-        console.log(event.target.value);
-        
         if(event.target.value == 1){
           this.campanhaRecorrente = false;
         } else if(event.target.value == 2){
           this.campanhaRecorrente = true;
           this.campanhaForm.get('duracao_dias')?.setValue(null);
         }
+
+        this.setDuracaoValidation(event.target.value)
       }
-}
+
+      setDuracaoValidation(tipo: number){
+        this.campanhaForm.controls['duracao_dias'].clearValidators();
+        
+        // TIPO == 1 - Campanha única, com duração
+        if (tipo == 1){
+          this.campanhaForm.controls['duracao_dias'].setValidators(Validators.required);
+        } 
+
+        this.campanhaForm.controls['duracao_dias'].updateValueAndValidity();
+      }
+    }
+
+
+
+
+    

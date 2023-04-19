@@ -10,13 +10,14 @@ import { ResetPasswordComponent } from './resetPassword/resetPassword.component'
 import { ResetPasswordUserComponent } from './resetPasswordUser/resetPasswordUser.component';
 import { AddCardComponent } from './wallet/addCard.component';
 import { MyWalletComponent } from './wallet/myWallet.component';
+import { AuthGuard } from './auth.guard';
 
 const authRouterConfig: Routes = [
     {
         path: '', component: AuthComponent,
         children: [
             { path: 'login', component: LoginComponent },
-            { path: 'register', component: RegisterComponent },
+            { path: 'register', component: RegisterComponent, canDeactivate: [AuthGuard] },
             { path: 'edit-user/:id', component: EditComponent, resolve: { user: AuthResolve }},
             { path: 'edit-password', component: EditPasswordComponent },
             { path: 'reset-password', component: ResetPasswordComponent },

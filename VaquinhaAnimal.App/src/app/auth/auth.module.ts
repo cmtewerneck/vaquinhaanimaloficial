@@ -18,6 +18,7 @@ import { AuthResolve } from './auth.resolve';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ResetPasswordComponent } from './resetPassword/resetPassword.component';
 import { ResetPasswordUserComponent } from './resetPasswordUser/resetPasswordUser.component';
+import { AuthGuard } from './auth.guard';
 
 @NgModule({
   imports: [
@@ -51,7 +52,8 @@ import { ResetPasswordUserComponent } from './resetPasswordUser/resetPasswordUse
   ],
   providers: [
     //AuthService,
-    AuthResolve
+    AuthResolve,
+    AuthGuard
   ]
 })
 export class AuthModule { }

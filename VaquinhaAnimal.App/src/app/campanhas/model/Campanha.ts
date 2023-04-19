@@ -3,7 +3,7 @@ export class Campanha {
     data_inicio?: Date;
     data_encerramento?: Date;
     duracao_dias?: number;
-    tipo_campanha!: number;
+    tipo_campanha!: TipoCampanhaEnum;
     titulo!: string;    
     descricao_curta!: string;
     descricao_longa!: string;

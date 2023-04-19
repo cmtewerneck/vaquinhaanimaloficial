@@ -2,7 +2,7 @@
 {
     public enum TipoCampanhaEnum
     {
-        RECORRENTE = 1,
-        UNICA = 2
+        UNICA = 1,
+        RECORRENTE = 2
     }
 }

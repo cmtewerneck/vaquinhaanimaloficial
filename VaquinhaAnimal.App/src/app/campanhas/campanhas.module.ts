@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe, registerLocaleData } from '@angular/common';
 import { CampanhasRoutingModule } from './campanhas.routing';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +12,11 @@ import { ListarTodasComponent } from './listar-todas/listar-todas.component';
 import { CampanhaGuard } from './campanha.guard';
 import { CriarComponent } from './criar/criar.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { CampanhaService } from './campanha.service';
+import { LOCALE_ID, DEFAULT_CURRENCY_CODE } from '@angular/core';
+import localePt from '@angular/common/locales/pt';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
+registerLocaleData(localePt);
 
 @NgModule({
   imports: [
@@ -19,6 +24,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     CampanhasRoutingModule,
     RouterModule,
     NgxSpinnerModule,
+    CurrencyMaskModule,
     ReactiveFormsModule,
     ImageCropperModule,
     NgxMaskModule.forChild(),
@@ -39,7 +45,17 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     CriarComponent
   ],
   providers: [
-    CampanhaGuard
+    CampanhaGuard,
+    CampanhaService,
+    CurrencyPipe,
+    {
+      provide: LOCALE_ID,
+      useValue: "pt-BR"
+    },
+    {
+      provide:  DEFAULT_CURRENCY_CODE,
+      useValue: 'BRL'
+    }
   ]
 })
 export class CampanhasModule { }

@@ -439,7 +439,7 @@ namespace VaquinhaAnimal.Api.V1.Controllers
                     Birthdate = registerUser.Birthdate,
                     Email = registerUser.Email,
                     Gender = registerUser.Gender,
-                    Address = new PagarmeClienteEndereco()
+                    Address = new PagarmeCliente_Endereco()
                     {
                         city = registerUser.City,
                         country = registerUser.Country,
@@ -448,10 +448,10 @@ namespace VaquinhaAnimal.Api.V1.Controllers
                         state = registerUser.State,
                         zip_code = registerUser.Zip_Code
                     },
-                    Phones = new PagarmeClienteTelefone()
+                    Phones = new PagarmeCliente_Telefone()
                     {
                         home_phone = null,
-                        mobile_phone = new PagarmeClienteTelefoneMobile()
+                        mobile_phone = new PagarmeCliente_Telefone_Mobile()
                         {
                             area_code = "21",
                             country_code = "55",
@@ -498,7 +498,7 @@ namespace VaquinhaAnimal.Api.V1.Controllers
                     Birthdate = applicationUser.Birthdate,
                     Email = applicationUser.Email,
                     Gender = applicationUser.Gender,
-                    Address = new PagarmeClienteEndereco()
+                    Address = new PagarmeCliente_Endereco()
                     {
                         city = applicationUser.City,
                         country = applicationUser.Country,
@@ -507,10 +507,10 @@ namespace VaquinhaAnimal.Api.V1.Controllers
                         state = applicationUser.State,
                         zip_code = applicationUser.Zip_Code
                     },
-                    Phones = new PagarmeClienteTelefone()
+                    Phones = new PagarmeCliente_Telefone()
                     {
                         home_phone = null,
-                        mobile_phone = new PagarmeClienteTelefoneMobile()
+                        mobile_phone = new PagarmeCliente_Telefone_Mobile()
                         {
                             area_code = "55",
                             country_code = "21",

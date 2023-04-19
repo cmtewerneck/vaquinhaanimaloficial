@@ -12,7 +12,8 @@ const campanhasRouterConfig: Routes = [
             { path: 'listar-todas', component: ListarTodasComponent },
             {
                 path: 'criar', component: CriarComponent,
-                canActivate: [CampanhaGuard]
+                canActivate: [CampanhaGuard],
+                canDeactivate: [CampanhaGuard]
             },
             { path: '**', redirectTo: 'listar-todas', pathMatch: 'full' }
         ]

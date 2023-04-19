@@ -33,10 +33,39 @@ namespace VaquinhaAnimal.Domain.Entities.Pagarme
         public DateTime Birthdate { get; set; }
 
         [JsonPropertyName("address")]
-        public PagarmeClienteEndereco Address { get; set; }
+        public PagarmeCliente_Endereco Address { get; set; }
 
         [JsonPropertyName("phones")]
-        public PagarmeClienteTelefone Phones { get; set; }
+        public PagarmeCliente_Telefone Phones { get; set; }
+    }
 
+    public class PagarmeCliente_Endereco
+    {
+        public string line_1 { get; set; }
+        public string line_2 { get; set; }
+        public string zip_code { get; set; }
+        public string city { get; set; }
+        public string state { get; set; }
+        public string country { get; set; }
+    }
+
+    public class PagarmeCliente_Telefone
+    {
+        public PagarmeCliente_Telefone_Home home_phone { get; set; }
+        public PagarmeCliente_Telefone_Mobile mobile_phone { get; set; }
+    }
+
+    public class PagarmeCliente_Telefone_Home
+    {
+        public string country_code { get; set; }
+        public string area_code { get; set; }
+        public string number { get; set; }
+    }
+
+    public class PagarmeCliente_Telefone_Mobile
+    {
+        public string country_code { get; set; }
+        public string area_code { get; set; }
+        public string number { get; set; }
     }
 }

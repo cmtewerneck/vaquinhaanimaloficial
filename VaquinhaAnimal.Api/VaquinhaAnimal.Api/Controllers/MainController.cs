@@ -18,7 +18,7 @@ namespace VaquinhaAnimal.Api.Controllers
         public readonly IUser AppUser;
         public HttpClient client = new HttpClient();
         public string urlPagarme = "https://api.pagar.me/core/v5/";
-        public string prod_key = "sk_Nw486n1sk3cjOJyj";
+        public string prod_key = "sk_a4Wenl3TjiRByvMo";
         public string test_key = "sk_test_yjeXypWSwEtVYn3M";
         protected Guid UsuarioId { get; set; }
         protected bool UsuarioAutenticado { get; set; }
