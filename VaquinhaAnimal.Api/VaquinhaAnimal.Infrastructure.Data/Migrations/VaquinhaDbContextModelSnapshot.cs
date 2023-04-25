@@ -114,6 +114,9 @@ namespace VaquinhaAnimal.Infrastructure.Data.Migrations
                     b.Property<int>("StatusCampanha")
                         .HasColumnType("int");
 
+                    b.Property<int>("TagCampanha")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Termos")
                         .HasColumnType("bit");
 

@@ -20,6 +20,9 @@ namespace VaquinhaAnimal.Domain.Entities
         [JsonPropertyName("data_inicio")]
         public DateTime? DataInicio { get; set; }
 
+        [JsonPropertyName("tag_campanha")]
+        public TagCampanhaEnum TagCampanha { get; set; }
+
         [JsonPropertyName("duracao_dias")]
         public int? DuracaoDias { get; set; } // SE FOR RECORRENTE NÃO TEM DURAÇÃo
 

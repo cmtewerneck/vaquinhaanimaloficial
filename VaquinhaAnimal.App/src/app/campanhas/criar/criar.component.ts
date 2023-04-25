@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Dimensions, ImageCroppedEvent, ImageTransform } from 'ngx-image-cropper';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { Campanha } from '../model/Campanha';
+import { Campanha, TagCampanhaEnum } from '../model/Campanha';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Bancos } from '../model/Bancos';
@@ -16,8 +16,10 @@ import { CampanhaService } from '../campanha.service';
 })
 export class CriarComponent implements OnInit {
   
+  imgSrc: string = "assets/img/causes_1.jpg";
   descricao_curta_card: string = "";
   titulo_card: string = "";
+  tag_campanha!: number;
   private _jsonURL = '../../../assets/bancos.json';
   document_mask: string = "000.000.000-00";
   document_toggle: string = "CPF";
@@ -71,6 +73,7 @@ export class CriarComponent implements OnInit {
       this.campanhaForm = this.fb.group({
         titulo: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
         tipo_campanha: ['', Validators.required],
+        tag_campanha: ['', Validators.required],
         duracao_dias: [''],
         valor_desejado: ['', Validators.required],
         descricao_curta: ['', [Validators.required, Validators.maxLength(200), Validators.minLength(5)]],
@@ -125,23 +128,6 @@ export class CriarComponent implements OnInit {
       console.log(this.beneficiarioForm);
     }
     
-    setTestForm(){
-      this.campanhaForm.controls['titulo'].setValue("Campanha Teste");
-      this.campanhaForm.controls['valor_desejado'].setValue(1000);
-      this.campanhaForm.controls['descricao_curta'].setValue("Campanha teste para a plataforma");
-      this.campanhaForm.controls['descricao_longa'].setValue("Campanha teste para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha testedasd para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha teste para a plataformaCampanha tasdasdasdasdasdasdasdasdasadasdasdadaseste para a plataformaCampanha teste para teste para a plataformaCampanha teste para a plataforma");
-      this.campanhaForm.controls['termos'].setValue(true);
-      this.campanhaForm.controls['premium'].setValue(false);
-      this.beneficiarioForm.controls['nome'].setValue("Thiago");
-      this.beneficiarioForm.controls['documento'].setValue("14043032781");
-      this.beneficiarioForm.controls['codigo_banco'].setValue("237");
-      this.beneficiarioForm.controls['tipo'].setValue("individual");
-      this.beneficiarioForm.controls['tipo_conta'].setValue("savings");
-      this.beneficiarioForm.controls['numero_agencia'].setValue("1234");
-      this.beneficiarioForm.controls['numero_conta'].setValue("1234");
-      this.beneficiarioForm.controls['digito_conta'].setValue("12");
-    }
-    
     criaImagem(documento: any): FormGroup {
       return this.fb.group({
         id: [documento.id],
@@ -181,6 +167,7 @@ export class CriarComponent implements OnInit {
         this.campanha.termos = this.campanha.termos.toString() == "true";
         this.campanha.premium = this.campanha.premium.toString() == "true";
         this.campanha.tipo_campanha = Number(this.campanha.tipo_campanha)
+        this.campanha.tag_campanha = Number(this.campanha.tag_campanha)
         
         this.campanhaService.novaCampanha(this.campanha)
         .subscribe(
@@ -210,30 +197,28 @@ export class CriarComponent implements OnInit {
       }
       
       fileChangeEvent(event: any): void {
-        this.imageChangedEvent = event;
+        console.log(event);
+
+        if (event.target.files && event.target.files[0]) {
+          this.imgSrc = URL.createObjectURL(event.target.files[0]);
+          console.log("URL IMAGEM CARD: " + this.imgSrc);
+        }
+
         this.imagemNome = event.currentTarget.files[0].name;
         this.adicionarImagem();
+
+        const reader = new FileReader();
+        reader.readAsDataURL(event.target.files[0]);
+        reader.onload = () => {
+            console.log("BASE64: " + reader.result);
+            this.croppedImage = reader.result;
+        };
       }
       
       removerFoto(){
         this.imagemNome = "";
         this.removerImagem(0);
-      }
-      
-      imageCropped(event: ImageCroppedEvent) {
-        this.croppedImage = event.base64;
-      }
-      
-      imageLoaded() {
-        this.showCropper = true;
-      }
-      
-      cropperReady(sourceImageDimensions: Dimensions) {
-        console.log('Cropper ready', sourceImageDimensions);
-      }
-      
-      loadImageFailed() {
-        this.errors.push('O formato do arquivo ' + this.imagemNome + ' não é aceito.');
+        this.imgSrc = "assets/img/causes_1.jpg";
       }
       
       tipoCampanhaSelected(event: any){

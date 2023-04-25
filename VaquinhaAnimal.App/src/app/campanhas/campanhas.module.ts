@@ -16,6 +16,10 @@ import { CampanhaService } from './campanha.service';
 import { LOCALE_ID, DEFAULT_CURRENCY_CODE } from '@angular/core';
 import localePt from '@angular/common/locales/pt';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
+import { SafePipe } from './safe.pipe';
+import { TagCampanhaPipe } from './tag_campanha.pipe';
+import { MinhasCampanhasComponent } from './minhas-campanhas/minhas-campanhas.component';
+import { StatusCampanhaPipe } from './status.campanha.pipe';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -42,7 +46,11 @@ registerLocaleData(localePt);
   declarations: [
     CampanhasComponent,
     ListarTodasComponent,
-    CriarComponent
+    CriarComponent,
+    MinhasCampanhasComponent,
+    SafePipe,
+    StatusCampanhaPipe,
+    TagCampanhaPipe
   ],
   providers: [
     CampanhaGuard,

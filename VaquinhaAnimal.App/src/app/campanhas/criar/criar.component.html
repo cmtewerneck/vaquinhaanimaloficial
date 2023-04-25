@@ -7,7 +7,7 @@
     <picture>
       <source srcset="assets/img/create_campanha.jpg" media="(min-width: 992px)"/><img class="img--bg" src="assets/img/create_campanha.jpg" alt="img"/>
     </picture>
-    <div class="promo-primary__description"> <span>Nós podemos</span></div>
+    <div class="promo-primary__description" style="bottom: 10px;"> <span>Nós podemos</span></div>
     <div class="container">
       <div class="row">
         <div class="col-auto">
@@ -111,11 +111,27 @@
                   
                   <!-- LINHA 4 -->
                   <div class="row" style="margin-top: 20px;">
-                    <div class="col-lg-12">
+                    <div class="col-lg-8">
                       <input class="form__field" style="margin-bottom: 0;" formControlName="video_url" placeholder="Link do vídeo (opcional)" maxlength="100">
                     </div>
-                  </div>
 
+                    <div class="col-lg-4 space-top-input">
+                      <select class="form__field" formControlName="tag_campanha" style="color: #6e6e6e; margin-bottom: 0;" required="required" [(ngModel)]="tag_campanha">
+                        <option value="" disabled selected hidden>Tag da Campanha *</option>
+                        <option value=1>Alimentação</option>
+                        <option value=2>Medicamentos</option>
+                        <option value=3>Cirurgias</option>
+                        <option value=4>Tratamentos</option>
+                        <option value=5>Acessórios</option>
+                        <option value=6>Puro Amor</option>
+                        <option value=7>Outros</option>
+                      </select>
+                      <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('tag_campanha')?.hasError('required') && this.campanhaForm.get('tag_campanha')?.touched">
+                        * Campo obrigatório
+                      </div>
+                    </div>
+                  </div>
+                  
                   <!-- LINHA 5 -->
                   <div class="row" style="text-align: left; margin-top: 20px;">
                     <div class="col-lg-12"> 
@@ -136,7 +152,7 @@
                       </label>
                     </div>
                   </div>
-
+                  
                   <!-- LINHA 7 -->
                   <div class="row" style="margin-top: 20px;">
                     <div class="col-lg-4"></div>
@@ -147,13 +163,13 @@
                         <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('valor_desejado')?.hasError('required') && this.campanhaForm.get('valor_desejado')?.touched">
                           * Campo obrigatório
                         </div>
+                      </div>
+                      <div class="col-lg-4"></div>
                     </div>
-                    <div class="col-lg-4"></div>
-                  </div>
                   </div>
                   
                   <h6 class="form__title" style="margin: 60px 0 30px;">Dados do Beneficiário</h6>
-
+                  
                   <div class="alert alert--warning alert--filled">
                     <div class="alert__icon">
                       <svg class="icon">
@@ -162,7 +178,7 @@
                     </div>
                     <p class="alert__text" style="font-size: 16px;"><strong style="font-size: 16px;">Atenção!</strong> O beneficiário deve ter no mínimo 18 anos. Caso contrário haverá problema na hora do repasse</p>
                   </div>
-
+                  
                   <!-- LINHA 8 -->
                   <div class="row" [formGroup]="beneficiarioForm" style="margin-top: 20px;">
                     <div class="col-lg-6">
@@ -256,29 +272,9 @@
                     </div>
                   </div>
                   
-                  <!-- LINHA 11 -->
-                  <!-- <div class="row" style="margin-top: 60px;">
-                    <div class="col-lg-12">
-                      <h6 class="form__title" style="text-align: left;">Imagem de Capa</h6>
-                      <div class="custom-file">
-                        <input type="file" accept="image/jpeg,image/png" class="custom-file-input" id="arquivo" formControlName="arquivo" (change)="fileChangeEvent($event)">
-                        <label data-browse="Procurar" style="width: 400px" class="custom-file-label"></label>
-                        
-                        <div *ngIf='imagemNome' style="text-align: left;"><br><strong>Arquivo selecionado:</strong> {{ imagemNome }} <br></div>
-                      </div>
-                      
-                      <div *ngIf='imagemNome' class="row">
-                        <div class="col-lg-12">
-                          <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 2" [resizeToWidth]="800" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false"
-                          [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'center'" [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)"
-                          (loadImageFailed)="loadImageFailed()"></image-cropper>
-                        </div>
-                      </div>
-                    </div>
-                  </div> -->
-
-                  <!-- LINHA TESTE -->
+                  <!-- LINHA 11 IMAGEM -->
                   <div class="row" style="margin-top: 60px;">
+                    <!-- CARD -->
                     <div class="col-lg-6">
                       <div class="causes-item causes-item--primary">
                         <div class="causes-item__body">
@@ -287,7 +283,7 @@
                             <p>{{descricao_curta_card}}</p>
                           </div>
                           <div class="causes-item__img">
-                            <img class="img--bg" src="assets/img/causes_1.jpg" alt="img"/>
+                            <div class="causes-item__badge" style="background-color: #49C2DF">{{tag_campanha | tagCampanha}}</div><img class="img--bg" [src]="imgSrc | safe" alt="img"/>
                           </div>
                           <div class="causes-item__lower">
                             <div class="progress-bar">
@@ -303,26 +299,32 @@
                         </div>
                       </div>
                     </div>
-
+                    
+                    <!-- UPLOAD IMAGEM -->
                     <div class="col-lg-6">
                       <h6 class="form__title" style="text-align: left;">Imagem de Capa (opcional)</h6>
                       <p style="text-align: left;">Campanhas com foto de capa e vídeo chamam muito mais atenção e podem ter mais facilidade para alcançar os objetivos</p>
-                      <input type="file" accept="image/jpeg,image/png" class="custom-file-input" id="arquivo" formControlName="arquivo" (change)="fileChangeEvent($event)">
+                      
+                      <div class="custom-file">
+                        <input type="file" accept="image/jpeg,image/png" class="custom-file-input" (change)="fileChangeEvent($event)">
                         <label data-browse="Procurar" style="width: 400px" class="custom-file-label"></label>
+                        
+                        <div *ngIf='imagemNome' style="text-align: left;"><br><strong>Arquivo selecionado:</strong> {{ imagemNome }} <br></div>
+                      </div>
+                      
                     </div>
                   </div>
                   
                   <div class="col-12" style="text-align: center; margin-top: 50px;">
                     <button class="form__submit" (click)="removerFoto()" style="margin-left: 10px;">Remover Foto</button>
                   </div>
-
+                  
                   <!-- BOTÕES -->
                   <div class="col-12" style="text-align: center; margin-top: 30px;">
                     <button class="form__submit" (click)="adicionarCampanha()" [disabled]="!campanhaForm.valid" [ngStyle]="{'background-color': !campanhaForm.valid ? '#D3D3D3' : 'white'}">Criar</button>
                     <button class="form__submit" type="reset" (click)="removerFoto()" style="margin-left: 10px;">Limpar</button>
-                    <!-- <button class="form__submit" (click)="setTestForm()" style="margin-left: 10px;">Setar</button> -->
                   </div>
-
+                  
                   <!-- <div>
                     {{this.campanhaForm.value|json}}
                   </div> -->

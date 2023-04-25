@@ -115,22 +115,25 @@ namespace VaquinhaAnimal.App.V1.Controllers
             }
             else
             {
-                //erro
+                NotificarErro("Erro ao validar documento.");
+                return CustomResponse();
             }
 
             var campanhaToAdd = _mapper.Map<Campanha>(campanhaViewModel);
 
             var result = await _campanhaService.Adicionar(campanhaToAdd);
 
-            if (result)
-            {
-                SendEmailCampanhaAdded(campanhaToAdd);
-            }
+            //if (result)
+            //{
+            //    SendEmailCampanhaAdded(campanhaToAdd);
+            //}
 
             return CustomResponse(campanhaViewModel);
         }
 
         [HttpPut("{id:guid}")]
+        [RequestFormLimits(MultipartBodyLengthLimit = 3145728)]
+        [RequestSizeLimit(3145728)]
         public async Task<ActionResult<CampanhaViewModel>> Atualizar(Guid id, CampanhaViewModel campanhaViewModel)
         {
             if (id != campanhaViewModel.Id)
@@ -232,6 +235,7 @@ namespace VaquinhaAnimal.App.V1.Controllers
             campanhaAtualizacao.DataInicio = campanhaViewModel.DataInicio;
             campanhaAtualizacao.DataEncerramento = campanhaViewModel.DataEncerramento;
             campanhaAtualizacao.DuracaoDias = campanhaViewModel.DuracaoDias;
+            campanhaAtualizacao.TagCampanha = campanhaViewModel.TagCampanha;
             campanhaAtualizacao.Titulo = campanhaViewModel.Titulo;
             campanhaAtualizacao.DescricaoCurta = campanhaViewModel.DescricaoCurta;
             campanhaAtualizacao.DescricaoLonga = campanhaViewModel.DescricaoLonga;

@@ -9,7 +9,6 @@ namespace VaquinhaAnimal.Domain.Interfaces
     public interface IUsuarioService 
     {
         Task<List<UsuarioListDTO>> ObterListaUsuariosAsync();
-        Task<UsuarioListDTO> GetUserDocumentAsync(string document);
         Task<UsuarioListDTO> GetUserEmailAsync(string email);
         Task<ApplicationUser> GetEmailById(Guid usuario_id);
     }

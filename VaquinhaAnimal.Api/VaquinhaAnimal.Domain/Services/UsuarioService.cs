@@ -14,8 +14,6 @@ namespace VaquinhaAnimal.Domain.Services
     public class UsuarioService : IUsuarioService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IUser _user;
-
 
         public UsuarioService(UserManager<ApplicationUser> userManager)
         {
@@ -32,27 +30,6 @@ namespace VaquinhaAnimal.Domain.Services
                    Nome = x.Name
                });
             return await query.ToListAsync();
-        }
-
-        public async Task<UsuarioListDTO> GetUserDocumentAsync(string document)
-        {
-            var query = _userManager.Users
-               .Where(x => x.Document == document)
-               .Select(x => new UsuarioListDTO
-               {
-                   Id = x.Id,
-                   Nome = x.Name
-               });
-
-            if (query.Count() >= 1)
-            {
-                return await query.FirstAsync();
-            } 
-            else
-            {
-                return null;
-            };
-
         }
 
         public async Task<UsuarioListDTO> GetUserEmailAsync(string email)

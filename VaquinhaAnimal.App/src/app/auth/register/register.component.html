@@ -12,120 +12,71 @@
                 </div>
             </div>
             <!-- FORM START HERE-->
-            <section class="section contacts no-padding-top">
+            <section class="section contacts no-padding-top no-padding-bottom">
                 <div class="contacts-wrapper">
                     <div class="container">
                         <div class="row justify-content-center">
-                            <div class="col-xl-10">
+                            <div class="col-xl-8">
                                 <form class="form message-form" [formGroup]="registerForm" autocomplete="on">
                                     <h6 class="form__title">Preencha com suas informações</h6><span class="form__text">* campos obrigatórios</span>
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <input class="form__field" formControlName="name" placeholder="Nome Completo *" required="required"/>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <input class="form__field" type="email" formControlName="email" placeholder="E-mail *" required="required"/>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <select formControlName="gender" required="required" class="form__field" style="color: #6e6e6e;">
-                                                <option value="" disabled selected hidden>Gênero *</option>
-                                                <option value="male">Masculino</option>
-                                                <option value="female">Feminino</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-3">
-                                            <select formControlName="type" required="required" class="form__field" style="color: #6e6e6e;">
-                                                <option value="" disabled selected hidden>Tipo *</option>
-                                                <option value="individual">Pessoa Física</option>
-                                                <option value="company">Pessoa Jurídica</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <select formControlName="document_type" (change)="documentSelected($event)" required="required" class="form__field" style="color: #6e6e6e;">
-                                                <option value="" disabled selected hidden>Documento *</option>
-                                                <option value="CPF">CPF</option>
-                                                <option value="CNPJ">CNPJ</option>
-                                                <option value="PASSPORT">Passaporte</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <input class="form__field" mask={{document_mask}} formControlName="document" required="required" placeholder="Número *"/>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <input class="form__field" type="date" formControlName="birthdate" required="required" style="color: #6e6e6e;"/>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row">
-                                        <div class="col-lg-3">
-                                            <input class="form__field" formControlName="zip_code" mask="00000-000" placeholder="CEP *" required="required"/>
-                                        </div>
-                                        <div class="col-lg-9">
-                                            <input class="form__field" formControlName="line_1" placeholder="Endereço *" required="required"/>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row">
-                                        <div class="col-lg-3">
-                                            <input class="form__field" formControlName="line_2" placeholder="Complemento"/>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <select formControlName="country" required="required" class="form__field" style="color: #6e6e6e;">
-                                                <option value="" disabled selected hidden>País *</option>
-                                                <option value="BR">Brasil</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <select formControlName="state" required="required" class="form__field" style="color: #6e6e6e;">
-                                                <option value="" disabled selected hidden>Estado *</option>
-                                                <option value="AC">Acre</option>
-                                                <option value="AL">Alagoas</option>
-                                                <option value="AP">Amapá</option>
-                                                <option value="AM">Amazonas</option>
-                                                <option value="BA">Bahia</option>
-                                                <option value="CE">Ceará</option>
-                                                <option value="DF">Distrito Federal</option>
-                                                <option value="ES">Espírito Santo</option>
-                                                <option value="GO">Goiás</option>
-                                                <option value="MA">Maranhão</option>
-                                                <option value="MT">Mato Grosso</option>
-                                                <option value="MS">Mato Grosso do Sul</option>
-                                                <option value="MG">Minas Gerais</option>
-                                                <option value="PA">Pará</option>
-                                                <option value="PB">Paraíba</option>
-                                                <option value="PR">Paraná</option>
-                                                <option value="PE">Pernambuco</option>
-                                                <option value="PI">Piauí</option>
-                                                <option value="RJ">Rio de Janeiro</option>
-                                                <option value="RN">Rio Grande do Norte</option>
-                                                <option value="RS">Rio Grande do Sul</option>
-                                                <option value="RO">Rondônia</option>
-                                                <option value="RR">Roraima</option>
-                                                <option value="SC">Santa Catarina</option>
-                                                <option value="SP">São Paulo</option>
-                                                <option value="SE">Sergipe</option>
-                                                <option value="TO">Tocantins</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <input class="form__field" formControlName="city" placeholder="Cidade *" required="required"/>
-                                        </div>
-                                    </div>
-                                    
-                                    <h6 class="form__title" style="margin: 30px 0 20px 0;">Dados de usuário</h6>
                                     
                                     <div class="row">
                                         <div class="col-lg-6">
-                                            <input class="form__field" formControlName="password" type={{passwordInputType}} placeholder="Senha *" required="required"/>
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="name" placeholder="Nome Completo *" required="required"/>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('name')?.hasError('required') && this.registerForm.get('name')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('name')?.hasError('minlength') && this.registerForm.get('name')?.touched">
+                                                Mínimo 5 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('name')?.hasError('maxlength') && this.registerForm.get('name')?.touched">
+                                                Máximo 64 caracteres
+                                            </div>
                                         </div>
+                                        <div class="col-lg-6 space-top-input">
+                                            <input class="form__field" style="margin-bottom: 0;" type="email" formControlName="email" placeholder="E-mail *" required="required"/>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('email')?.hasError('required') && this.registerForm.get('email')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('email')?.hasError('minlength') && this.registerForm.get('email')?.touched">
+                                                Mínimo 5 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('email')?.hasError('maxlength') && this.registerForm.get('email')?.touched">
+                                                Máximo 64 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('email')?.hasError('email') && this.registerForm.get('email')?.touched">
+                                                Formato inválido
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 20px;">
                                         <div class="col-lg-6">
-                                            <input class="form__field" formControlName="confirmPassword" type={{passwordInputType}} placeholder="Confirmação de Senha *" required="required"/>
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="password" type={{passwordInputType}} placeholder="Senha *" required="required"/>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('password')?.hasError('required') && this.registerForm.get('password')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('password')?.hasError('minlength') && this.registerForm.get('password')?.touched">
+                                                Mínimo 6 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('password')?.hasError('maxlength') && this.registerForm.get('password')?.touched">
+                                                Máximo 12 caracteres
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 space-top-input">
+                                            <input class="form__field" style="margin-bottom: 0;" formControlName="confirmPassword" type={{passwordInputType}} placeholder="Confirmação de Senha *" required="required"/>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('confirmPassword')?.hasError('required') && this.registerForm.get('confirmPassword')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('confirmPassword')?.hasError('minlength') && this.registerForm.get('confirmPassword')?.touched">
+                                                Mínimo 6 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('confirmPassword')?.hasError('maxlength') && this.registerForm.get('confirmPassword')?.touched">
+                                                Máximo 12 caracteres
+                                            </div>
                                         </div>
                                     </div>
                                     
-                                    <div class="row">
+                                    <div class="row" style="margin-top: 20px;">
                                         <div class="col-lg-12"> 
                                             <label class="form__checkbox-label"><span class="form__label-text">Mostrar Senha</span>
                                                 <input class="form__input-checkbox" type="checkbox" name="value-select" (change)="onCheckboxChange($event)"/><span class="form__checkbox-mask form__checkbox-mask"></span>
@@ -136,8 +87,7 @@
                                     <!-- BOTÕES -->
                                     <div class="col-12" style="text-align: center; margin-top: 30px;">
                                         <button class="form__submit" (click)="register()">Cadastrar</button>
-                                        <!-- <button class="form__submit" (click)="resetForm()" style="margin-left: 10px;">Limpar</button> -->
-                                        <button class="form__submit" type="reset" style="margin-left: 10px;">Limpar</button>
+                                        <button class="form__submit" (click)="resetForm()" style="margin-left: 10px;">Limpar</button>
                                     </div>
                                     
                                     <!-- Divider Text -->

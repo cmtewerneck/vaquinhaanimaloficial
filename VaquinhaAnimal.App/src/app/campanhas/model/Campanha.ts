@@ -3,6 +3,7 @@ export class Campanha {
     data_inicio?: Date;
     data_encerramento?: Date;
     duracao_dias?: number;
+    tag_campanha!: TagCampanhaEnum;
     tipo_campanha!: TipoCampanhaEnum;
     titulo!: string;    
     descricao_curta!: string;
@@ -48,6 +49,16 @@ export class Imagem {
 export enum TipoImagemEnum {
     Capa = 1,
     Interna = 2
+}
+
+export enum TagCampanhaEnum {
+    Alimentacao = 1,
+    Medicamentos = 2,
+    Cirurgias = 3,
+    Tratamentos = 4,
+    Acessórios = 5,
+    PuroAmor = 6,
+    Outros = 7
 }
 
 export enum TipoCampanhaEnum {

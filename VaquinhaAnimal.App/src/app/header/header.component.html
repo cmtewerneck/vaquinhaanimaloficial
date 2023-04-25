@@ -18,8 +18,11 @@
           <li class="aside-menu__item aside-menu__item--has-child">
             <a class="aside-menu__link" [routerLink]="['campanhas']"><span>Crie a sua</span></a>
           </li>
-          <li class="aside-menu__item aside-menu__item--has-child">
+          <!-- <li class="aside-menu__item aside-menu__item--has-child">
             <a class="aside-menu__link" [routerLink]="['artigos']"><span>Artigos</span></a>
+          </li> -->
+          <li class="aside-menu__item aside-menu__item--has-child">
+            <a class="aside-menu__link" [routerLink]="['contato']"><span>Adote</span></a>
           </li>
           <li class="aside-menu__item aside-menu__item--has-child">
             <a class="aside-menu__link" [routerLink]="['contato']"><span>Contato</span></a>
@@ -30,12 +33,16 @@
           <li class="aside-menu__item aside-menu__item--has-child" *ngIf="!userLogado">
             <a class="aside-menu__link" [routerLink]="['auth/register']"><span><strong>Cadastrar</strong></span></a>
           </li>
-          <li class="side-menu__item aside-menu__item--has-child" *ngIf="userLogado"><a class="aside-menu__link"><span><strong>{{nomeUsuario}}</strong></span></a>
+          <li class="aside-menu__item aside-menu__item--has-child" *ngIf="userLogado"><a class="aside-menu__link"><span><strong>{{nomeUsuario}}</strong></span></a>
             <!-- MENU USUÁRIO LOGADO -->
-            <ul class="aside-menu__sub-list">
-              <li><a href="about.html"><span>About</span></a></li>
-              <li><a href="typography.html"> <span>Typography</span></a></li>
-              <li><a href="donors.html"><span>Donors & Partners</span></a></li>
+            <ul class="aside-menu__sub-list sub-list">
+              <li><a href="about.html"><span>Dados Cadastrais</span></a></li>
+              <li><a href="typography.html"> <span>Alterar Senha</span></a></li>
+              <li><a href="campanhas/minhas-campanhas"><span>Minhas Campanhas</span></a></li>
+              <li><a href="donors.html"><span>Minhas Doações</span></a></li>
+              <li><a href="donors.html"><span>Minhas Assinaturas</span></a></li>
+              <li><a href="donors.html"><span>Carteira</span></a></li>
+              <li><a (click)="logout()" style="cursor: pointer;"><span>Sair</span></a></li>
             </ul>
             <!-- MENU USUÁRIO LOGADO FIM-->
           </li>
@@ -67,9 +74,9 @@
         </ul>
       </div>
       <div class="aside-dropdown__item">
-        <a class="button button--squared" href="#"><span>Donate</span></a>
         <a *ngIf="userLogado" class="button button--squared" (click)="logout()" style="margin-top: 10px; background-color: rgb(139, 0, 0); color: white; cursor: pointer;"><span>Sair</span></a>
         <a *ngIf="!userLogado" [routerLink]="['auth/login']" class="button button--squared" style="margin-top: 10px; background-color: rgb(1, 75, 194); color: white; cursor: pointer;"><span>Entrar</span></a>
+        <a *ngIf="!userLogado" [routerLink]="['auth/register']" class="button button--squared" style="margin-top: 10px; background-color: rgb(7, 207, 0); color: white; cursor: pointer;"><span>Cadastrar</span></a>
       </div>
     </div>
   </div>
@@ -115,7 +122,7 @@
         </div>
         <div class="col-auto">
           <!-- main menu start-->
-          <nav>
+          <nav *ngIf="emailUsuario != 'contato@vaquinhaanimal.com.br'">
             <ul class="main-menu">
               <li class="main-menu__item main-menu__item--has-child">
                 <a class="main-menu__link" [routerLink]="['']"><span>Início</span></a>
@@ -126,8 +133,11 @@
               <li class="main-menu__item main-menu__item--has-child">
                 <a class="main-menu__link" [routerLink]="['campanhas/criar']"><span>Crie a sua</span></a>
               </li>
-              <li class="main-menu__item main-menu__item--has-child">
+              <!-- <li class="main-menu__item main-menu__item--has-child">
                 <a class="main-menu__link" [routerLink]="['artigos']"><span>Artigos</span></a>
+              </li> -->
+              <li class="main-menu__item main-menu__item--has-child">
+                <a class="main-menu__link" [routerLink]="['adote']"><span>Adote</span></a>
               </li>
               <li class="main-menu__item main-menu__item--has-child">
                 <a class="main-menu__link" [routerLink]="['contato']"><span>Contato</span></a>
@@ -139,6 +149,24 @@
                 <a class="main-menu__link" [routerLink]="['auth/register']"><span><strong>Cadastrar</strong></span></a>
               </li>
               <li class="main-menu__item main-menu__item--has-child" *ngIf="userLogado"><a class="main-menu__link"><span><strong>{{nomeUsuario}}</strong></span></a>
+                <!-- MENU USUÁRIO LOGADO -->
+                <ul class="main-menu__sub-list sub-list">
+                  <li><a href="about.html"><span>Dados Cadastrais</span></a></li>
+                  <li><a href="typography.html"> <span>Alterar Senha</span></a></li>
+                  <li><a href="campanhas/minhas-campanhas"><span>Minhas Campanhas</span></a></li>
+                  <li><a href="donors.html"><span>Minhas Doações</span></a></li>
+                  <li><a href="donors.html"><span>Minhas Assinaturas</span></a></li>
+                  <li><a href="donors.html"><span>Carteira</span></a></li>
+                  <li><a (click)="logout()" style="color: white; cursor: pointer;"><span>Sair</span></a></li>
+                </ul>
+                <!-- MENU USUÁRIO LOGADO FIM-->
+              </li>
+            </ul>
+          </nav>
+
+          <nav *ngIf="emailUsuario == 'contato@vaquinhaanimal.com.br'">
+            <ul class="main-menu">
+              <li class="main-menu__item main-menu__item--has-child" *ngIf="userLogado"><a class="main-menu__link"><span><strong>Admin</strong></span></a>
                 <!-- MENU USUÁRIO LOGADO -->
                 <ul class="main-menu__sub-list sub-list">
                   <li><a href="about.html"><span>About</span></a></li>

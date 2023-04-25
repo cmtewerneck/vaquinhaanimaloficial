@@ -71,45 +71,6 @@ namespace VaquinhaAnimal.Api.V1.Controllers
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            if (registerUser.Document_Type == "CPF"){
-                if (registerUser.Document.Length != CpfValidacao.TamanhoCpf)
-                {
-                    NotificarErro("Quantidade de caracteres do CPF inválida.");
-                    return CustomResponse();
-                }
-
-                var cpfValido = CpfValidacao.Validar(registerUser.Document);
-
-                if (cpfValido == false){
-                    NotificarErro("CPF inválido.");
-                    return CustomResponse();
-                }
-            }
-
-            if (registerUser.Document_Type == "CNPJ")
-            {
-                if (registerUser.Document.Length != CnpjValidacao.TamanhoCnpj)
-                {
-                    NotificarErro("Quantidade de caracteres do CNPJ inválida.");
-                    return CustomResponse();
-                }
-
-                var cnpjValido = CnpjValidacao.Validar(registerUser.Document);
-
-                if (cnpjValido == false)
-                {
-                    NotificarErro("CNPJ inválido.");
-                    return CustomResponse();
-                }
-            }
-
-            var userSameDocument = await _usuarioService.GetUserDocumentAsync(registerUser.Document);
-            if (userSameDocument != null)
-            {
-                NotificarErro("Já existe um usuário com este documento");
-                return CustomResponse();
-            }
-
             var userSameEmail = await _usuarioService.GetUserEmailAsync(registerUser.Email);
             if (userSameEmail != null)
             {
@@ -132,17 +93,6 @@ namespace VaquinhaAnimal.Api.V1.Controllers
                 EmailConfirmed = true,
                 Name = registerUser.Name,
                 Code = "",
-                Document = registerUser.Document,
-                Type = registerUser.Type,
-                Document_Type = registerUser.Document_Type,
-                Gender = registerUser.Gender,
-                Line_1 = registerUser.Line_1,
-                Line_2 = registerUser.Line_2,
-                Birthdate = registerUser.Birthdate,
-                Zip_Code = registerUser.Zip_Code,
-                City = registerUser.City,
-                State = registerUser.State,
-                Country = registerUser.Country,
                 Foto = registerUser.Foto,
                 Codigo_Pagarme = idPagarme
             };
@@ -190,50 +140,9 @@ namespace VaquinhaAnimal.Api.V1.Controllers
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            if (user.Document_Type == "CPF")
-            {
-                if (user.Document.Length != CpfValidacao.TamanhoCpf)
-                {
-                    NotificarErro("Quantidade de caracteres inválida.");
-                    return CustomResponse();
-                }
-
-                var cpfValido = CpfValidacao.Validar(user.Document);
-
-                if (cpfValido == false)
-                {
-                    NotificarErro("CPF inválido.");
-                    return CustomResponse();
-                }
-            }
-
-            if (user.Document_Type == "CNPJ")
-            {
-                if (user.Document.Length != CnpjValidacao.TamanhoCnpj)
-                {
-                    NotificarErro("Quantidade de caracteres inválida.");
-                    return CustomResponse();
-                }
-
-                var cnpjValido = CnpjValidacao.Validar(user.Document);
-
-                if (cnpjValido == false)
-                {
-                    NotificarErro("CNPJ inválido.");
-                    return CustomResponse();
-                }
-            }
-
             var userToBeUpdated = await _userManager.FindByIdAsync(_user.GetUserId().ToString());
-
-            var userSameDocument = await _usuarioService.GetUserDocumentAsync(user.Document);
+            
             var userSameEmail = await _usuarioService.GetUserEmailAsync(user.Email);
-
-            if (userSameDocument != null && userToBeUpdated.Id != userSameDocument.Id)
-            {
-                NotificarErro("Já existe um usuário com este documento");
-                return CustomResponse();
-            }
 
             if (userSameEmail != null && userToBeUpdated.Id != userSameEmail.Id)
             {
@@ -242,21 +151,8 @@ namespace VaquinhaAnimal.Api.V1.Controllers
             }
 
             userToBeUpdated.Name = user.Name;
-            userToBeUpdated.Zip_Code = user.Zip_Code;
             userToBeUpdated.Email = user.Email;
-            userToBeUpdated.Country = user.Country;
-            userToBeUpdated.State = user.State;
-            userToBeUpdated.City = user.City;
-            userToBeUpdated.Gender = user.Gender;
-            userToBeUpdated.Birthdate = user.Birthdate;
             userToBeUpdated.Code = user.Code;
-            userToBeUpdated.Document_Type = user.Document_Type;
-            userToBeUpdated.Document = user.Document;
-            userToBeUpdated.Line_1 = user.Line_1;
-            userToBeUpdated.Line_2 = user.Line_2;
-            userToBeUpdated.Mobile_phone_area_code = user.Mobile_phone_area_code;
-            userToBeUpdated.Mobile_phone_country_code = user.Mobile_phone_country_code;
-            userToBeUpdated.Mobile_phone_number = user.Mobile_phone_number;
 
             var resultPagarme = await EditClientPagarme(user);
 
@@ -433,31 +329,7 @@ namespace VaquinhaAnimal.Api.V1.Controllers
                 {
                     Name = registerUser.Name,
                     Code = "Cliente_" + registerUser.Name.Split(" ", 10, StringSplitOptions.None)[0],
-                    Document = registerUser.Document,
-                    Type = "individual",
-                    Document_Type = registerUser.Document_Type,
-                    Birthdate = registerUser.Birthdate,
-                    Email = registerUser.Email,
-                    Gender = registerUser.Gender,
-                    Address = new PagarmeCliente_Endereco()
-                    {
-                        city = registerUser.City,
-                        country = registerUser.Country,
-                        line_1 = registerUser.Line_1,
-                        line_2 = registerUser.Line_2,
-                        state = registerUser.State,
-                        zip_code = registerUser.Zip_Code
-                    },
-                    Phones = new PagarmeCliente_Telefone()
-                    {
-                        home_phone = null,
-                        mobile_phone = new PagarmeCliente_Telefone_Mobile()
-                        {
-                            area_code = "21",
-                            country_code = "55",
-                            number = "987987987"
-                        },
-                    }
+                    Email = registerUser.Email
                 };
 
                 HttpResponseMessage response = await client.PostAsJsonAsync(urlPagarme + "customers", clienteToAdd);
@@ -465,7 +337,7 @@ namespace VaquinhaAnimal.Api.V1.Controllers
 
                 var clienteRecebido = JsonConvert.DeserializeObject<PagarmeCliente>(responseBody);
 
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
                     return clienteRecebido.Id;
                 } 
@@ -492,31 +364,7 @@ namespace VaquinhaAnimal.Api.V1.Controllers
                 {
                     Name = applicationUser.Name,
                     Code = "Cliente_" + applicationUser.Name.Split(" ", 10, StringSplitOptions.None)[0],
-                    Document = applicationUser.Document,
-                    Type = "individual",
-                    Document_Type = applicationUser.Document_Type,
-                    Birthdate = applicationUser.Birthdate,
-                    Email = applicationUser.Email,
-                    Gender = applicationUser.Gender,
-                    Address = new PagarmeCliente_Endereco()
-                    {
-                        city = applicationUser.City,
-                        country = applicationUser.Country,
-                        line_1 = applicationUser.Line_1,
-                        line_2 = applicationUser.Line_2,
-                        state = applicationUser.State,
-                        zip_code = applicationUser.Zip_Code
-                    },
-                    Phones = new PagarmeCliente_Telefone()
-                    {
-                        home_phone = null,
-                        mobile_phone = new PagarmeCliente_Telefone_Mobile()
-                        {
-                            area_code = "55",
-                            country_code = "21",
-                            number = "987987987"
-                        },
-                    }
+                    Email = applicationUser.Email
                 };
 
                 HttpResponseMessage response = await client.PutAsJsonAsync(urlPagarme + "customers/" + customerId, clienteToEdit);
@@ -557,8 +405,8 @@ namespace VaquinhaAnimal.Api.V1.Controllers
                     "<img src='https://www.doadoresespeciais.com.br/assets/img/logo.png' style='width: 300px;'/><br/><br/>" +
                     "<h2>Usuário criado na plataforma</h2></br></br> <h3><u>Confira os detalhes abaixo: </u></h2><br/><br/> " +
                     "<p><b>Nome: </b>" + userAdded.Name + "</p>" +
-                    "<p><b>Tipo de Documento: </b>" + userAdded.Document_Type + "</p>" +
-                    "<p><b>Documento: </b>" + userAdded.Document + " dias </p>";
+                    "<p><b>Tipo de Documento: </b>" + "" + "</p>" +
+                    "<p><b>Documento: </b>" + "" + " dias </p>";
 
                 SmtpClient smtp = new SmtpClient();
                 smtp.Host = "smtp.zoho.com";

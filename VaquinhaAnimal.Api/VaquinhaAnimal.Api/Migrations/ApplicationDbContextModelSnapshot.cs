@@ -162,12 +162,6 @@ namespace VaquinhaAnimal.Api.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Birthdate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
@@ -176,15 +170,6 @@ namespace VaquinhaAnimal.Api.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Document")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Document_Type")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -197,38 +182,11 @@ namespace VaquinhaAnimal.Api.Migrations
                     b.Property<string>("Foto")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Home_phone_area_code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Home_phone_country_code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Home_phone_number")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Line_1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Line_2")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Mobile_phone_area_code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mobile_phone_country_code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mobile_phone_number")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -253,21 +211,12 @@ namespace VaquinhaAnimal.Api.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("Zip_Code")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

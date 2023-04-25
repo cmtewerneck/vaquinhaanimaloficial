@@ -3,25 +3,9 @@ export class User {
     password!: string;
     name!: string;
     email!: string;
-    document!: string;
-    document_type!: string;
-    type!: string;
-    gender!: string;
-    birthdate!: Date;
-    line_1!: string;
-    line_2!: string;
-    zip_code!: string;
-    city!: string;
-    state!: string;
-    country!: string;
     foto!: string;
     fotoUpload!: string;
 }
-
-// document --> Numeros, máximo 16caracteres para cpf e cnpj e 50 para passaporte
-// document_type --> CPF / CNPJ / PASSPORT
-// type --> individual para PF e company para PJ
-// gender --> male / female
 
 export class ResetPassword {
     username!: string;

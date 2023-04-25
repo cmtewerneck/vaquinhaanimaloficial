@@ -7,7 +7,7 @@
       <picture>
         <source srcset="assets/img/causes.jpg" media="(min-width: 992px)"/><img class="img--bg" src="assets/img/causes.jpg" alt="img"/>
       </picture>
-      <div class="promo-primary__description"> <span>Salve um pet</span></div>
+      <div class="promo-primary__description" style="bottom: 10px;"> <span>Salve um pet</span></div>
       <div class="container">
         <div class="row">
           <div class="col-auto">
@@ -24,168 +24,59 @@
     <section class="section causes-inner">
       <div class="container">
         <div class="row offset-margin">
-          <div class="col-md-6 col-lg-4">
+          
+          <!-- CARD REPETIDOR -->
+          <div class="col-md-6 col-lg-4" *ngFor="let campanha of campanhasPaginado.data">
             <div class="causes-item causes-item--primary">
               <div class="causes-item__body">
                 <div class="causes-item__top">
-                  <h6 class="causes-item__title"> <a href="cause-details.html">Water Delivery in Africa</a></h6>
-                  <p>Sharksucker sea toad candiru rocket danio tilefish stingray deepwater stingray Sacramento splittail</p>
+                  <h6 class="causes-item__title"> <a href="cause-details.html">{{campanha.titulo}}</a></h6>
+                  <p>{{campanha.descricao_curta}}</p>
                 </div>
                 <div class="causes-item__img">
-                  <div class="causes-item__badge" style="background-color: #49C2DF">Water Delivery</div><img class="img--bg" src="assets/img/causes_1.jpg" alt="img"/>
+                  <div class="causes-item__badge" style="background-color: #49C2DF">{{campanha.tag_campanha | tagCampanha}}</div>
+                  <!-- <img class="img--bg" src="assets/img/causes_1.jpg" alt="img"/> -->
+                  <img *ngIf="campanha.imagens.length != 0" class="img--bg" src="{{ imagens }}{{ campanha.imagens[0].arquivo }}">
+                  <img *ngIf="campanha.imagens.length == 0" class="img--bg" src="assets/img/noImage.png" alt="Card image cap">
                 </div>
                 <div class="causes-item__lower">
                   <div class="progress-bar">
-                    <div class="progress-bar__inner" style="width: 78%;">
-                      <div class="progress-bar__value">78%</div>
+                    <div class="progress-bar__inner" [ngStyle]="{width: getWidth(campanha.percentual_arrecadado!)}">
+                      <div class="progress-bar__value">{{campanha.percentual_arrecadado!}}%</div>
                     </div>
                   </div>
                   <div class="causes-item__details-holder">
-                    <div class="causes-item__details-item"><span>Goal: </span><span>25 000$</span></div>
-                    <div class="causes-item__details-item text-right"><span>Pledged: </span><span>20 350$</span></div>
+                    <div class="causes-item__details-item"><span>Objetivo: </span><span>{{campanha.valor_desejado | currency}}</span></div>
+                    <div class="causes-item__details-item text-right"><span>Arrecadado: </span><span>{{campanha.total_arrecadado | currency}}</span></div>
                   </div>
                 </div>
-              </div><a class="button causes-item__button button--primary" href="#">+ Donate</a>
+                <div style="text-align: center;"><a class="button causes-item__button button--primary" style="margin-left: 0;" href="#">+ Quero Ajudar</a></div>
+              </div>
+              <!-- <div style="text-align: center;"><a class="button causes-item__button button--primary" style="margin-left: 0;" href="#">+ Quero Ajudar</a></div> -->
             </div>
           </div>
-          <div class="col-md-6 col-lg-4">
-            <div class="causes-item causes-item--primary">
-              <div class="causes-item__body">
-                <div class="causes-item__top">
-                  <h6 class="causes-item__title"> <a href="cause-details.html">Health in other Countries</a></h6>
-                  <p>Sharksucker sea toad candiru rocket danio tilefish stingray deepwater stingray Sacramento splittail</p>
-                </div>
-                <div class="causes-item__img">
-                  <div class="causes-item__badge" style="background-color: #F36F8F">Medicine</div><img class="img--bg" src="assets/img/causes_2.jpg" alt="img"/>
-                </div>
-                <div class="causes-item__lower">
-                  <div class="progress-bar">
-                    <div class="progress-bar__inner" style="width: 23%;">
-                      <div class="progress-bar__value">23%</div>
-                    </div>
-                  </div>
-                  <div class="causes-item__details-holder">
-                    <div class="causes-item__details-item"><span>Goal: </span><span>14 000$</span></div>
-                    <div class="causes-item__details-item text-right"><span>Pledged: </span><span>6 098$</span></div>
-                  </div>
-                </div>
-              </div><a class="button causes-item__button button--primary" href="#">+ Donate</a>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <div class="causes-item causes-item--primary">
-              <div class="causes-item__body">
-                <div class="causes-item__top">
-                  <h6 class="causes-item__title"> <a href="cause-details.html">We Build and Create</a></h6>
-                  <p>Sharksucker sea toad candiru rocket danio tilefish stingray deepwater stingray Sacramento splittail</p>
-                </div>
-                <div class="causes-item__img">
-                  <div class="causes-item__badge" style="background-color: #2EC774">Education</div><img class="img--bg" src="assets/img/causes_3.jpg" alt="img"/>
-                </div>
-                <div class="causes-item__lower">
-                  <div class="progress-bar">
-                    <div class="progress-bar__inner" style="width: 51%;">
-                      <div class="progress-bar__value">51%</div>
-                    </div>
-                  </div>
-                  <div class="causes-item__details-holder">
-                    <div class="causes-item__details-item"><span>Goal: </span><span>150 000$</span></div>
-                    <div class="causes-item__details-item text-right"><span>Pledged: </span><span>76 500$</span></div>
-                  </div>
-                </div>
-              </div><a class="button causes-item__button button--primary" href="#">+ Donate	</a>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <div class="causes-item causes-item--primary">
-              <div class="causes-item__body">
-                <div class="causes-item__top">
-                  <h6 class="causes-item__title"> <a href="cause-details.html">Healthy Food</a></h6>
-                  <p>Sharksucker sea toad candiru rocket danio tilefish stingray deepwater stingray Sacramento splittail</p>
-                </div>
-                <div class="causes-item__img">
-                  <div class="causes-item__badge" style="background-color: #F8AC3A">Food</div><img class="img--bg" src="assets/img/causes_4.jpg" alt="img"/>
-                </div>
-                <div class="causes-item__lower">
-                  <div class="progress-bar">
-                    <div class="progress-bar__inner" style="width: 42%;">
-                      <div class="progress-bar__value">42%</div>
-                    </div>
-                  </div>
-                  <div class="causes-item__details-holder">
-                    <div class="causes-item__details-item"><span>Goal: </span><span>220 000$</span></div>
-                    <div class="causes-item__details-item text-right"><span>Pledged: </span><span>95 200$</span></div>
-                  </div>
-                </div>
-              </div><a class="button causes-item__button button--primary" href="#">+ Donate	</a>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <div class="causes-item causes-item--primary">
-              <div class="causes-item__body">
-                <div class="causes-item__top">
-                  <h6 class="causes-item__title"> <a href="cause-details.html">Clean Water in India</a></h6>
-                  <p>Sharksucker sea toad candiru rocket danio tilefish stingray deepwater stingray Sacramento splittail</p>
-                </div>
-                <div class="causes-item__img">
-                  <div class="causes-item__badge" style="background-color: #49C2DF">Water Delivery</div><img class="img--bg" src="assets/img/causes_5.jpg" alt="img"/>
-                </div>
-                <div class="causes-item__lower">
-                  <div class="progress-bar">
-                    <div class="progress-bar__inner" style="width: 65%;">
-                      <div class="progress-bar__value">65%</div>
-                    </div>
-                  </div>
-                  <div class="causes-item__details-holder">
-                    <div class="causes-item__details-item"><span>Goal: </span><span>80 000$</span></div>
-                    <div class="causes-item__details-item text-right"><span>Pledged: </span><span>52 200$</span></div>
-                  </div>
-                </div>
-              </div><a class="button causes-item__button button--primary" href="#">+ Donate</a>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <div class="causes-item causes-item--primary">
-              <div class="causes-item__body">
-                <div class="causes-item__top">
-                  <h6 class="causes-item__title"> <a href="cause-details.html">New Books for Children</a></h6>
-                  <p>Sharksucker sea toad candiru rocket danio tilefish stingray deepwater stingray Sacramento splittail</p>
-                </div>
-                <div class="causes-item__img">
-                  <div class="causes-item__badge" style="background-color: #2EC774">Education</div><img class="img--bg" src="assets/img/causes_6.jpg" alt="img"/>
-                </div>
-                <div class="causes-item__lower">
-                  <div class="progress-bar">
-                    <div class="progress-bar__inner" style="width: 95%;">
-                      <div class="progress-bar__value">95%</div>
-                    </div>
-                  </div>
-                  <div class="causes-item__details-holder">
-                    <div class="causes-item__details-item"><span>Goal: </span><span>20 000$</span></div>
-                    <div class="causes-item__details-item text-right"><span>Pledged: </span><span>18 000$</span></div>
-                  </div>
-                </div>
-              </div><a class="button causes-item__button button--primary" href="#">+ Donate</a>
-            </div>
-          </div>
+
         </div>
       </div>
-      <div class="container">
+      
+      <div *ngIf="!campanhasPaginado.data || campanhasPaginado.data.length == 0" style="text-align: center;">
+        <h5 style="text-align: center;">Você não possui campanhas até o momento!</h5>
+        <a [routerLink]="['/campanhas/criar']" style="cursor: pointer; margin-top: 25px; text-decoration: none;" class="btn btn-primary">Criar campanha</a>
+      </div>
+
+      <!-- PAGINADOR -->
+      <div class="container" *ngIf="campanhasPaginado.data && campanhasPaginado.data.length != 0">
         <div class="row">
           <div class="col-12">
             <!-- pagination start-->
             <ul class="pagination">
-              <li class="pagination__item pagination__item--prev"><i class="fa fa-angle-left" aria-hidden="true"></i><span>Página Anterior</span>
-              </li>
-              <li class="pagination__item pagination__item--active"><span>1</span></li>
-              <li class="pagination__item"><span>2</span></li>
-              <li class="pagination__item"><span>3</span></li>
-              <li class="pagination__item"><span>4</span></li>
-              <li class="pagination__item"><span>5</span></li>
-              <li class="pagination__item pagination__item--disabled">...</li>
-              <li class="pagination__item"><span>12</span></li>
-              <li class="pagination__item pagination__item--next"><span>Próxima Página</span><i class="fa fa-angle-right" aria-hidden="true"></i>
-              </li>
+              <li class="pagination__item pagination__item--prev" (click)="previousOrNext('previous')"><i class="fa fa-angle-left" aria-hidden="true"></i><span>Página Anterior</span></li>
+
+              <div *ngFor="let i of paginasPaginador">
+                <li class="pagination__item" [ngClass]="{ 'pagination__item--active': pageNumber == i}" (click)="pageChanged(i)"><span>{{i}}</span></li>
+              </div>
+
+              <li class="pagination__item pagination__item--next" (click)="previousOrNext('next')"><span>Próxima Página</span><i class="fa fa-angle-right" aria-hidden="true"></i></li>
             </ul>
             <!-- pagination end-->
           </div>
@@ -193,6 +84,7 @@
       </div>
     </section>
     <!-- causes inner end-->
+
     <!-- bottom bg start-->
     <section class="bottom-background background--brown">
       <div class="container">
