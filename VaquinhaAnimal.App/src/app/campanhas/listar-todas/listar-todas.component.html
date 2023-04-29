@@ -26,46 +26,47 @@
         <div class="row offset-margin">
           
           <!-- CARD REPETIDOR -->
-          <div class="col-md-6 col-lg-4" *ngFor="let campanha of campanhasPaginado.data">
-            <div class="causes-item causes-item--primary">
-              <div class="causes-item__body">
-                <div class="causes-item__top">
-                  <h6 class="causes-item__title"> <a href="cause-details.html">{{campanha.titulo}}</a></h6>
-                  <p>{{campanha.descricao_curta}}</p>
-                </div>
-                <div class="causes-item__img">
-                  <div class="causes-item__badge" style="background-color: #49C2DF">{{campanha.tag_campanha | tagCampanha}}</div>
-                  <!-- <img class="img--bg" src="assets/img/causes_1.jpg" alt="img"/> -->
-                  <img *ngIf="campanha.imagens.length != 0" class="img--bg" src="{{ imagens }}{{ campanha.imagens[0].arquivo }}">
-                  <img *ngIf="campanha.imagens.length == 0" class="img--bg" src="assets/img/noImage.png" alt="Card image cap">
-                </div>
-                <div class="causes-item__lower">
-                  <div class="progress-bar">
-                    <div class="progress-bar__inner" [ngStyle]="{width: getWidth(campanha.percentual_arrecadado!)}">
-                      <div class="progress-bar__value">{{campanha.percentual_arrecadado!}}%</div>
+          <ng-template *ngIf="campanhasPaginado">
+            <div class="col-md-6 col-lg-4"  *ngFor="let campanha of campanhasPaginado.data">
+              <div class="causes-item causes-item--primary">
+                <div class="causes-item__body">
+                  <div class="causes-item__top">
+                    <h6 class="causes-item__title"> <a href="cause-details.html">{{campanha.titulo}}</a></h6>
+                    <p>{{campanha.descricao_curta}}</p>
+                  </div>
+                  <div class="causes-item__img">
+                    <div class="causes-item__badge" style="background-color: #49C2DF">{{campanha.tag_campanha | tagCampanha}}</div>
+                    <!-- <img class="img--bg" src="assets/img/causes_1.jpg" alt="img"/> -->
+                    <img *ngIf="campanha.imagens.length != 0" class="img--bg" src="{{ imagens }}{{ campanha.imagens[0].arquivo }}">
+                    <img *ngIf="campanha.imagens.length == 0" class="img--bg" src="assets/img/noImage.png" alt="Card image cap">
+                  </div>
+                  <div class="causes-item__lower">
+                    <div class="progress-bar">
+                      <div class="progress-bar__inner" [ngStyle]="{width: getWidth(campanha.percentual_arrecadado!)}">
+                        <div class="progress-bar__value">{{campanha.percentual_arrecadado!}}%</div>
+                      </div>
+                    </div>
+                    <div class="causes-item__details-holder">
+                      <div class="causes-item__details-item"><span>Objetivo: </span><span>{{campanha.valor_desejado | currency}}</span></div>
+                      <div class="causes-item__details-item text-right"><span>Arrecadado: </span><span>{{campanha.total_arrecadado | currency}}</span></div>
                     </div>
                   </div>
-                  <div class="causes-item__details-holder">
-                    <div class="causes-item__details-item"><span>Objetivo: </span><span>{{campanha.valor_desejado | currency}}</span></div>
-                    <div class="causes-item__details-item text-right"><span>Arrecadado: </span><span>{{campanha.total_arrecadado | currency}}</span></div>
-                  </div>
+                  <div style="text-align: center;"><a class="button causes-item__button button--primary" style="margin-left: 0;" href="#">+ Quero Ajudar</a></div>
                 </div>
-                <div style="text-align: center;"><a class="button causes-item__button button--primary" style="margin-left: 0;" href="#">+ Quero Ajudar</a></div>
+                <!-- <div style="text-align: center;"><a class="button causes-item__button button--primary" style="margin-left: 0;" href="#">+ Quero Ajudar</a></div> -->
               </div>
-              <!-- <div style="text-align: center;"><a class="button causes-item__button button--primary" style="margin-left: 0;" href="#">+ Quero Ajudar</a></div> -->
             </div>
-          </div>
-
+          </ng-template>  
         </div>
       </div>
       
-      <div *ngIf="!campanhasPaginado.data || campanhasPaginado.data.length == 0" style="text-align: center;">
+      <div *ngIf="campanhasPaginado && (!campanhasPaginado.data || campanhasPaginado.data.length == 0)" style="text-align: center;">
         <h5 style="text-align: center;">Você não possui campanhas até o momento!</h5>
         <a [routerLink]="['/campanhas/criar']" style="cursor: pointer; margin-top: 25px; text-decoration: none;" class="btn btn-primary">Criar campanha</a>
       </div>
 
       <!-- PAGINADOR -->
-      <div class="container" *ngIf="campanhasPaginado.data && campanhasPaginado.data.length != 0">
+      <div class="container" *ngIf="campanhasPaginado && campanhasPaginado.data && campanhasPaginado.data.length != 0">
         <div class="row">
           <div class="col-12">
             <!-- pagination start-->
