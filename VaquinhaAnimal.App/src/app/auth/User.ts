@@ -3,6 +3,8 @@ export class User {
     password!: string;
     name!: string;
     email!: string;
+    type!: string;
+    document!: string;
     foto!: string;
     fotoUpload!: string;
 }

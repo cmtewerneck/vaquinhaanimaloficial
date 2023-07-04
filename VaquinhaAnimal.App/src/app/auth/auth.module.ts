@@ -6,12 +6,10 @@ import { RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from './auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { AddCardComponent } from './wallet/addCard.component';
 import { MyWalletComponent } from './wallet/myWallet.component';
-import { EditComponent } from './edit/edit.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { EditPasswordComponent } from './editPassword/editPassword.component';
 import { AuthResolve } from './auth.resolve';
@@ -44,7 +42,6 @@ import { AuthGuard } from './auth.guard';
     LoginComponent,
     AddCardComponent,
     MyWalletComponent,
-    EditComponent,
     ResetPasswordComponent,
     ResetPasswordUserComponent,
     EditPasswordComponent,

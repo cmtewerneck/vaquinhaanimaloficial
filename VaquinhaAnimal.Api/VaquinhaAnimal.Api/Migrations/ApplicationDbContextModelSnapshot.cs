@@ -172,6 +172,10 @@ namespace VaquinhaAnimal.Api.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Document")
+                        .HasMaxLength(14)
+                        .HasColumnType("nvarchar(14)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -213,6 +217,10 @@ namespace VaquinhaAnimal.Api.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Type")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)

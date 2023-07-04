@@ -16,5 +16,11 @@ namespace VaquinhaAnimal.Domain.Entities.Pagarme
 
         [JsonPropertyName("code")]
         public string Code { get; set; }
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("document")]
+        public string Document { get; set; }
     }
 }

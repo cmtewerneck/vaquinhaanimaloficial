@@ -18,9 +18,10 @@ export class ListarTodasComponent implements OnInit {
   campanhasPaginado!: PagedResult<Campanha>;
   imagens: string = environment.imagensUrl;
   paginasPaginador: number[] = [];
+  numeroPaginas!: number;
 
   // PAGINAÇÃO
-  pageSize: number = 3;
+  pageSize: number = 9;
   pageNumber: number = 1;
 
   constructor(private campanhaService: CampanhaService,
@@ -44,9 +45,9 @@ export class ListarTodasComponent implements OnInit {
   }
 
   previousOrNext(order: string) {
-    if (order == "previous") {
+    if (order == "previous" && this.pageNumber > 1) {
       this.pageNumber = this.pageNumber - 1;
-    } else if (order == "next") {
+    } else if (order == "next" && this.pageNumber < this.numeroPaginas) {
       this.pageNumber = this.pageNumber + 1;
     }
     this.paginasPaginador = [];
@@ -88,8 +89,9 @@ export class ListarTodasComponent implements OnInit {
   }
 
   numeroDePaginas() {
-    let res = Math.ceil(this.campanhasPaginado.totalRecords / 3);
-    console.log("resultado divisao: " + res);
+    let res = Math.ceil(this.campanhasPaginado.totalRecords / 9);
+
+    this.numeroPaginas = res;
 
     for (let i = 1; i <= res; i++) {
       this.paginasPaginador.push(i);

@@ -7,7 +7,7 @@
           <a class="footer-logo__link" href="index.html"
             ><img
               class="footer-logo__img"
-              src="assets/img/logo_fundo_claro.png"
+              src="assets/img/logo_fundo_escuro.png"
               alt="logo"
           /></a>
         </div>
@@ -22,22 +22,22 @@
         <!-- footer socials start-->
         <ul class="footer-socials">
           <li class="footer-socials__item">
-            <a class="footer-socials__link" href="#"
+            <a class="footer-socials__link" target="_blank" href="https://www.facebook.com/vaquinhaanimal"
               ><i class="fa fa-facebook" aria-hidden="true"></i
             ></a>
           </li>
-          <li class="footer-socials__item">
-            <a class="footer-socials__link" href="#"
+          <!-- <li class="footer-socials__item">
+            <a class="footer-socials__link" target="_blank" href="#"
               ><i class="fa fa-twitter" aria-hidden="true"></i
             ></a>
           </li>
           <li class="footer-socials__item">
-            <a class="footer-socials__link" href="#"
+            <a class="footer-socials__link" target="_blank" href="#"
               ><i class="fa fa-google-plus" aria-hidden="true"></i
             ></a>
-          </li>
+          </li> -->
           <li class="footer-socials__item">
-            <a class="footer-socials__link" href="#"
+            <a class="footer-socials__link" target="_blank" href="https://www.instagram.com/vaquinhaanimal"
               ><i class="fa fa-instagram" aria-hidden="true"></i
             ></a>
           </li>
@@ -52,16 +52,16 @@
               <a class="footer-menu__link" href="#">Início</a>
             </li>
             <li class="footer-menu__item">
-              <a class="footer-menu__link" href="#">Campanhas</a>
+              <a class="footer-menu__link" [routerLink]="['campanhas/listar-todas']">Campanhas</a>
             </li>
             <li class="footer-menu__item">
-              <a class="footer-menu__link" href="#">Crie a sua</a>
+              <a class="footer-menu__link" [routerLink]="['campanhas/criar']">Crie a sua</a>
             </li>
             <li class="footer-menu__item">
               <a class="footer-menu__link" href="#">Aprenda</a>
             </li>
             <li class="footer-menu__item">
-              <a class="footer-menu__link" href="#">Artigos</a>
+              <a class="footer-menu__link" [routerLink]="['artigos/listar-todos']">Artigos</a>
             </li>
             <li class="footer-menu__item">
               <a class="footer-menu__link" href="#">Termos</a>
@@ -70,32 +70,8 @@
               <a class="footer-menu__link" href="#">Mídia</a>
             </li>
             <li class="footer-menu__item">
-              <a class="footer-menu__link" href="#">Fale Conosco</a>
+              <a class="footer-menu__link" [routerLink]="['contato']">Fale Conosco</a>
             </li>
-            <!-- <li class="footer-menu__item">
-              <a class="footer-menu__link" href="#">Pages</a>
-            </li>
-            <li class="footer-menu__item">
-              <a class="footer-menu__link" href="#">Elements</a>
-            </li>
-            <li class="footer-menu__item">
-              <a class="footer-menu__link" href="#">Children</a>
-            </li>
-            <li class="footer-menu__item">
-              <a class="footer-menu__link" href="#">Food</a>
-            </li>
-            <li class="footer-menu__item">
-              <a class="footer-menu__link" href="#">Causes</a>
-            </li>
-            <li class="footer-menu__item">
-              <a class="footer-menu__link" href="#">Documentation</a>
-            </li>
-            <li class="footer-menu__item">
-              <a class="footer-menu__link" href="#">Old People</a>
-            </li>
-            <li class="footer-menu__item">
-              <a class="footer-menu__link" href="#">Documentation</a>
-            </li> -->
           </ul>
         </nav>
         <!-- footer nav end-->
@@ -107,23 +83,8 @@
       <div class="row align-items-baseline">
         <div class="col-md-6 col-xl-7">
           <p class="footer-copyright">
-            © 2023 Direitos Reservados - Vaquinha Animal - CNPJ: 48.173.612/0001-02
+            © 2023 Direitos Reservados - Vaquinha Animal - CNPJ: 48.173.612/0001-02 - Grupo Doadores Especiais
           </p>
-        </div>
-        <div class="col-md-6 col-xl-5">
-          <div class="footer__form">
-            <input
-              class="footer__form-input"
-              type="email"
-              placeholder="Insira seu e-mail"
-            />
-            <button
-              class="footer__form-submit button button--primary"
-              type="submit"
-            >
-              Assinar
-            </button>
-          </div>
         </div>
       </div>
     </div>

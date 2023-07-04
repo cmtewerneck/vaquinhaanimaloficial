@@ -19,6 +19,16 @@ namespace VaquinhaAnimal.Domain.Entities.Base
         [JsonPropertyName("code")]
         public string Code { get; set; }
 
+        // Obrigatório --> 10 caracteres
+        [JsonPropertyName("type")]
+        [MaxLength(10)]
+        public string Type { get; set; }
+
+        // Obrigatório --> 14 caracteres
+        [JsonPropertyName("document")]
+        [MaxLength(14)]
+        public string Document { get; set; }
+
         // Opcional
         [JsonPropertyName("codigo_pagarme")]
         public string Codigo_Pagarme { get; set; }

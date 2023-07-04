@@ -32,10 +32,55 @@ namespace VaquinhaAnimal.Domain.Services
             return await query.ToListAsync();
         }
 
+        public async Task<UsuarioListDTO> ObterUserPeloCustomerIdAsync(string customerId)
+        {
+            var query = _userManager.Users
+               .Where(x => x.Codigo_Pagarme == customerId)
+               .Select(x => new UsuarioListDTO
+               {
+                   Id = x.Id,
+                   Nome = x.Name
+               });
+            return await query.FirstAsync();
+        }
+
+        public async Task<UsuarioListDTO> ObterUserPeloDocumentoIdAsync(string document)
+        {
+            var query = _userManager.Users
+               .Where(x => x.Document == document)
+               .Select(x => new UsuarioListDTO
+               {
+                   Id = x.Id,
+                   Nome = x.Name
+               });
+            return await query.FirstAsync();
+        }
+
         public async Task<UsuarioListDTO> GetUserEmailAsync(string email)
         {
             var query = _userManager.Users
                .Where(x => x.Email == email)
+               .Select(x => new UsuarioListDTO
+               {
+                   Id = x.Id,
+                   Nome = x.Name
+               });
+
+            if (query.Count() >= 1)
+            {
+                return await query.FirstAsync();
+            }
+            else
+            {
+                return null;
+            };
+
+        }
+
+        public async Task<UsuarioListDTO> GetUserDocumentAsync(string document)
+        {
+            var query = _userManager.Users
+               .Where(x => x.Document == document)
                .Select(x => new UsuarioListDTO
                {
                    Id = x.Id,

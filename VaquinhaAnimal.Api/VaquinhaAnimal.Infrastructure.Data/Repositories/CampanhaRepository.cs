@@ -23,7 +23,16 @@ namespace VaquinhaAnimal.Data.Repository
                 .Include(c => c.Beneficiario)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
-        
+
+        public async Task<Campanha> GetByUrlWithImagesAsync(string url_campanha)
+        {
+            return await Db.Campanhas
+                .AsNoTracking()
+                .Include(c => c.Imagens)
+                .Include(c => c.Beneficiario)
+                .FirstOrDefaultAsync(p => p.UrlCampanha == url_campanha);
+        }
+
         public async Task<Campanha> GetByIdWithImagesAndDonationsAsync(Guid id)
         {
             return await Db.Campanhas
@@ -48,7 +57,7 @@ namespace VaquinhaAnimal.Data.Repository
         
         public async Task<List<Campanha>> GetAllCampaignsAndImagesAsync(string email)
         {
-            if (email == "contato@doadoresespeciais.com.br")
+            if (email == "contato@vaquinhaanimal.com.br")
             {
                 return await Db.Campanhas
                                 .AsNoTracking()
@@ -66,6 +75,28 @@ namespace VaquinhaAnimal.Data.Repository
                 .ToListAsync();
             }
             
+        }
+
+        public async Task<List<Campanha>> GetThreeCampaignsAndImagesAsync()
+        {
+            return await Db.Campanhas
+                    .AsNoTracking()
+                    .Include(c => c.Imagens)
+                    .Where(c => c.StatusCampanha == Domain.Enums.StatusCampanhaEnum.ANDAMENTO)
+                    .OrderBy(p => p.TotalArrecadado)
+                    .Take(3)
+                    .ToListAsync();
+        }
+
+        public async Task<List<Campanha>> GetThreePremiumCampaignsAndImagesAsync()
+        {
+            return await Db.Campanhas
+                    .AsNoTracking()
+                    .Include(c => c.Imagens)
+                    .Where(c => c.StatusCampanha == Domain.Enums.StatusCampanhaEnum.ANDAMENTO && c.Premium == true)
+                    .OrderBy(p => p.TotalArrecadado)
+                    .Take(3)
+                    .ToListAsync();
         }
 
         // TESTE DE PAGINAÇÃO
@@ -86,6 +117,33 @@ namespace VaquinhaAnimal.Data.Repository
                 .ToListAsync();
 
             var resultPaginado = new PagedResult<Campanha>{ 
+                PageNumber = _PageNumber,
+                PageSize = _PageSize,
+                TotalRecords = totalResults,
+                Data = result
+            };
+
+            return resultPaginado;
+        }
+
+        public async Task<PagedResult<Campanha>> ListMyCampaignsAsync(int _PageSize, int _PageNumber, Guid userId)
+        {
+            var totalResults = Db.Campanhas
+                .AsNoTracking()
+                .Where(c => c.Usuario_Id == userId)
+                .Count();
+
+            var result = await Db.Campanhas
+                .AsNoTracking()
+                .Include(c => c.Imagens)
+                .Where(c => c.Usuario_Id == userId)
+                .Skip((_PageNumber - 1) * _PageSize)
+                .Take(_PageSize)
+                .OrderBy(p => p.DataCriacao)
+                .ToListAsync();
+
+            var resultPaginado = new PagedResult<Campanha>
+            {
                 PageNumber = _PageNumber,
                 PageSize = _PageSize,
                 TotalRecords = totalResults,

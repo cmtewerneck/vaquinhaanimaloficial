@@ -5,15 +5,36 @@ namespace VaquinhaAnimal.Domain.Entities.Pagarme
 {
     public class PagarmePedidoBoleto
     {
+        public PagarmePedidoBoletoCustomer customer { get; set; }
         public List<PagarmePedidoItensBoleto> items { get; set; }
-        public string customer_id { get; set; }
         public List<PagarmePedidoPagamentosBoleto> payments { get; set; }
+        public double valorPlataforma { get; set; }
+    }
+
+    public class PagarmePedidoBoletoCustomer
+    {
+        public string name { get; set; }
+        public string email { get; set; }
+        public string document { get; set; }
+        public string type { get; set; }
+        public PagarmePedidoBoletoPhones phones { get; set; }
+    }
+
+    public class PagarmePedidoBoletoPhones
+    {
+        public PagarmePedidoBoletoMobilePhone mobile_phone { get; set; }
+    }
+
+    public class PagarmePedidoBoletoMobilePhone
+    {
+        public string country_code { get; set; }
+        public string area_code { get; set; }
+        public string number { get; set; }
     }
 
     public class PagarmePedidoItensBoleto
     {
         public double amount { get; set; }
-        //public int amount { get; set; }
         public string description { get; set; }
         public int quantity { get; set; }
         public string code { get; set; }

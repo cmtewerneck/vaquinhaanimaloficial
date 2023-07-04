@@ -23,6 +23,10 @@ namespace VaquinhaAnimal.Domain.Entities.Validations
                 .NotNull().WithMessage("O campo {PropertyName} precisa ser fornecido")
                 .GreaterThan(0).WithMessage("O campo {PropertyName} precisa ser maior que {ComparisonValue}");
 
+            RuleFor(c => c.ValorDestinadoPlataforma)
+                .NotNull().WithMessage("O campo {PropertyName} precisa ser fornecido")
+                .GreaterThanOrEqualTo(0).WithMessage("O campo {PropertyName} precisa ser maior ou igual a {ComparisonValue}");
+
             RuleFor(c => c.ValorTaxa)
                 .NotNull().WithMessage("O campo {PropertyName} precisa ser fornecido")
                 .GreaterThan(0).WithMessage("O campo {PropertyName} precisa ser maior que {ComparisonValue}");

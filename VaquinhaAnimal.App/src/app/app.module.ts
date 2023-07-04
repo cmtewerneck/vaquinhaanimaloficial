@@ -19,6 +19,10 @@ import { CommonModule, registerLocaleData } from '@angular/common';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BlogComponent } from './blog/blog.component';
 import { ContatoComponent } from './contato/contato.component';
+import { CampanhaService } from './campanhas/campanha.service';
+import { TagCampanhaPipe } from './campanhas/tag_campanha.pipe';
+import { CampanhasModule } from './campanhas/campanhas.module';
+import { AcessoNegadoComponent } from './acesso-negado/acesso-negado.component';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -26,6 +30,7 @@ registerLocaleData(localePt);
     AppComponent,
     HeaderComponent,
     FooterComponent,
+    AcessoNegadoComponent,
     ContatoComponent,
     BlogComponent,
     HomepageComponent
@@ -36,6 +41,7 @@ registerLocaleData(localePt);
     HttpClientModule,
     NgxSpinnerModule,
     AppRoutingModule,
+    CampanhasModule,
     ReactiveFormsModule,
     FormsModule,
     NgxMaskModule.forRoot(),

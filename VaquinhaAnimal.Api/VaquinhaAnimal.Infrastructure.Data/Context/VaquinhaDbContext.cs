@@ -12,8 +12,11 @@ namespace VaquinhaAnimal.Data.Context
         public VaquinhaDbContext(DbContextOptions<VaquinhaDbContext> options) : base(options) { }
 
         #region ENTITIES CONTEXT
+        public DbSet<Adocao> Adocoes { get; set; }
+        public DbSet<Artigo> Artigos { get; set; }
         public DbSet<Campanha> Campanhas { get; set; }
         public DbSet<Cartao> Cartoes { get; set; }
+        public DbSet<Assinatura> Assinaturas { get; set; }
         public DbSet<Beneficiario> Beneficiario { get; set; }
         public DbSet<ContaDeposito> ContasDeposito { get; set; }
         public DbSet<Suporte> Suportes { get; set; }

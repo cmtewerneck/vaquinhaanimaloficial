@@ -17,6 +17,7 @@ export class ResetPasswordUserComponent implements OnInit {
   user!: ResetPasswordUser;
   token!: string;
   username!: string;
+  passwordInputType: string = "password";
   
   constructor(
     private router: Router, 
@@ -37,9 +38,9 @@ export class ResetPasswordUserComponent implements OnInit {
     createForm(){
       this.resetPasswordUserForm = this.fb.group({
         username: ['', [Validators.required, Validators.email]],
-        newPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
-        confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
-        token: ['', Validators.required],
+        newPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]],
+        confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]],
+        token: ['', Validators.required]
       });
     }
 
@@ -65,6 +66,16 @@ export class ResetPasswordUserComponent implements OnInit {
         );
 
       }
+    }
+
+    onCheckboxChange(event: any) {
+      if(event.target.checked){
+        this.passwordInputType = "text";
+      } else this.passwordInputType = "password";
+    }
+
+    resetForm(){
+      this.resetPasswordUserForm.reset();
     }
   
     processarSucesso(response: any) {

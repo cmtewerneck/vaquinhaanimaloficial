@@ -22,6 +22,9 @@ namespace VaquinhaAnimal.Api.Configurations
             services.AddScoped<VaquinhaDbContext>();
 
             // SERVICES
+            services.AddScoped<IAdocaoService, AdocaoService>();
+            services.AddScoped<IArtigoService, ArtigoService>();
+            services.AddScoped<IAssinaturaService, AssinaturaService>();
             services.AddScoped<ICartaoService, CartaoService>();
             services.AddScoped<ISuporteService, SuporteService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
@@ -33,6 +36,9 @@ namespace VaquinhaAnimal.Api.Configurations
             services.AddScoped<IUsuarioService, UsuarioService>();
 
             // REPOSITORIES
+            services.AddScoped<IAdocaoRepository, AdocaoRepository>();
+            services.AddScoped<IArtigoRepository, ArtigoRepository>();
+            services.AddScoped<IAssinaturaRepository, AssinaturaRepository>();
             services.AddScoped<ICartaoRepository, CartaoRepository>();
             services.AddScoped<ISuporteRepository, SuporteRepository>();
             services.AddScoped<ICampanhaRepository, CampanhaRepository>();

@@ -31,6 +31,9 @@ namespace VaquinhaAnimal.Api.ViewModels
         [JsonPropertyName("titulo")]
         public string Titulo { get; set; }
 
+        [JsonPropertyName("url_campanha")]
+        public string UrlCampanha { get; set; }
+
         [JsonPropertyName("video_url")]
         public string VideoUrl { get; set; }
 

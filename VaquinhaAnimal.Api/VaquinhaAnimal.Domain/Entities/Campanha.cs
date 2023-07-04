@@ -40,6 +40,10 @@ namespace VaquinhaAnimal.Domain.Entities
         [Required]
         public string DescricaoCurta { get; set; } // (200)
 
+        [JsonPropertyName("url_campanha")]
+        [Required]
+        public string UrlCampanha { get; set; } // (200)
+
         [JsonPropertyName("descricao_longa")]
         [Required]
         public string DescricaoLonga { get; set; }// (MÍNIMO 500 MÁXIMO 5.000)
@@ -80,7 +84,12 @@ namespace VaquinhaAnimal.Domain.Entities
         [JsonPropertyName("beneficiario")]
         public Beneficiario Beneficiario { get; set; }
 
+        [JsonIgnore]
         [JsonPropertyName("doacoes")]
-        public List<Doacao> Doacoes { get; set; } 
+        public List<Doacao> Doacoes { get; set; }
+
+        [JsonIgnore]
+        [JsonPropertyName("assinaturas")]
+        public List<Assinatura> Assinaturas { get; set; }
     }
 }

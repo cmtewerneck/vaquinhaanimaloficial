@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../auth.service';
 import { User } from '../User';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
     public fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    @Inject(DOCUMENT) private _document: any
   ) {}
 
   ngOnInit() {
@@ -31,6 +33,9 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['']);
     }
     this.validation();
+
+    var window = this._document.defaultView;
+    window.scrollTo(0, 0);
   }
 
   validation() {
@@ -69,6 +74,7 @@ export class LoginComponent implements OnInit {
 
   processarSucesso(response: any) {
     this.spinner.hide();
+    this.loginForm.reset();
     const returnUrl = this.route.snapshot.queryParams['returnUrl'];
     if (returnUrl) this.router.navigate([returnUrl]);
     else this.router.navigate(['']);

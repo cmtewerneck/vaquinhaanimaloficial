@@ -8,6 +8,7 @@ export class Campanha {
     titulo!: string;    
     descricao_curta!: string;
     descricao_longa!: string;
+    url_campanha!: string;
     valor_desejado!: number;
     total_arrecadado?: number;
     termos!: boolean;

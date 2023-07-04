@@ -20,6 +20,7 @@
                                 <form class="form message-form" [formGroup]="registerForm" autocomplete="on">
                                     <h6 class="form__title">Preencha com suas informações</h6><span class="form__text">* campos obrigatórios</span>
                                     
+                                    <!-- LINHA 1 -->
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <input class="form__field" style="margin-bottom: 0;" formControlName="name" placeholder="Nome Completo *" required="required"/>
@@ -49,6 +50,40 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- LINHA 2 -->
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-lg-6">
+                                            <select class="form__field" formControlName="type" style="color: #6e6e6e; margin-bottom: 0;" required="required" (change)="documentSelected($event)">
+                                              <option value="" disabled selected hidden>Tipo de Documento *</option>
+                                              <option value="individual">CPF</option>
+                                              <option value="company">CNPJ</option>
+                                            </select>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('type')?.hasError('required') && this.registerForm.get('type')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('type')?.hasError('minlength') && this.registerForm.get('type')?.touched">
+                                                Mínimo 7 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('type')?.hasError('maxlength') && this.registerForm.get('type')?.touched">
+                                                Máximo 10 caracteres
+                                            </div>
+                                          </div>
+                                        <div class="col-lg-6 space-top-input">
+                                            <input class="form__field" style="margin-bottom: 0;" mask={{document_mask}} formControlName="document" placeholder="Documento *" required="required"/>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('document')?.hasError('required') && this.registerForm.get('document')?.touched">
+                                                * Campo obrigatório
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('document')?.hasError('minlength') && this.registerForm.get('document')?.touched">
+                                                Mínimo 11 caracteres
+                                            </div>
+                                            <div class="text-danger alertFormError" *ngIf="this.registerForm.get('document')?.hasError('maxlength') && this.registerForm.get('document')?.touched">
+                                                Máximo 14 caracteres
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LINHA 3 -->
                                     <div class="row" style="margin-top: 20px;">
                                         <div class="col-lg-6">
                                             <input class="form__field" style="margin-bottom: 0;" formControlName="password" type={{passwordInputType}} placeholder="Senha *" required="required"/>
@@ -86,7 +121,7 @@
                                     
                                     <!-- BOTÕES -->
                                     <div class="col-12" style="text-align: center; margin-top: 30px;">
-                                        <button class="form__submit" (click)="register()">Cadastrar</button>
+                                        <button class="form__submit" (click)="register()" [disabled]="!registerForm.valid" [ngStyle]="{'background-color': !registerForm.valid ? '#D3D3D3' : ''}">Cadastrar</button>
                                         <button class="form__submit" (click)="resetForm()" style="margin-left: 10px;">Limpar</button>
                                     </div>
                                     

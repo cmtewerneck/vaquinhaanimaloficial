@@ -25,6 +25,14 @@ export abstract class BaseService {
         };
     }
 
+    protected PdfHeader() {
+        return {
+            headers: new HttpHeaders({
+                'Accept': 'application/json',
+            })
+        };
+      }
+
     protected extractData(response: any) {
         return response.data || {};
     }

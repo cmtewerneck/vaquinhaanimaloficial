@@ -17,6 +17,8 @@ namespace VaquinhaAnimal.Api.ViewModels
         public string ConfirmPassword { get; set; }
 
         public string Name { get; set; }
+        public string Type { get; set; }
+        public string Document { get; set; }
         public string Email { get; set; }
         public string Foto { get; set; }
         public string FotoUpload { get; set; }
@@ -47,6 +49,15 @@ namespace VaquinhaAnimal.Api.ViewModels
         [Required(ErrorMessage = "Confirm Password is required")]
         [StringLength(100, ErrorMessage = "Confirm Password must be between 6 and 100 characters.", MinimumLength = 6)]
         public string ConfirmPassword { get; set; }
+        public string Token { get; set; }
+
+    }
+
+    public class ConfirmEmailViewModel
+    {
+        [Required(ErrorMessage = "Username is required")]
+        public string Username { get; set; }
+
         public string Token { get; set; }
 
     }

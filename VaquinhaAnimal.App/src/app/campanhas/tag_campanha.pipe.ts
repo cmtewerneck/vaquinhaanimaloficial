@@ -24,6 +24,6 @@ export class TagCampanhaPipe implements PipeTransform {
       return "PuroAmor";
     } else if(tagCampanha == TagCampanhaEnum.Tratamentos){
       return "Tratamentos";
-    }  
+    } 
   }
 }

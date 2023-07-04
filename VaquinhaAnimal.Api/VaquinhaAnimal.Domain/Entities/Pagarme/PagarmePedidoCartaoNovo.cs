@@ -51,13 +51,12 @@ namespace VaquinhaAnimal.Domain.Entities.Pagarme
 
     public class PagarmePedidoCartaoCreditoNovo
     {
-        public string holder_name { get; set; }
-        public string holder_document { get; set; }
+        public string number { get; set; }
         public int exp_month { get; set; }
         public int exp_year { get; set; }
-        public string number { get; set; }
         public string cvv { get; set; }
-        public string brand { get; set; }
+        public string holder_name { get; set; }
+        public string holder_document { get; set; }
         public BillingAddressCartaoNovo billing_address { get; set; }
     }
 

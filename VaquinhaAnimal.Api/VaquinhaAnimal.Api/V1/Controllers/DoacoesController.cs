@@ -1,10 +1,4 @@
 ﻿using AutoMapper;
-using VaquinhaAnimal.Api.Controllers;
-using VaquinhaAnimal.Api.ViewModels;
-using VaquinhaAnimal.Domain.Entities;
-using VaquinhaAnimal.Domain.Entities.Pagarme;
-using VaquinhaAnimal.Domain.Helpers;
-using VaquinhaAnimal.Domain.Interfaces;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Authorization;
@@ -13,12 +7,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using VaquinhaAnimal.Api.Controllers;
+using VaquinhaAnimal.Api.ViewModels;
+using VaquinhaAnimal.Domain.Entities;
+using VaquinhaAnimal.Domain.Entities.Pagarme;
+using VaquinhaAnimal.Domain.Interfaces;
 
 namespace VaquinhaAnimal.App.V1.Controllers
 {
@@ -113,7 +111,7 @@ namespace VaquinhaAnimal.App.V1.Controllers
 
                 var usuarioId = _user.GetUserId(); // Pega o ID do usuário
                 var idPagarme = _identityRepository.GetCodigoPagarme(usuarioId.ToString()); // Pega o ID da Pagarme do usuário
-                
+
                 //var pedidoToAdd = new PagarmePedido()
                 //{
                 //    customer_id = idPagarme,
@@ -177,7 +175,7 @@ namespace VaquinhaAnimal.App.V1.Controllers
             doacaoAtualizacao.status = doacaoViewModel.status;
             doacaoAtualizacao.campanha_id = doacaoViewModel.campanha_id;
             doacaoAtualizacao.charge_id = doacaoViewModel.charge_id;
-            
+
             await _doacaoService.Atualizar(_mapper.Map<Doacao>(doacaoAtualizacao));
 
             return CustomResponse(doacaoViewModel);
@@ -239,133 +237,260 @@ namespace VaquinhaAnimal.App.V1.Controllers
             return _mapper.Map<List<DoacaoViewModel>>(doacoesToReturn);
         }
 
-        [HttpGet("export-to-pdf/{campanhaId:guid}")]
-        public void GerarRelatorioPdf(Guid campanhaId)
+        [HttpGet("minhas-doacoes-paginado/{PageSize:int}/{PageNumber:int}")]
+        public async Task<ActionResult> ObterMinhasDoacoesPaginado(int PageSize, int PageNumber)
+        {
+            var userId = _user.GetUserId();
+
+            var result = await _doacaoRepository.ListMyDonationsAsync(PageSize, PageNumber, userId);
+
+            return Ok(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("comprovante-pdf/{doacaoId:guid}")]
+        public async Task<ActionResult> GerarComprovantePdf(Guid doacaoId)
         {
             // PEGAR DOACOES DA CAMPANHA ENVIADA
-            var doacoes = _doacaoRepository.ObterDoacoesDaCampanha(campanhaId).GetAwaiter().GetResult().OrderBy(x => x.Data).ToList(); ;
+            var doacao = await _doacaoRepository.GetDonationsWithCampaignAsync(doacaoId);
 
-            if (doacoes.Count > 0)
+            if (doacao == null)
             {
-                // CALCULAR TOTAL DE PÁGINAS
-                int totalPaginas = 1;
-                int totalLinhas = doacoes.Count;
-                if (totalLinhas > 24)
-                {
-                    totalPaginas += (int)Math.Ceiling((totalLinhas - 24) / 29F);
-                }
-
-                // CONFIGURAÇÃO DO DOCUMENTO
-                var pxPorMm = 72 / 25.2F;
-                var pdf = new Document(PageSize.A4.Rotate(), 15 * pxPorMm, 15 * pxPorMm, 15 * pxPorMm, 20 * pxPorMm);
-                var path = $"doacoes.{DateTime.Now.ToString("dd.MM.yyyy.HH.mm")}.pdf";
-                var arquivo = new FileStream(path, FileMode.Create);
-                var writer = PdfWriter.GetInstance(pdf, arquivo);
-                writer.PageEvent = new EventoDePagina(totalPaginas);
-                pdf.Open();
-
-                // ADICIONANDO TÍTULO
-                var fonteTitulo = new iTextSharp.text.Font(fonteBase, 28, iTextSharp.text.Font.NORMAL, BaseColor.Black);
-                var titulo = new Paragraph("Relatório de Doações\n\n", fonteTitulo);
-                titulo.Alignment = Element.ALIGN_LEFT;
-                titulo.SpacingAfter = 4;
-                pdf.Add(titulo);
-
-                // ADICIONANDO A LOGOMARCA
-                var pathImagem = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/logomarca.png");
-                if (System.IO.File.Exists(pathImagem))
-                {
-                    iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(pathImagem);
-                    float razaoLarguraAltura = logo.Width / logo.Height;
-                    float alturaLogo = 60;
-                    float larguraLogo = alturaLogo * razaoLarguraAltura;
-                    logo.ScaleToFit(larguraLogo, alturaLogo);
-                    var margemEsquerda = pdf.PageSize.Width - pdf.RightMargin - larguraLogo;
-                    var margemTopo = pdf.PageSize.Height - pdf.TopMargin - 54;
-                    logo.SetAbsolutePosition(margemEsquerda, margemTopo);
-                    writer.DirectContent.AddImage(logo, false);
-                }
-
-                // ADICIONANDO A TABELA
-                var tabela = new PdfPTable(7);
-                float[] largurasColunas = { 0.5f, 1.0f, 1.0f, 1.2f, 1.0f, 1.0f, 1.0f };
-                tabela.SetWidths(largurasColunas);
-                tabela.DefaultCell.BorderWidth = 0;
-                tabela.WidthPercentage = 100;
-
-                // ADICIONAR TÍTULOS
-                CriarCelulaTexto(tabela, "Data", PdfPCell.ALIGN_LEFT, true);
-                CriarCelulaTexto(tabela, "Valor Doado", PdfPCell.ALIGN_CENTER, true);
-                CriarCelulaTexto(tabela, "Forma de Pagamento", PdfPCell.ALIGN_CENTER, true);
-                CriarCelulaTexto(tabela, "ID da Transação", PdfPCell.ALIGN_CENTER, true);
-                CriarCelulaTexto(tabela, "Plataforma (3%)", PdfPCell.ALIGN_CENTER, true);
-                CriarCelulaTexto(tabela, "Taxa da Operadora", PdfPCell.ALIGN_CENTER, true);
-                CriarCelulaTexto(tabela, "Beneficiário", PdfPCell.ALIGN_CENTER, true);
-
-                // ADICIONAR DADOS
-                foreach (var doacao in doacoes)
-                {
-                    CriarCelulaTexto(tabela, doacao.Data.ToString("dd/MM/yyyy"), PdfPCell.ALIGN_LEFT);
-                    CriarCelulaTexto(tabela, "R$ " + doacao.Valor.ToString(), PdfPCell.ALIGN_CENTER);
-
-                    if (doacao.FormaPagamento == "billing")
-                    {
-                        CriarCelulaTexto(tabela, "Boleto", PdfPCell.ALIGN_CENTER);
-                    } 
-                    else if (doacao.FormaPagamento == "pix")
-                    {
-                        CriarCelulaTexto(tabela, "PIX", PdfPCell.ALIGN_CENTER);
-                    }
-                    else if (doacao.FormaPagamento == "credit_card")
-                    {
-                        CriarCelulaTexto(tabela, "Cartão de Crédito", PdfPCell.ALIGN_CENTER);
-                    }
-
-                    CriarCelulaTexto(tabela, doacao.Transacao_Id, PdfPCell.ALIGN_CENTER);
-                    CriarCelulaTexto(tabela, "R$ " + doacao.ValorPlataforma.ToString(), PdfPCell.ALIGN_CENTER);
-                    CriarCelulaTexto(tabela, "R$ " + doacao.ValorTaxa.ToString(), PdfPCell.ALIGN_CENTER);
-                    CriarCelulaTexto(tabela, "R$ " + doacao.ValorBeneficiario.ToString(), PdfPCell.ALIGN_CENTER);
-                }
-
-                pdf.Add(tabela);
-
-                // FECHANDO O PDF
-                pdf.Close();
-                arquivo.Close();
-
-                // ABRINDO O ARQUIVO
-                var caminhoPdf = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/docs/" + path);
-                if (System.IO.File.Exists(caminhoPdf))
-                {
-                    Process.Start(new ProcessStartInfo()
-                    {
-                        Arguments = $"/c start {caminhoPdf}",
-                        FileName = "cmd.exe",
-                        CreateNoWindow = true
-                    });
-                }
+                NotificarErro("Doação não encontrada");
+                return CustomResponse();
             }
+
+            // CONFIGURAÇÃO DO DOCUMENTO
+            var pxPorMm = 72 / 25.2F;
+            var pdf = new Document(PageSize.A4.Rotate(), 15 * pxPorMm, 15 * pxPorMm, 15 * pxPorMm, 20 * pxPorMm);
+            var path = $"comprovante_vaquinha_animal.{DateTime.Now.ToString("dd.MM.yyyy.HH.mm")}.pdf";
+            var arquivo = new FileStream(path, FileMode.Create);
+            var writer = PdfWriter.GetInstance(pdf, arquivo);
+            pdf.Open();
+
+            // ADICIONANDO TÍTULO
+            var fonteTitulo = new Font(fonteBase, 28, Font.NORMAL, BaseColor.Black);
+            var titulo = new Paragraph("Comprovante de Doação\n\n", fonteTitulo);
+            titulo.Alignment = Element.ALIGN_LEFT;
+            titulo.SpacingAfter = 10;
+            pdf.Add(titulo);
+
+            // ADICIONANDO A LOGOMARCA
+            var pathImagem = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/logomarca.png");
+            if (System.IO.File.Exists(pathImagem))
+            {
+                Image logo = Image.GetInstance(pathImagem);
+                float razaoLarguraAltura = logo.Width / logo.Height;
+                float alturaLogo = 60;
+                float larguraLogo = alturaLogo * razaoLarguraAltura;
+                logo.ScaleToFit(larguraLogo, alturaLogo);
+                var margemEsquerda = pdf.PageSize.Width - pdf.RightMargin - larguraLogo;
+                var margemTopo = pdf.PageSize.Height - pdf.TopMargin - 54;
+                logo.SetAbsolutePosition(margemEsquerda, margemTopo);
+                writer.DirectContent.AddImage(logo, false);
+            }
+
+            // ADICIONANDO A TABELA
+            var tabela = new PdfPTable(4);
+            float[] largurasColunas = { 0.5f, 1.5f, 1.0f, 1.2f };
+            tabela.SetWidths(largurasColunas);
+            tabela.DefaultCell.BorderWidth = 0;
+            tabela.WidthPercentage = 100;
+
+            // ADICIONAR TÍTULOS
+            CriarCelulaTexto(tabela, "Data", PdfPCell.ALIGN_LEFT, true);
+            CriarCelulaTexto(tabela, "Campanha", PdfPCell.ALIGN_LEFT, true);
+            CriarCelulaTexto(tabela, "Valor Doado", PdfPCell.ALIGN_CENTER, true);
+            CriarCelulaTexto(tabela, "Forma de Pagamento", PdfPCell.ALIGN_CENTER, true);
+
+            CriarCelulaTexto(tabela, doacao.Data.ToString("dd/MM/yyyy"), PdfPCell.ALIGN_LEFT);
+            CriarCelulaTexto(tabela, doacao.Campanha.Titulo, PdfPCell.ALIGN_LEFT);
+            CriarCelulaTexto(tabela, "R$ " + doacao.Valor.ToString(), PdfPCell.ALIGN_CENTER);
+
+            if (doacao.FormaPagamento == "billing")
+            {
+                CriarCelulaTexto(tabela, "Boleto", PdfPCell.ALIGN_CENTER);
+            }
+            else if (doacao.FormaPagamento == "pix")
+            {
+                CriarCelulaTexto(tabela, "PIX", PdfPCell.ALIGN_CENTER);
+            }
+            else if (doacao.FormaPagamento == "credit_card")
+            {
+                CriarCelulaTexto(tabela, "Cartão de Crédito", PdfPCell.ALIGN_CENTER);
+            }
+
+            pdf.Add(tabela);
+
+            //ADICIONAR CNPJ
+            var fonteDireitosReservados = new Font(fonteBase, 9, Font.NORMAL, BaseColor.Black);
+            Paragraph copyright = new Paragraph("© 2023 Direitos Reservados - Vaquinha Animal - CNPJ: 48.173.612/0001-02 - Grupo Doadores Especiais.", fonteDireitosReservados);
+            PdfPTable footerTbl = new PdfPTable(1);
+            footerTbl.TotalWidth = 500;
+            PdfPCell cell = new PdfPCell(copyright);
+            cell.Border = 1;
+            footerTbl.AddCell(cell);
+            footerTbl.WriteSelectedRows(0, -1, 30, 30, writer.DirectContent);
+
+            // FECHANDO O PDF
+            pdf.Close();
+            arquivo.Close();
+
+            // ABRINDO O ARQUIVO
+            var caminhoPdf = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/docs/" + path);
+            if (System.IO.File.Exists(caminhoPdf))
+            {
+                //Process.Start(new ProcessStartInfo()
+                //{
+                //    Arguments = $"/c start {caminhoPdf}",
+                //    FileName = "cmd.exe",
+                //    CreateNoWindow = true
+                //});
+
+                Process.Start(caminhoPdf);
+            }
+
+            return CustomResponse();
+        }
+
+        [HttpGet("relatorio-pdf/{campanhaId:guid}")]
+        public async Task<ActionResult> GerarRelatórioPdf(Guid campanhaId)
+        {
+            // PEGAR DOACOES DA CAMPANHA ENVIADA
+            var doacoes = await _doacaoRepository.ObterDoacoesDaCampanha(campanhaId);
+
+            if (doacoes.Count <= 0)
+            {
+                NotificarErro("Doações não encontrada ou inexistentes");
+                return CustomResponse();
+            }
+
+            // CONFIGURAÇÃO DO DOCUMENTO
+            var pxPorMm = 72 / 25.2F;
+            var pdf = new Document(PageSize.A4.Rotate(), 15 * pxPorMm, 15 * pxPorMm, 15 * pxPorMm, 20 * pxPorMm);
+            var path = $"relatorio_vaquinha_animal.{DateTime.Now.ToString("dd.MM.yyyy.HH.mm")}.pdf";
+            var arquivo = new FileStream(path, FileMode.Create);
+            var writer = PdfWriter.GetInstance(pdf, arquivo);
+            pdf.Open();
+
+            // ADICIONANDO TÍTULO
+            var fonteTitulo = new Font(fonteBase, 28, Font.NORMAL, BaseColor.Black);
+            var fonteNomeCampanha = new Font(fonteBase, 24, Font.NORMAL, BaseColor.Black);
+            //var titulo = new Paragraph("Relatório de Campanha: " + doacoes[0].Campanha.Titulo + " \n\n", fonteTitulo);
+            var titulo = new Paragraph("Relatório de Campanha \n\n", fonteTitulo);
+            var nomeCampanha = new Paragraph(doacoes[0].Campanha.Titulo, fonteNomeCampanha);
+            titulo.Alignment = Element.ALIGN_LEFT;
+            titulo.SpacingAfter = 10;
+            nomeCampanha.Alignment = Element.ALIGN_LEFT;
+            nomeCampanha.SpacingAfter = 10;
+            pdf.Add(titulo);
+            pdf.Add(nomeCampanha);
+
+            // ADICIONANDO A LOGOMARCA
+            var pathImagem = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/logomarca.png");
+            if (System.IO.File.Exists(pathImagem))
+            {
+                Image logo = Image.GetInstance(pathImagem);
+                float razaoLarguraAltura = logo.Width / logo.Height;
+                float alturaLogo = 60;
+                float larguraLogo = alturaLogo * razaoLarguraAltura;
+                logo.ScaleToFit(larguraLogo, alturaLogo);
+                var margemEsquerda = pdf.PageSize.Width - pdf.RightMargin - larguraLogo;
+                var margemTopo = pdf.PageSize.Height - pdf.TopMargin - 54;
+                logo.SetAbsolutePosition(margemEsquerda, margemTopo);
+                writer.DirectContent.AddImage(logo, false);
+            }
+
+            // ADICIONANDO A TABELA
+            var tabela = new PdfPTable(7);
+            float[] largurasColunas = { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f };
+            tabela.SetWidths(largurasColunas);
+            tabela.DefaultCell.BorderWidth = 0;
+            tabela.WidthPercentage = 100;
+
+            // ADICIONAR TÍTULOS
+            CriarCelulaTexto(tabela, "Data", PdfPCell.ALIGN_LEFT, true);
+            CriarCelulaTexto(tabela, "Valor Doado", PdfPCell.ALIGN_LEFT, true);
+            CriarCelulaTexto(tabela, "Valor Plataforma", PdfPCell.ALIGN_LEFT, true);
+            CriarCelulaTexto(tabela, "Taxas", PdfPCell.ALIGN_LEFT, true);
+            CriarCelulaTexto(tabela, "Valor Final", PdfPCell.ALIGN_LEFT, true);
+            CriarCelulaTexto(tabela, "Forma de Pagamento", PdfPCell.ALIGN_LEFT, true);
+            CriarCelulaTexto(tabela, "ID da Transação", PdfPCell.ALIGN_LEFT, true);
+
+            foreach (var doacao in doacoes)
+            {
+                CriarCelulaTexto(tabela, doacao.Data.ToString("dd/MM/yyyy"), PdfPCell.ALIGN_LEFT);
+                CriarCelulaTexto(tabela, "R$ " + doacao.Valor.ToString(), PdfPCell.ALIGN_LEFT);
+                CriarCelulaTexto(tabela, "R$ " + doacao.ValorPlataforma.ToString(), PdfPCell.ALIGN_LEFT);
+                CriarCelulaTexto(tabela, "R$ " + doacao.ValorTaxa.ToString(), PdfPCell.ALIGN_LEFT);
+                CriarCelulaTexto(tabela, "R$ " + doacao.ValorBeneficiario.ToString(), PdfPCell.ALIGN_LEFT);
+
+                if (doacao.FormaPagamento == "billing")
+                {
+                    CriarCelulaTexto(tabela, "Boleto", PdfPCell.ALIGN_LEFT);
+                }
+                else if (doacao.FormaPagamento == "pix")
+                {
+                    CriarCelulaTexto(tabela, "PIX", PdfPCell.ALIGN_LEFT);
+                }
+                else if (doacao.FormaPagamento == "credit_card")
+                {
+                    CriarCelulaTexto(tabela, "Cartão de Crédito", PdfPCell.ALIGN_LEFT);
+                }
+
+                CriarCelulaTexto(tabela, doacao.Transacao_Id, PdfPCell.ALIGN_LEFT);
+            }
+
+            pdf.Add(tabela);
+
+            //ADICIONAR CNPJ
+            var fonteDireitosReservados = new Font(fonteBase, 9, Font.NORMAL, BaseColor.Black);
+            Paragraph copyright = new Paragraph("© 2023 Direitos Reservados - Vaquinha Animal - CNPJ: 48.173.612/0001-02 - Grupo Doadores Especiais.", fonteDireitosReservados);
+            PdfPTable footerTbl = new PdfPTable(1);
+            footerTbl.TotalWidth = 500;
+            PdfPCell cell = new PdfPCell(copyright);
+            cell.Border = 1;
+            footerTbl.AddCell(cell);
+            footerTbl.WriteSelectedRows(0, -1, 30, 30, writer.DirectContent);
+
+            // FECHANDO O PDF
+            pdf.Close();
+            arquivo.Close();
+
+            // ABRINDO O ARQUIVO
+            var caminhoPdf = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/docs/" + path);
+            if (System.IO.File.Exists(caminhoPdf))
+            {
+                Process.Start(new ProcessStartInfo()
+                {
+                    Arguments = $"/c start {caminhoPdf}",
+                    FileName = "cmd.exe",
+                    CreateNoWindow = true
+                });
+            }
+
+            return CustomResponse();
         }
 
         static void CriarCelulaTexto(PdfPTable tabela, string texto, int alinhamentoHorz = PdfPCell.ALIGN_LEFT,
                                                  bool negrito = false, bool italico = false, int tamanhoFonte = 10, int alturaCelula = 25)
         {
-            int estilo = iTextSharp.text.Font.NORMAL;
+            int estilo = Font.NORMAL;
 
             if (negrito && italico)
             {
-                estilo = iTextSharp.text.Font.BOLDITALIC;
+                estilo = Font.BOLDITALIC;
             }
             else if (negrito)
             {
-                estilo = iTextSharp.text.Font.BOLD;
+                estilo = Font.BOLD;
             }
             else if (italico)
             {
-                estilo = iTextSharp.text.Font.ITALIC;
+                estilo = Font.ITALIC;
             }
 
-            var fonteCelula = new iTextSharp.text.Font(fonteBase, tamanhoFonte, estilo, BaseColor.Black);
+            var fonteCelula = new Font(fonteBase, tamanhoFonte, estilo, BaseColor.Black);
 
             var bgColor = BaseColor.White;
             if (tabela.Rows.Count % 2 == 1)
@@ -381,6 +506,7 @@ namespace VaquinhaAnimal.App.V1.Controllers
             celula.BackgroundColor = bgColor;
             tabela.AddCell(celula);
         }
+
         #endregion
     }
 }

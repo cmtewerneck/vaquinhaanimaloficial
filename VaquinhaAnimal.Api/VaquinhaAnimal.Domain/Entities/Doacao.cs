@@ -18,6 +18,9 @@ namespace VaquinhaAnimal.Domain.Entities
         [JsonPropertyName("valor_plataforma")]
         public decimal ValorPlataforma { get; set; }
 
+        [JsonPropertyName("valor_destinado_plataforma")]
+        public decimal ValorDestinadoPlataforma { get; set; }
+
         [JsonPropertyName("valor_beneficiario")]
         public decimal ValorBeneficiario { get; set; }
 

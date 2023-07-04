@@ -20,6 +20,13 @@ import { SafePipe } from './safe.pipe';
 import { TagCampanhaPipe } from './tag_campanha.pipe';
 import { MinhasCampanhasComponent } from './minhas-campanhas/minhas-campanhas.component';
 import { StatusCampanhaPipe } from './status.campanha.pipe';
+import { DetailComponent } from './detail/detail.component';
+import { CampanhaResolve } from './campanha.resolve';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { ListaAdminComponent } from './lista-admin/listaAdmin.component';
+import { CampanhaAdminGuard } from './campanha.admin.guard';
+import { CampanhaEditGuard } from './campanha.edit.guard';
+import { EditComponent } from './edit/edit.component';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -30,6 +37,7 @@ registerLocaleData(localePt);
     NgxSpinnerModule,
     CurrencyMaskModule,
     ReactiveFormsModule,
+    ModalModule.forRoot(),
     ImageCropperModule,
     NgxMaskModule.forChild(),
     HttpClientModule,
@@ -46,15 +54,24 @@ registerLocaleData(localePt);
   declarations: [
     CampanhasComponent,
     ListarTodasComponent,
+    ListaAdminComponent,
+    EditComponent,
     CriarComponent,
+    DetailComponent,
     MinhasCampanhasComponent,
     SafePipe,
     StatusCampanhaPipe,
     TagCampanhaPipe
   ],
+  exports: [
+    TagCampanhaPipe
+  ],
   providers: [
     CampanhaGuard,
+    CampanhaEditGuard,
+    CampanhaAdminGuard,
     CampanhaService,
+    CampanhaResolve,
     CurrencyPipe,
     {
       provide: LOCALE_ID,

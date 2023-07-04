@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Dimensions, ImageCroppedEvent, ImageTransform } from 'ngx-image-cropper';
@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Bancos } from '../model/Bancos';
 import { CampanhaService } from '../campanha.service';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-criar-campanhas',
@@ -19,7 +20,7 @@ export class CriarComponent implements OnInit {
   imgSrc: string = "assets/img/causes_1.jpg";
   descricao_curta_card: string = "";
   titulo_card: string = "";
-  tag_campanha!: number;
+  tag_campanha: any = "";
   private _jsonURL = '../../../assets/bancos.json';
   document_mask: string = "000.000.000-00";
   document_toggle: string = "CPF";
@@ -54,7 +55,8 @@ export class CriarComponent implements OnInit {
     private campanhaService: CampanhaService,
     private spinner: NgxSpinnerService, 
     private router: Router,
-    private toastr: ToastrService) { 
+    private toastr: ToastrService,
+    @Inject(DOCUMENT) private _document: any) { 
       this.getJSON().subscribe(data => {
         this.bancos = data;
         console.log(data);
@@ -67,6 +69,9 @@ export class CriarComponent implements OnInit {
     
     ngOnInit(): void {
       this.createForm();
+
+      var window = this._document.defaultView;
+      window.scrollTo(0, 0);
     }
     
     createForm(){
@@ -90,10 +95,10 @@ export class CriarComponent implements OnInit {
           tipo: ['', Validators.required],
           codigo_banco: ['', [Validators.required, Validators.maxLength(3)]],
           tipo_conta: ['', Validators.required],
-          numero_agencia: ['', [Validators.required, Validators.maxLength(4)]],
-          digito_agencia: ['', Validators.maxLength(1)],
-          numero_conta: ['', [Validators.required, Validators.maxLength(13)]],
-          digito_conta: ['', [Validators.required, Validators.maxLength(2)]],
+          numero_agencia: ['', [Validators.required, Validators.maxLength(4), Validators.pattern("[0-9]+")]],
+          digito_agencia: ['', [Validators.maxLength(1), Validators.pattern("[0-9]+")]],
+          numero_conta: ['', [Validators.required, Validators.maxLength(13), Validators.pattern("[0-9]+")]],
+          digito_conta: ['', [Validators.required, Validators.maxLength(2), Validators.pattern("[0-9]+")]],
           recebedor_id: ['']
         })
       });
@@ -168,6 +173,10 @@ export class CriarComponent implements OnInit {
         this.campanha.premium = this.campanha.premium.toString() == "true";
         this.campanha.tipo_campanha = Number(this.campanha.tipo_campanha)
         this.campanha.tag_campanha = Number(this.campanha.tag_campanha)
+        // this.campanha.beneficiario.numero_agencia = this.campanha.beneficiario.numero_agencia.replace(/\D/g, '');
+        // this.campanha.beneficiario.digito_agencia = this.campanha.beneficiario.numero_agencia.replace(/\D/g, '');
+        // this.campanha.beneficiario.numero_conta = this.campanha.beneficiario.numero_agencia.replace(/\D/g, '');
+        // this.campanha.beneficiario.digito_conta = this.campanha.beneficiario.numero_agencia.replace(/\D/g, '');
         
         this.campanhaService.novaCampanha(this.campanha)
         .subscribe(
@@ -175,76 +184,81 @@ export class CriarComponent implements OnInit {
           falha => { this.processarFalha(falha) }
           );
         }
-      }
+    }
       
-      processarSucesso(response: any) {
-        this.spinner.hide();
-        this.campanhaForm.reset();
-        this.errors = [];
-        
-        let toast = this.toastr.success('Campanha cadastrada com sucesso!', 'Sucesso!');
-        if (toast) {
-          toast.onHidden.subscribe(() => {
-            this.router.navigate(['campanhas/minhas-campanhas']);
-          });
-        }
-      }
+    processarSucesso(response: any) {
+      this.spinner.hide();
+      this.campanhaForm.reset();
+      this.errors = [];
       
-      processarFalha(fail: any) {
-        this.spinner.hide();
-        this.errors = fail.error.errors;
-        this.toastr.error(this.errors[0], "Erro!");
-      }
-      
-      fileChangeEvent(event: any): void {
-        console.log(event);
-
-        if (event.target.files && event.target.files[0]) {
-          this.imgSrc = URL.createObjectURL(event.target.files[0]);
-          console.log("URL IMAGEM CARD: " + this.imgSrc);
-        }
-
-        this.imagemNome = event.currentTarget.files[0].name;
-        this.adicionarImagem();
-
-        const reader = new FileReader();
-        reader.readAsDataURL(event.target.files[0]);
-        reader.onload = () => {
-            console.log("BASE64: " + reader.result);
-            this.croppedImage = reader.result;
-        };
-      }
-      
-      removerFoto(){
-        this.imagemNome = "";
-        this.removerImagem(0);
-        this.imgSrc = "assets/img/causes_1.jpg";
-      }
-      
-      tipoCampanhaSelected(event: any){
-        if(event.target.value == 1){
-          this.campanhaRecorrente = false;
-        } else if(event.target.value == 2){
-          this.campanhaRecorrente = true;
-          this.campanhaForm.get('duracao_dias')?.setValue(null);
-        }
-
-        this.setDuracaoValidation(event.target.value)
-      }
-
-      setDuracaoValidation(tipo: number){
-        this.campanhaForm.controls['duracao_dias'].clearValidators();
-        
-        // TIPO == 1 - Campanha única, com duração
-        if (tipo == 1){
-          this.campanhaForm.controls['duracao_dias'].setValidators(Validators.required);
-        } 
-
-        this.campanhaForm.controls['duracao_dias'].updateValueAndValidity();
+      let toast = this.toastr.success('Campanha cadastrada com sucesso!', 'Sucesso!');
+      if (toast) {
+        toast.onHidden.subscribe(() => {
+          this.router.navigate(['campanhas/minhas-campanhas']);
+        });
       }
     }
-
-
-
-
     
+    processarFalha(fail: any) {
+      this.spinner.hide();
+      this.errors = fail.error.errors;
+      this.toastr.error(this.errors[0], "Erro!");
+    }
+    
+    fileChangeEvent(event: any): void {
+      this.removerFoto();
+
+      if (event.target.files && event.target.files[0]) {
+        this.imgSrc = URL.createObjectURL(event.target.files[0]);
+      }
+
+      this.imagemNome = event.currentTarget.files[0].name;
+      this.adicionarImagem();
+
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = () => {
+          if(event.target.files[0].size > 3145728){
+            this.toastr.error("A imagem deve ter menos do que 2 mb.");
+            this.removerFoto();
+            return;
+          }
+
+          if(event.target.files[0].type != "image/png" && event.target.files[0].type != "image/jpg" && event.target.files[0].type != "image/jpeg"){
+            this.toastr.error("Formato inválido. Aceitos (png, jpg e jpeg)");
+            this.removerFoto();
+            return;
+          }
+
+          this.croppedImage = reader.result;
+      };
+    }
+    
+    removerFoto(){
+      this.imagemNome = "";
+      this.removerImagem(0);
+      this.imgSrc = "assets/img/causes_1.jpg";
+    }
+    
+    tipoCampanhaSelected(event: any){
+      if(event.target.value == 1){
+        this.campanhaRecorrente = false;
+      } else if(event.target.value == 2){
+        this.campanhaRecorrente = true;
+        this.campanhaForm.get('duracao_dias')?.setValue(null);
+      }
+
+      this.setDuracaoValidation(event.target.value)
+    }
+
+    setDuracaoValidation(tipo: number){
+      this.campanhaForm.controls['duracao_dias'].clearValidators();
+      
+      // TIPO == 1 - Campanha única, com duração
+      if (tipo == 1){
+        this.campanhaForm.controls['duracao_dias'].setValidators(Validators.required);
+      } 
+
+      this.campanhaForm.controls['duracao_dias'].updateValueAndValidity();
+    }
+}    

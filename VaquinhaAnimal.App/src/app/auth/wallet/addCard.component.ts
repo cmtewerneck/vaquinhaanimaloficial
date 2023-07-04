@@ -75,4 +75,8 @@ export class AddCardComponent implements OnInit {
         this.errors = fail.error.errors;
         this.toastr.error('Ocorreu um erro!', 'Opa :(');
       }
+
+      resetForm(){
+        this.cartaoForm.reset();
+      }
 }

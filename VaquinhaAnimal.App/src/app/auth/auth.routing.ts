@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthComponent } from './auth.component';
 import { AuthResolve } from './auth.resolve';
-import { EditComponent } from './edit/edit.component';
 import { EditPasswordComponent } from './editPassword/editPassword.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -18,7 +17,6 @@ const authRouterConfig: Routes = [
         children: [
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent, canDeactivate: [AuthGuard] },
-            { path: 'edit-user/:id', component: EditComponent, resolve: { user: AuthResolve }},
             { path: 'edit-password', component: EditPasswordComponent },
             { path: 'reset-password', component: ResetPasswordComponent },
             { path: 'reset-password-user/:username/:token', component: ResetPasswordUserComponent },

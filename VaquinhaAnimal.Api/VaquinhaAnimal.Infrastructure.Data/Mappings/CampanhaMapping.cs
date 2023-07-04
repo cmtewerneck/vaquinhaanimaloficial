@@ -23,6 +23,11 @@ namespace VaquinhaAnimal.Data.Mappings
                 .HasMaxLength(5000)
                 .HasColumnType("varchar(5000)");
 
+            builder.Property(p => p.UrlCampanha)
+                .IsRequired()
+                .HasMaxLength(200)
+                .HasColumnType("varchar(200)");
+
             builder.Property(p => p.Usuario_Id)
                .IsRequired();
 

@@ -242,6 +242,9 @@
                       <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('numero_agencia')?.hasError('required') && this.beneficiarioForm.get('numero_agencia')?.touched">
                         * Campo obrigatório
                       </div>
+                      <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('numero_agencia')?.hasError('pattern') && this.beneficiarioForm.get('numero_agencia')?.touched">
+                        Somente números
+                      </div>
                       <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('numero_agencia')?.hasError('maxlength') && this.beneficiarioForm.get('numero_agencia')?.touched">
                         Máximo 4 caracteres
                       </div>
@@ -251,11 +254,17 @@
                       <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('digito_agencia')?.hasError('maxlength') && this.beneficiarioForm.get('digito_agencia')?.touched">
                         Máximo 1 caracteres
                       </div>
+                      <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('digito_agencia')?.hasError('pattern') && this.beneficiarioForm.get('numero_agencia')?.touched">
+                        Somente números
+                      </div>
                     </div>
                     <div class="col-lg-3 space-top-input">
                       <input mask="9999999999999" style="margin-bottom: 0;" class="form__field" formControlName="numero_conta" required="required" placeholder="Conta *" maxlength="13"/>
                       <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('numero_conta')?.hasError('required') && this.beneficiarioForm.get('numero_conta')?.touched">
                         * Campo obrigatório
+                      </div>
+                      <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('numero_conta')?.hasError('pattern') && this.beneficiarioForm.get('numero_agencia')?.touched">
+                        Somente números
                       </div>
                       <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('numero_conta')?.hasError('maxlength') && this.beneficiarioForm.get('numero_conta')?.touched">
                         Máximo 13 caracteres
@@ -265,6 +274,9 @@
                       <input mask="99" class="form__field" style="margin-bottom: 0;" formControlName="digito_conta" required="required" placeholder="Dígito *" maxlength="2"/>
                       <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('digito_conta')?.hasError('required') && this.beneficiarioForm.get('digito_conta')?.touched">
                         * Campo obrigatório
+                      </div>
+                      <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('digito_conta')?.hasError('pattern') && this.beneficiarioForm.get('numero_agencia')?.touched">
+                        Somente números
                       </div>
                       <div class="text-danger alertFormError" *ngIf="this.beneficiarioForm.get('digito_conta')?.hasError('maxlength') && this.beneficiarioForm.get('digito_conta')?.touched">
                         Máximo 2 caracteres
@@ -304,9 +316,10 @@
                     <div class="col-lg-6">
                       <h6 class="form__title" style="text-align: left;">Imagem de Capa (opcional)</h6>
                       <p style="text-align: left;">Campanhas com foto de capa e vídeo chamam muito mais atenção e podem ter mais facilidade para alcançar os objetivos</p>
+                      <p style="text-align: left;">Formatos válidos: png, jpg, jpeg (máx 2 mb)</p>
                       
                       <div class="custom-file">
-                        <input type="file" accept="image/jpeg,image/png" class="custom-file-input" (change)="fileChangeEvent($event)">
+                        <input type="file" accept="image/jpeg,image/png,image/jpg" class="custom-file-input" (change)="fileChangeEvent($event)">
                         <label data-browse="Procurar" style="width: 400px" class="custom-file-label"></label>
                         
                         <div *ngIf='imagemNome' style="text-align: left;"><br><strong>Arquivo selecionado:</strong> {{ imagemNome }} <br></div>
@@ -321,7 +334,7 @@
                   
                   <!-- BOTÕES -->
                   <div class="col-12" style="text-align: center; margin-top: 30px;">
-                    <button class="form__submit" (click)="adicionarCampanha()" [disabled]="!campanhaForm.valid" [ngStyle]="{'background-color': !campanhaForm.valid ? '#D3D3D3' : 'white'}">Criar</button>
+                    <button class="form__submit" (click)="adicionarCampanha()" [disabled]="!campanhaForm.valid" [ngStyle]="{'background-color': !campanhaForm.valid ? '#D3D3D3' : ''}">Criar</button>
                     <button class="form__submit" type="reset" (click)="removerFoto()" style="margin-left: 10px;">Limpar</button>
                   </div>
                   

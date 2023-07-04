@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using VaquinhaAnimal.Data.Repositories;
 using System.Linq;
 using System.Collections.Generic;
+using VaquinhaAnimal.Domain.Helpers;
 
 namespace VaquinhaAnimal.Data.Repository
 {
@@ -19,6 +20,14 @@ namespace VaquinhaAnimal.Data.Repository
             return await Db.Doacoes
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Transacao_Id == orderId);
+        }
+
+        public async Task<Doacao> GetDonationsWithCampaignAsync(Guid doacaoId)
+        {
+            return await Db.Doacoes
+                .AsNoTracking()
+                .Include(c => c.Campanha)
+                .FirstOrDefaultAsync(p => p.Id == doacaoId);
         }
 
         public async Task<List<Doacao>> GetAllMyDonationsAsync(Guid id)
@@ -35,6 +44,7 @@ namespace VaquinhaAnimal.Data.Repository
         {
             return await Db.Doacoes
                 .AsNoTracking()
+                .Include(c => c.Campanha)
                 .Where(c => c.Campanha_Id == campanhaId && c.Status == "paid")
                 .OrderByDescending(p => p.Data)
                 .ToListAsync();
@@ -46,6 +56,7 @@ namespace VaquinhaAnimal.Data.Repository
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Charge_Id == charge_id);
         }
+
         public async Task<int> ObterTotalDoadoresPorCampanha(Guid campanhaId)
         {
             var result = await Db.Doacoes
@@ -55,6 +66,58 @@ namespace VaquinhaAnimal.Data.Repository
                 .CountAsync();
             
             return result;
+        }
+
+        // TESTE DE PAGINAÇÃO
+        public async Task<PagedResult<Doacao>> ListAsync(int _PageSize, int _PageNumber)
+        {
+            var totalResults = Db.Doacoes
+                .AsNoTracking()
+                .Count();
+
+            var result = await Db.Doacoes
+                .AsNoTracking()
+                //.Include(c => c.Campanha)
+                .Skip((_PageNumber - 1) * _PageSize)
+                .Take(_PageSize)
+                .OrderBy(p => p.Data)
+                .ToListAsync();
+
+            var resultPaginado = new PagedResult<Doacao>
+            {
+                PageNumber = _PageNumber,
+                PageSize = _PageSize,
+                TotalRecords = totalResults,
+                Data = result
+            };
+
+            return resultPaginado;
+        }
+        public async Task<PagedResult<Doacao>> ListMyDonationsAsync(int _PageSize, int _PageNumber, Guid userId)
+        {
+            var totalResults = Db.Doacoes
+                .AsNoTracking()
+                .Where(c => c.Usuario_Id == userId.ToString())
+                .Count();
+
+            var result = await Db.Doacoes
+                .AsNoTracking()
+                .Where(c => c.Usuario_Id == userId.ToString())
+                .Include(c => c.Campanha)
+                .OrderByDescending(p => p.Data)
+                .Skip((_PageNumber - 1) * _PageSize)
+                .Take(_PageSize)
+                .ToListAsync();
+
+            var resultPaginado = new PagedResult<Doacao>
+            {
+                PageNumber = _PageNumber,
+                PageSize = _PageSize,
+                TotalRecords = totalResults,
+                Data = result
+            };
+
+            return resultPaginado;
         }
     }
 }
