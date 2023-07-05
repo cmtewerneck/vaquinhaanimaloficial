@@ -1,6 +1,7 @@
 ﻿using VaquinhaAnimal.Domain.Interfaces;
 using VaquinhaAnimal.Domain.Notificacoes;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Linq;
@@ -16,19 +17,19 @@ namespace VaquinhaAnimal.Api.Controllers
         #region VARIABLES
         private readonly INotificador _notificador;
         public readonly IUser AppUser;
+        private readonly IConfiguration _configuration;
         public HttpClient client = new HttpClient();
         public string urlPagarme = "https://api.pagar.me/core/v5/";
-        public string prod_key = "sk_a4Wenl3TjiRByvMo";
-        public string test_key = "sk_test_yjeXypWSwEtVYn3M";
         protected Guid UsuarioId { get; set; }
         protected bool UsuarioAutenticado { get; set; }
         #endregion
 
         #region CONSTRUCTOR
-        public MainController(INotificador notificador, IUser appUser)
+        public MainController(INotificador notificador, IUser appUser, IConfiguration configuration)
         {
             _notificador = notificador;
             AppUser = appUser;
+            _configuration = configuration;
 
             if (appUser.IsAuthenticated())
             {
@@ -85,9 +86,7 @@ namespace VaquinhaAnimal.Api.Controllers
 
         protected void AddHeaderPagarme()
         {
-            //Set Basic Auth
-            //var userPagarme = prod_key;
-            var userPagarme = test_key;
+            var userPagarme = _configuration["PagarMe:AppKey"];
             var password = "";
             var base64String = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{userPagarme}:{password}"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64String);
