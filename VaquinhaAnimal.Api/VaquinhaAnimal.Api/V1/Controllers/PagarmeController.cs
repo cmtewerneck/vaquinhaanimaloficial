@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -55,8 +56,9 @@ namespace VaquinhaAnimal.App.V1.Controllers
                                  IUsuarioService usuarioService,
                                  ICampanhaService campanhaService,
                                  ISignalR signalR,
+                                 IConfiguration configuration,
                                  IIdentityRepository identityRepository)
-                                 : base(notificador, user)
+                                 : base(notificador, user, configuration)
         {
             _user = user;
             _usuarioService = usuarioService;

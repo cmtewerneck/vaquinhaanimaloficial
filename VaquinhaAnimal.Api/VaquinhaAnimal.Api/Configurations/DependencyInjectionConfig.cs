@@ -29,10 +29,8 @@ namespace VaquinhaAnimal.Api.Configurations
             services.AddScoped<ISuporteService, SuporteService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<ICampanhaService, CampanhaService>();
-            services.AddScoped<IContaDepositoService, ContaDepositoService>();
             services.AddScoped<IDoacaoService, DoacaoService>();
             services.AddScoped<IImagemService, ImagemService>();
-            services.AddScoped<IRedeSocialService, RedeSocialService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
 
             // REPOSITORIES
@@ -42,10 +40,8 @@ namespace VaquinhaAnimal.Api.Configurations
             services.AddScoped<ICartaoRepository, CartaoRepository>();
             services.AddScoped<ISuporteRepository, SuporteRepository>();
             services.AddScoped<ICampanhaRepository, CampanhaRepository>();
-            services.AddScoped<IContaDepositoRepository, ContaDepositoRepository>();
             services.AddScoped<IDoacaoRepository, DoacaoRepository>();
             services.AddScoped<IImagemRepository, ImagemRepository>();
-            services.AddScoped<IRedeSocialRepository, RedeSocialRepository>();
             services.AddScoped<IIdentityRepository, IdentityRepository>();
             
             services.AddScoped<ISignalR, SignalRHub>(); // SIGNAL R

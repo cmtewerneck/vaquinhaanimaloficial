@@ -72,14 +72,8 @@ namespace VaquinhaAnimal.Domain.Entities
         [Required]
         public Guid Usuario_Id { get; set; }
 
-        [JsonPropertyName("redes_sociais")]
-        public List<RedeSocial> RedesSociais { get; set; }
-
         [JsonPropertyName("imagens")]
         public List<Imagem> Imagens { get; set; }
-
-        [JsonPropertyName("conta_deposito")]
-        public ContaDeposito ContaDeposito { get; set; }
 
         [JsonPropertyName("beneficiario")]
         public Beneficiario Beneficiario { get; set; }

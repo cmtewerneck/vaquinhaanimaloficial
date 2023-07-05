@@ -3,6 +3,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,7 +40,8 @@ namespace VaquinhaAnimal.App.V1.Controllers
                                  IDoacaoService doacaoService,
                                  IIdentityRepository identityRepository,
                                  IMapper mapper,
-                                 INotificador notificador, IUser user) : base(notificador, user)
+                                 IConfiguration configuration,
+                                 INotificador notificador, IUser user) : base(notificador, user, configuration)
         {
             _doacaoRepository = doacaoRepository;
             _mapper = mapper;
@@ -63,12 +65,12 @@ namespace VaquinhaAnimal.App.V1.Controllers
             try
             {
                 //Set Basic Auth
-                var userPagarme = test_key;
-                var password = "";
-                var base64String = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{userPagarme}:{password}"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64String);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                //var userPagarme = test_key;
+                //var password = "";
+                //var base64String = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{userPagarme}:{password}"));
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64String);
+                //client.DefaultRequestHeaders.Accept.Clear();
+                //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 //foreach (var item in pedido.items)
                 //{

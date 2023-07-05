@@ -32,9 +32,6 @@ namespace VaquinhaAnimal.Data.Mappings
                .IsRequired();
 
             // RELATIONSHIP
-            builder.HasOne(f => f.ContaDeposito)
-                .WithOne();
-
             builder.HasOne(f => f.Beneficiario)
                .WithOne();
 

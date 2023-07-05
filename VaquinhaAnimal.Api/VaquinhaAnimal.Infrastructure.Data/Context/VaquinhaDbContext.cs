@@ -18,11 +18,9 @@ namespace VaquinhaAnimal.Data.Context
         public DbSet<Cartao> Cartoes { get; set; }
         public DbSet<Assinatura> Assinaturas { get; set; }
         public DbSet<Beneficiario> Beneficiario { get; set; }
-        public DbSet<ContaDeposito> ContasDeposito { get; set; }
         public DbSet<Suporte> Suportes { get; set; }
         public DbSet<Doacao> Doacoes { get; set; }
         public DbSet<Imagem> Imagens { get; set; }
-        public DbSet<RedeSocial> RedesSociais { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,11 +31,6 @@ namespace VaquinhaAnimal.Data.Context
                 property.SetColumnType("varchar(100)");
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(VaquinhaDbContext).Assembly);
-
-            modelBuilder.Entity<ContaDeposito>()
-                .HasOne(a => a.Campanha)
-                .WithOne(b => b.ContaDeposito)
-                .HasForeignKey<ContaDeposito>(b => b.Campanha_Id);
 
             modelBuilder.Entity<Beneficiario>()
                 .HasOne(a => a.Campanha)

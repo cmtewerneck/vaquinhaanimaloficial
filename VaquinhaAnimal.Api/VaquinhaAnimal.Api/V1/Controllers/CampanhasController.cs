@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -41,8 +42,9 @@ namespace VaquinhaAnimal.App.V1.Controllers
                                   ICampanhaService campanhaService,
                                   IImagemService imagemService,
                                   IMapper mapper,
+                                  IConfiguration configuration,
                                   UserManager<ApplicationUser> userManager,
-                                  INotificador notificador, IUser user) : base(notificador, user)
+                                  INotificador notificador, IUser user) : base(notificador, user, configuration)
         {
             _imagemService = imagemService;
             _campanhaRepository = campanhaRepository;

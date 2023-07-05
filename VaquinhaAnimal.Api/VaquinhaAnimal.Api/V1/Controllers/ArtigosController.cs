@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,9 +32,10 @@ namespace VaquinhaAnimal.App.V1.Controllers
         public ArtigosController(IArtigoRepository artigoRepository,
                                   IArtigoService artigoService,
                                   IMapper mapper,
+                                  IConfiguration configuration,
                                   UserManager<ApplicationUser> userManager,
                                   INotificador notificador,
-                                  IUser user) : base(notificador, user)
+                                  IUser user) : base(notificador, user, configuration)
         {
             _artigoRepository = artigoRepository;
             _mapper = mapper;

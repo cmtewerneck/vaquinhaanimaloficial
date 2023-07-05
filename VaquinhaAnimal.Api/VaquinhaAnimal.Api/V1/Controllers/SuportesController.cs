@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -35,8 +36,9 @@ namespace VaquinhaAnimal.App.V1.Controllers
                                   ISuporteService suporteService,
                                   IUsuarioService usuarioService,
                                   IMapper mapper,
+                                  IConfiguration configuration,
                                   UserManager<ApplicationUser> userManager,
-                                  INotificador notificador, IUser user) : base(notificador, user)
+                                  INotificador notificador, IUser user) : base(notificador, user, configuration)
         {
             _suporteRepository = suporteRepository;
             _mapper = mapper;

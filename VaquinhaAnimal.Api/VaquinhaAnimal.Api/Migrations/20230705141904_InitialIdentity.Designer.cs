@@ -10,8 +10,8 @@ using VaquinhaAnimal.Api.Data;
 namespace VaquinhaAnimal.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230511202811_inserindoDocumentoUsuario")]
-    partial class inserindoDocumentoUsuario
+    [Migration("20230705141904_InitialIdentity")]
+    partial class InitialIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

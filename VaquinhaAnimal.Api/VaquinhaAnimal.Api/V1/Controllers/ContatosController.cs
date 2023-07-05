@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Net;
 using System.Net.Mail;
@@ -12,7 +13,7 @@ namespace VaquinhaAnimal.App.V1.Controllers
     [Route("api/v{version:apiVersion}/contatos")]
     public class ContatosController : MainController
     {
-        public ContatosController(INotificador notificador, IUser user) : base(notificador, user) 
+        public ContatosController(INotificador notificador, IUser user, IConfiguration configuration) : base(notificador, user, configuration) 
         { }
 
         [HttpPost]

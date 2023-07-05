@@ -49,8 +49,6 @@ namespace VaquinhaAnimal.Data.Repository
                 .Where(c => c.Usuario_Id == id)
                 .Include(c => c.Doacoes)
                 .Include(c => c.Imagens)
-                .Include(c => c.RedesSociais)
-                .Include(c => c.ContaDeposito)
                 .OrderBy(p => p.DataCriacao)
                 .ToListAsync();
         }

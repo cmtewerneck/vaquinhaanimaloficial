@@ -318,57 +318,6 @@ namespace VaquinhaAnimal.Infrastructure.Data.Migrations
                     b.ToTable("Cartoes");
                 });
 
-            modelBuilder.Entity("VaquinhaAnimal.Domain.Entities.ContaDeposito", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Agencia")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<string>("AgenciaDigito")
-                        .HasMaxLength(1)
-                        .HasColumnType("varchar(1)");
-
-                    b.Property<string>("Banco")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<Guid>("Campanha_Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Conta")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("varchar(13)");
-
-                    b.Property<string>("ContaDigito")
-                        .IsRequired()
-                        .HasMaxLength(2)
-                        .HasColumnType("varchar(2)");
-
-                    b.Property<string>("Documento")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("varchar(14)");
-
-                    b.Property<int>("TipoConta")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TipoPessoa")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Campanha_Id")
-                        .IsUnique();
-
-                    b.ToTable("ContasDeposito");
-                });
-
             modelBuilder.Entity("VaquinhaAnimal.Domain.Entities.Doacao", b =>
                 {
                     b.Property<Guid>("Id")
@@ -454,30 +403,6 @@ namespace VaquinhaAnimal.Infrastructure.Data.Migrations
                     b.ToTable("Imagens");
                 });
 
-            modelBuilder.Entity("VaquinhaAnimal.Domain.Entities.RedeSocial", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("Campanha_Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Tipo")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Campanha_Id");
-
-                    b.ToTable("RedesSociais");
-                });
-
             modelBuilder.Entity("VaquinhaAnimal.Domain.Entities.Suporte", b =>
                 {
                     b.Property<Guid>("Id")
@@ -531,17 +456,6 @@ namespace VaquinhaAnimal.Infrastructure.Data.Migrations
                     b.Navigation("Campanha");
                 });
 
-            modelBuilder.Entity("VaquinhaAnimal.Domain.Entities.ContaDeposito", b =>
-                {
-                    b.HasOne("VaquinhaAnimal.Domain.Entities.Campanha", "Campanha")
-                        .WithOne("ContaDeposito")
-                        .HasForeignKey("VaquinhaAnimal.Domain.Entities.ContaDeposito", "Campanha_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Campanha");
-                });
-
             modelBuilder.Entity("VaquinhaAnimal.Domain.Entities.Doacao", b =>
                 {
                     b.HasOne("VaquinhaAnimal.Domain.Entities.Campanha", "Campanha")
@@ -564,30 +478,15 @@ namespace VaquinhaAnimal.Infrastructure.Data.Migrations
                     b.Navigation("Campanha");
                 });
 
-            modelBuilder.Entity("VaquinhaAnimal.Domain.Entities.RedeSocial", b =>
-                {
-                    b.HasOne("VaquinhaAnimal.Domain.Entities.Campanha", "Campanha")
-                        .WithMany("RedesSociais")
-                        .HasForeignKey("Campanha_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Campanha");
-                });
-
             modelBuilder.Entity("VaquinhaAnimal.Domain.Entities.Campanha", b =>
                 {
                     b.Navigation("Assinaturas");
 
                     b.Navigation("Beneficiario");
 
-                    b.Navigation("ContaDeposito");
-
                     b.Navigation("Doacoes");
 
                     b.Navigation("Imagens");
-
-                    b.Navigation("RedesSociais");
                 });
 #pragma warning restore 612, 618
         }

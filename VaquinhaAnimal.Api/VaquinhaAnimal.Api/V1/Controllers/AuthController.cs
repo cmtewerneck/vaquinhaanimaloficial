@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -51,7 +52,8 @@ namespace VaquinhaAnimal.Api.V1.Controllers
                               IOptions<AppSettings> appSettings, IUser user,
                               ILogger<AuthController> logger,
                               IMapper mapper,
-                              IUsuarioService usuarioService) : base(notificador, user)
+                              IConfiguration configuration,
+                              IUsuarioService usuarioService) : base(notificador, user, configuration)
         {
             _signInManager = signInManager;
             _userManager = userManager;

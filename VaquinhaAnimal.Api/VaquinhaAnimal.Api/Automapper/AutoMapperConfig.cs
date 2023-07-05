@@ -15,10 +15,8 @@ namespace VaquinhaAnimal.Api.AutoMapper
             CreateMap<Adocao, AdocaoListViewModel>().ReverseMap();
             CreateMap<Campanha, CampanhaViewModel>().ReverseMap();
             CreateMap<Beneficiario, BeneficiarioViewModel>().ReverseMap();
-            CreateMap<ContaDeposito, ContaDepositoViewModel>().ReverseMap();
             CreateMap<Doacao, DoacaoViewModel>().ReverseMap();
             CreateMap<Imagem, ImagemViewModel>().ReverseMap();
-            CreateMap<RedeSocial, RedeSocialViewModel>().ReverseMap();
             CreateMap<Suporte, SuporteViewModel>().ReverseMap();
         }
     }

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace VaquinhaAnimal.App.V1.Controllers
 {
@@ -26,7 +27,8 @@ namespace VaquinhaAnimal.App.V1.Controllers
         public ImagensController(IImagemRepository imagemRepository,
                                  IImagemService imagemService,
                                  IMapper mapper,
-                                 INotificador notificador, IUser user) : base(notificador, user)
+                                 IConfiguration configuration,
+                                 INotificador notificador, IUser user) : base(notificador, user, configuration)
         {
             _imagemRepository = imagemRepository;
             _mapper = mapper;

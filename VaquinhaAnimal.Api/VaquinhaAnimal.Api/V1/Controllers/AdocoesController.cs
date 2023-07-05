@@ -1,25 +1,15 @@
 ﻿using AutoMapper;
-using VaquinhaAnimal.Api.Controllers;
-using VaquinhaAnimal.Api.ViewModels;
-using VaquinhaAnimal.Domain.Entities;
-using VaquinhaAnimal.Domain.Entities.Base;
-using VaquinhaAnimal.Domain.Entities.Pagarme;
-using VaquinhaAnimal.Domain.Entities.Validations.Documents;
-using VaquinhaAnimal.Domain.Enums;
-using VaquinhaAnimal.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Net.Mail;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
+using VaquinhaAnimal.Api.Controllers;
+using VaquinhaAnimal.Api.ViewModels;
+using VaquinhaAnimal.Domain.Entities;
+using VaquinhaAnimal.Domain.Interfaces;
 
 namespace VaquinhaAnimal.App.V1.Controllers
 {
@@ -39,7 +29,8 @@ namespace VaquinhaAnimal.App.V1.Controllers
         public AdocoesController(IAdocaoRepository adocaoRepository,
                                  IMapper mapper,
                                  IAdocaoService adocaoService,
-                                 INotificador notificador, IUser user) : base(notificador, user)
+                                 IConfiguration configuration,
+                                 INotificador notificador, IUser user) : base(notificador, user, configuration)
         {
             _adocaoRepository = adocaoRepository;
             _adocaoService = adocaoService;
