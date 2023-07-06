@@ -12,7 +12,6 @@ import { environment } from 'src/environments/environment';
 export class HomepageComponent implements OnInit {
 
   campanhas!: Campanha[];
-  numeroCampanhas: boolean = false;
   imagens: string = environment.imagensUrl;
   
   constructor(@Inject(DOCUMENT) private _document: any, private appService: AppService, private toastr: ToastrService) { }
@@ -21,25 +20,21 @@ export class HomepageComponent implements OnInit {
     var window = this._document.defaultView;
     window.ajustarPromoSlider();
     window.ajustarDonorsSlider();
-    window.ajustarSliderCampanhasDestaque();
     this.ObterCampanhasPremium();
     window.scrollTo(0, 0);
   }
-
 
   ObterCampanhasPremium() {
     this.appService.obterCampanhasPremium().subscribe(
       (_campanhas: Campanha[]) => {
         this.campanhas = _campanhas;
 
-        if(this.campanhas.length >= 3){
-          this.numeroCampanhas = true;
-        }
-
         this.campanhas.forEach(campanha => {
           let percentual = (campanha.total_arrecadado! / campanha.valor_desejado) * 100;
           campanha.percentual_arrecadado = Math.trunc(percentual);
         });
+
+        setTimeout(() => this._document.defaultView.ajustarSliderCampanhasDestaque());
       }, error => {
         this.toastr.error("Erro de carregamento!");
       });

@@ -218,8 +218,8 @@ export class CriarComponent implements OnInit {
       const reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = () => {
-          if(event.target.files[0].size > 3145728){
-            this.toastr.error("A imagem deve ter menos do que 2 mb.");
+          if(event.target.files[0].size > 2097152){
+            this.toastr.error("A imagem deve ter no máximo 2 mb.");
             this.removerFoto();
             return;
           }
