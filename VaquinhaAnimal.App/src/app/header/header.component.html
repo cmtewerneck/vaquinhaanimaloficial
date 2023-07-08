@@ -2,27 +2,28 @@
 <div class="aside-dropdown">
   <div class="aside-dropdown__inner">
     <span class="aside-dropdown__close">
-      <svg class="icon"><use xlink:href="#close"></use></svg></span>
+      <svg class="icon">
+        <use xlink:href="#close"></use>
+      </svg></span>
       <div class="aside-dropdown__item d-lg-none d-block">
         <div style="margin-bottom: 40px; text-align: center;">
           <img class="header-logo__img" src="assets/img/logo_fundo_claro.png" width="90%" alt="logo"/>
         </div>
-        <!-- MENU QUANDO O SITE ESTÁ RECOLHIDO -->
         <ul class="aside-menu">
-          <li class="aside-menu__item aside-menu__item--has-child aside-menu__item--active">
-            <a class="aside-menu__link" [routerLink]="['']"><span>Início</span></a>
+          <li class="aside-menu__item aside-menu__item--has-child">
+            <a class="aside-menu__link" [routerLink]="['homepage']"><span>Início</span></a>
           </li>
           <li class="aside-menu__item aside-menu__item--has-child">
-            <a class="aside-menu__link" [routerLink]="['campanhas']"><span>Campanhas</span></a>
+            <a class="aside-menu__link" [routerLink]="['campanhas/listar-todas']"><span>Campanhas</span></a>
           </li>
           <li class="aside-menu__item aside-menu__item--has-child">
-            <a class="aside-menu__link" [routerLink]="['campanhas']"><span>Crie a sua</span></a>
+            <a class="aside-menu__link" [routerLink]="['campanhas/criar']"><span>Crie a sua</span></a>
           </li>
-          <!-- <li class="aside-menu__item aside-menu__item--has-child">
-            <a class="aside-menu__link" [routerLink]="['artigos']"><span>Artigos</span></a>
-          </li> -->
           <li class="aside-menu__item aside-menu__item--has-child">
-            <a class="aside-menu__link" [routerLink]="['contato']"><span>Adote</span></a>
+            <a class="aside-menu__link" [routerLink]="['artigos/listar-todos']"><span>Artigos</span></a>
+          </li>
+          <li class="aside-menu__item aside-menu__item--has-child">
+            <a class="aside-menu__link" [routerLink]="['adocoes/listar-todas']"><span>Adote</span></a>
           </li>
           <li class="aside-menu__item aside-menu__item--has-child">
             <a class="aside-menu__link" [routerLink]="['contato']"><span>Contato</span></a>
@@ -35,14 +36,15 @@
           </li>
           <li class="aside-menu__item aside-menu__item--has-child" *ngIf="userLogado"><a class="aside-menu__link"><span><strong>{{nomeUsuario}}</strong></span></a>
             <!-- MENU USUÁRIO LOGADO -->
-            <ul class="aside-menu__sub-list sub-list">
-              <li><a href="about.html"><span>Dados Cadastrais</span></a></li>
-              <li><a href="typography.html"> <span>Alterar Senha</span></a></li>
-              <li><a href="campanhas/minhas-campanhas"><span>Minhas Campanhas</span></a></li>
-              <li><a href="donors.html"><span>Minhas Doações</span></a></li>
-              <li><a href="donors.html"><span>Minhas Assinaturas</span></a></li>
-              <li><a href="donors.html"><span>Carteira</span></a></li>
-              <li><a (click)="logout()" style="cursor: pointer;"><span>Sair</span></a></li>
+            <ul class="aside-menu__sub-list">
+              <li><a [routerLink]="['auth/edit-password']"> <span>Alterar Senha</span></a></li>
+              <li><a [routerLink]="['campanhas/minhas-campanhas']"><span>Minhas Campanhas</span></a></li>
+              <li><a [routerLink]="['doacoes/minhas-doacoes']"><span>Minhas Doações</span></a></li>
+              <li><a [routerLink]="['assinaturas/minhas-assinaturas']"><span>Minhas Assinaturas</span></a></li>
+              <li><a [routerLink]="['adocoes/meus-pets']"><span>Meus PETS pra adoção</span></a></li>
+              <li><a [routerLink]="['auth/wallet']"><span>Carteira</span></a></li>
+              <li><a [routerLink]="['suporte/listar-suporte']"><span>Meus Tickets</span></a></li>
+              <li><a (click)="logout()" style="color: white; cursor: pointer;"><span>Sair</span></a></li>
             </ul>
             <!-- MENU USUÁRIO LOGADO FIM-->
           </li>
@@ -60,16 +62,10 @@
         </div>
         <ul class="aside-socials">
           <li class="aside-socials__item">
-            <a class="aside-socials__link" href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            <a class="aside-socials__link" target="_blank" href="https://www.instagram.com/vaquinhaanimal"><i class="fa fa-instagram" aria-hidden="true"></i></a>
           </li>
           <li class="aside-socials__item">
-            <a class="aside-socials__link" href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
-          </li>
-          <li class="aside-socials__item">
-            <a class="aside-socials__link aside-socials__link--active" href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          </li>
-          <li class="aside-socials__item">
-            <a class="aside-socials__link" href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+            <a class="aside-socials__link" target="_blank" href="https://www.facebook.com/vaquinhaanimal"><i class="fa fa-facebook" aria-hidden="true"></i></a>
           </li>
         </ul>
       </div>
@@ -125,9 +121,6 @@
           <nav *ngIf="emailUsuario != 'contato@vaquinhaanimal.com.br'">
             <ul class="main-menu">
               <li class="main-menu__item main-menu__item--has-child">
-                <a class="main-menu__link" [routerLink]="['']"><span>Início</span></a>
-              </li>
-              <li class="main-menu__item main-menu__item--has-child">
                 <a class="main-menu__link" [routerLink]="['campanhas/listar-todas']"><span>Campanhas</span></a>
               </li>
               <li class="main-menu__item main-menu__item--has-child">
@@ -164,7 +157,7 @@
               </li>
             </ul>
           </nav>
-
+          
           <nav *ngIf="emailUsuario == 'contato@vaquinhaanimal.com.br'">
             <ul class="main-menu">
               <li class="main-menu__item main-menu__item--has-child" *ngIf="userLogado"><a class="main-menu__link"><span><strong>Admin</strong></span></a>
@@ -184,6 +177,18 @@
           <!-- main menu end-->
         </div>
         <div class="col-auto d-flex align-items-center">
+          <!-- lang select start-->
+          <ul class="lang-select">
+            <li class="lang-select__item--active"><span>Pt</span>
+              <!-- <ul class="lang-select__sub-list">
+                <li><a href="#">French</a></li>
+                <li><a href="#">Spanish</a></li>
+                <li><a href="#">Deutsch</a></li>
+                <li><a href="#">Russian</a></li>
+              </ul> -->
+            </li>
+          </ul>
+          <!-- lang select end-->
           <a class="button button--squared" [routerLink]="['campanhas/listar-todas']"><span>Quero salvar um pet</span></a>
           <div class="dropdown-trigger d-block d-sm-none">
             <div class="dropdown-trigger__item"></div>
