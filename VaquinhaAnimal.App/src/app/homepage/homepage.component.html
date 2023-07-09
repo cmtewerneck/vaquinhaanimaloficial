@@ -1,4 +1,96 @@
 <main class="main">
+  <!-- promo start-->
+  <section class="promo promo--front_3">
+    <div class="promo-slider">
+      <div class="promo-slider__item promo-slider__item--style-3">
+        <picture>
+          <source srcset="assets/img/slider_1.jpg" media="(min-width: 835px)"/>
+          <source srcset="assets/img/slider_1_reduzido.jpg" media="(min-width: 376px)"/><img class="img--bg" src="assets/img/slider_1_reduzido.jpg" alt="img"/>
+        </picture>
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-6 offset-xl-6 text-left">
+              <div class="align-container">
+                <div class="align-container__item">
+                  <div class="promo-slider__wrapper-1">
+                    <h2 class="promo-slider__title"><span>Ajudamos animais</span><br/><span>por todo Brasil</span></h2>
+                  </div>
+                  <div class="promo-slider__wrapper-2">
+                    <p class="promo-slider__subtitle" style="text-align: justify;">Esses seres incríveis precisam cada vez mais da nossa ajuda e com uma pequena contribuição, juntos podemos transformar a situação de cada pet em necessidade no Brasil.</p>
+                  </div>
+                  <div class="promo-slider__wrapper-3"><a class="button promo-slider__button button--primary" [routerLink]="['campanhas']">Explorar Campanhas</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="promo-slider__item promo-slider__item--style-2">
+        <picture>
+          <source srcset="assets/img/slider_2.jpg" media="(min-width: 835px)"/>
+          <source srcset="assets/img/slider_2_reduzido.jpg" media="(min-width: 376px)"/><img class="img--bg" src="assets/img/slider_2_reduzido.jpg" alt="img"/>
+        </picture>
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-7">
+              <div class="align-container">
+                <div class="align-container__item">
+                  <div class="promo-slider__wrapper-1">
+                    <h2 class="promo-slider__title"><span>Juntos</span><br/><span>Faremos a diferença</span></h2>
+                  </div>
+                  <div class="promo-slider__wrapper-2">
+                    <p class="promo-slider__subtitle">Além das doações, adote um pet e faça com que ele possa ter uma vida melhor.</p>
+                  </div>
+                  <div class="promo-slider__wrapper-3"><a class="button promo-slider__button button--primary" [routerLink]="['/adocoes/listar-todas']">Adotar</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="promo-slider__item promo-slider__item--style-1">
+        <picture>
+          <source srcset="assets/img/slider_3.jpg" media="(min-width: 835px)"/>
+          <source srcset="assets/img/slider_3_reduzido.jpg" media="(min-width: 376px)"/><img class="img--bg" src="assets/img/slider_3_reduzido.jpg" alt="img"/>
+        </picture>
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <div class="align-container">
+                <div class="align-container__item">
+                  <div class="promo-slider__wrapper-1">
+                    <h2 class="promo-slider__title"><span>Nós podemos</span><br/><span>e eles merecem.</span></h2>
+                  </div>
+                  <div class="promo-slider__wrapper-3">
+                    <a class="button promo-slider__button button--primary" [routerLink]="['/campanhas/listar-todas']">Campanhas</a>
+                    <a class="button promo-slider__button button--primary" [routerLink]="['/campanhas/criar']" style="margin-left: 20px;">Crie a sua</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- promo pannel start-->
+    <div class="promo-pannel">
+      <div class="promo-pannel__video"><img class="img--bg" src="assets/img/video_background.jpg" alt="image"/><a class="video-trigger" href="https://www.youtube.com/watch?v=_sI_Ps7JSEk"><span>Assistir vídeo</span><i class="fa fa-play" aria-hidden="true"></i></a></div>
+    </div>
+    <!-- promo pannel end-->
+    <!-- slider nav start-->
+    <div class="slider__nav slider__nav--promo">
+      <div class="promo-slider__count"></div>
+      <div class="slider__arrows">
+        <div class="slider__prev"><i class="fa fa-chevron-left" aria-hidden="true"></i>
+        </div>
+        <div class="slider__next"><i class="fa fa-chevron-right" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+    <!-- slider nav end-->
+  </section>
+  <!-- promo end-->
+
   <!-- CAMPANHAS PREMIUM -->
   <!-- <section *ngIf="numeroCampanhas" class="section causes background--brown"><img class="causes__bg" src="assets/img/causes_img.png" alt="img" /> -->
   <section *ngIf="campanhas && campanhas.length" class="section causes background--brown"><img class="causes__bg" src="assets/img/causes_img.png" alt="img" />
