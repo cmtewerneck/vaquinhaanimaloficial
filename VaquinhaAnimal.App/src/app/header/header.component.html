@@ -121,6 +121,9 @@
           <nav *ngIf="emailUsuario != 'contato@vaquinhaanimal.com.br'">
             <ul class="main-menu">
               <li class="main-menu__item main-menu__item--has-child">
+                <a class="main-menu__link" [routerLink]="['homepage']"><span><i class="fa-solid fa-house"></i></span></a>
+              </li>
+              <li class="main-menu__item main-menu__item--has-child">
                 <a class="main-menu__link" [routerLink]="['campanhas/listar-todas']"><span>Campanhas</span></a>
               </li>
               <li class="main-menu__item main-menu__item--has-child">
