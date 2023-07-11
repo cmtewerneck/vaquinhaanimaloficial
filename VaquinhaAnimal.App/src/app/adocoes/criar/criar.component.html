@@ -145,10 +145,7 @@
                     </div>
 
                     <div class="col-lg-3 space-top-input">
-                      <input class="form__field" style="margin-bottom: 0;" mask="(00) 0000-0000||(00) 0 0000-0000" formControlName="celular" placeholder="Celular *" required="required" maxlength="20" [(ngModel)]="celular_card" />
-                      <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('celular')?.hasError('required') && this.adocaoForm.get('celular')?.touched">
-                        * Campo obrigatório
-                      </div>
+                      <input class="form__field" style="margin-bottom: 0;" mask="(00) 0000-0000||(00) 0 0000-0000" formControlName="celular" placeholder="Celular" maxlength="20" [(ngModel)]="celular_card" />
                       <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('celular')?.hasError('minlength') && this.adocaoForm.get('celular')?.touched">
                         Mínimo 6 caracteres
                       </div>
@@ -178,6 +175,19 @@
                   <!-- LINHA 4 -->
                   <div class="row" style="margin-top: 20px;">
 
+                    <div class="col-lg-6">
+                      <input class="form__field" style="margin-bottom: 0;" formControlName="instagram" placeholder="Instagram" maxlength="200" />
+                    </div>
+
+                    <div class="col-lg-6 space-top-input">
+                      <input class="form__field" style="margin-bottom: 0;" formControlName="facebook" placeholder="Facebook" maxlength="200" />
+                    </div>
+
+                  </div>
+
+                  <!-- LINHA 5 -->
+                  <div class="row" style="margin-top: 20px;">
+
                     <div class="col-lg-12">
                       <textarea class="form__message form__field" style="margin-bottom: 0;" formControlName="descricao" placeholder="Conte a história desse pet *" cols="40" rows="10" maxlength="1000"></textarea>
                       <div class="text-danger alertFormError" *ngIf="this.adocaoForm.get('faixa_etaria')?.hasError('required') && this.adocaoForm.get('faixa_etaria')?.touched">
@@ -187,14 +197,14 @@
 
                   </div>
 
-                  <!-- LINHA 5 -->
+                  <!-- LINHA 6 -->
                   <div class="row" style="margin-top: 20px;">
                     <div class="col-lg-12">
                       <input class="form__field" style="margin-bottom: 0;" formControlName="link_video" placeholder="URL de vídeo (opcional)" />
                     </div>
                   </div>
                   
-                  <!-- LINHA 6 IMAGEM -->
+                  <!-- LINHA 7 IMAGEM -->
                   <div class="row" style="margin-top: 60px;">
                     <!-- CARD -->
                     <div class="col-lg-6">

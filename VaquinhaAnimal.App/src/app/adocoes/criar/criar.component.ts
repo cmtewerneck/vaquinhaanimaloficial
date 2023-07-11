@@ -50,7 +50,9 @@ export class CriarComponent implements OnInit {
       this.adocaoForm = this.fb.group({
         nome_pet: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]],
         email: ['', [Validators.email, Validators.maxLength(100), Validators.minLength(3)]],
-        celular: ['', [Validators.required, Validators.maxLength(20), Validators.minLength(6)]],
+        celular: ['', [Validators.maxLength(20), Validators.minLength(6)]],
+        instagram: [''],
+        facebook: [''],
         descricao: ['', [Validators.maxLength(1000), Validators.minLength(5)]],
         link_video: [''],
         tipo_pet: ['', Validators.required],

@@ -136,6 +136,8 @@ namespace VaquinhaAnimal.App.V1.Controllers
             adocaoAtualizacao.LinkVideo = adocao.LinkVideo;
             adocaoAtualizacao.Particular_Nome = adocao.Particular_Nome;
             adocaoAtualizacao.TipoAnunciante = adocao.TipoAnunciante;
+            adocaoAtualizacao.Instagram = adocao.Instagram;
+            adocaoAtualizacao.Facebook = adocao.Facebook;
 
             var result = await _adocaoService.Atualizar(_mapper.Map<Adocao>(adocaoAtualizacao));
 

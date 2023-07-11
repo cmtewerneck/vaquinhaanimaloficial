@@ -3,6 +3,8 @@ export class Adocao {
     nome_pet!: string;
     email!: string;
     celular!: string;
+    instagram!: string;
+    facebook!: string;
     tipo_pet!: TipoPetEnum;
     tipo_anunciante!: TipoAnuncianteEnum;
     faixa_etaria!: FaixaEtariaEnum;

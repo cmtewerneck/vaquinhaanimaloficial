@@ -41,9 +41,16 @@ namespace VaquinhaAnimal.Data.Mappings
                 .HasColumnType("varchar(1000)");
 
             builder.Property(p => p.Celular)
-                .IsRequired()
                 .HasMaxLength(20)
                 .HasColumnType("varchar(20)");
+
+            builder.Property(p => p.Instagram)
+                .HasMaxLength(200)
+                .HasColumnType("varchar(200)");
+
+            builder.Property(p => p.Facebook)
+                .HasMaxLength(200)
+                .HasColumnType("varchar(200)");
 
             builder.Property(p => p.Email)
                 .HasMaxLength(100)

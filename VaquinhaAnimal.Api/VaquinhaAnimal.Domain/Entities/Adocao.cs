@@ -15,8 +15,13 @@ namespace VaquinhaAnimal.Domain.Entities
         public string Email { get; set; }
 
         [JsonPropertyName("celular")]
-        [Required]
         public string Celular { get; set; }
+
+        [JsonPropertyName("instagram")]
+        public string Instagram { get; set; }
+
+        [JsonPropertyName("facebook")]
+        public string Facebook { get; set; }
 
         [JsonPropertyName("tipo_pet")]
         [Required]

@@ -14,6 +14,12 @@ namespace VaquinhaAnimal.Api.ViewModels
         [JsonPropertyName("celular")]
         public string Celular { get; set; }
 
+        [JsonPropertyName("instagram")]
+        public string Instagram { get; set; }
+
+        [JsonPropertyName("facebook")]
+        public string Facebook { get; set; }
+
         [JsonPropertyName("tipo_pet")]
         public TipoPetEnum TipoPet { get; set; }
 

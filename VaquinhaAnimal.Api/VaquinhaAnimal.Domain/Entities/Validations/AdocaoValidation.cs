@@ -14,8 +14,7 @@ namespace VaquinhaAnimal.Domain.Entities.Validations
                 .NotNull().WithMessage("O campo {PropertyName} precisa ser fornecido");
 
             RuleFor(c => c.Celular)
-                .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido")
-                .Length(6, 20).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
+                .Length(6, 20).When(c => c.Celular != null).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
 
             RuleFor(c => c.Email)
                 .Length(3, 100).When(c => c.Email != null).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
