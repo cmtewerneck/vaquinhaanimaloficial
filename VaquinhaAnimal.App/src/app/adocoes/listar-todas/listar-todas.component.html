@@ -32,7 +32,7 @@
               <div class="causes-item__top">
                 <h6 class="causes-item__title"> <a href="cause-details.html">{{adocao.nome_pet}}</a></h6>
                 <p style="text-align: center;">Contato: {{ adocao.celular | mask:'(00) 90000-0000' }}</p>
-                <p style="text-align: center;">Faixa Etária: {{ adocao.faixa_etaria | faixaEtaria ' }}</p>
+                <p style="text-align: center;">Faixa Etária: {{ adocao.faixa_etaria | faixaEtaria }}</p>
               </div>
               <div class="causes-item__img">
                 <div class="causes-item__badge" style="background-color: #49C2DF">{{adocao.tipo_pet | tipoPet}}</div>
@@ -42,10 +42,10 @@
               <div style="text-align: center;"><a class="button causes-item__button button--primary" style="margin-left: 0;" [routerLink]="['/adocoes/detalhes', adocao.url_adocao]">+ Quero Conhecer Mais</a></div>
               <div style="text-align: center;">
                 <ul class="aside-socials" style="margin-top: 20px;">
-                  <li class="aside-socials__item">
+                  <li *ngIf="adocao.instagram" class="aside-socials__item">
                     <a class="aside-socials__link" target="_blank" href="{{ adocao.instagram }}"><i class="fa fa-instagram" aria-hidden="true"></i></a>
                   </li>
-                  <li class="aside-socials__item">
+                  <li *ngIf="adocao.facebook" class="aside-socials__item">
                     <a class="aside-socials__link" target="_blank" href="{{ adocao.facebook }}"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                   </li>
                 </ul>
