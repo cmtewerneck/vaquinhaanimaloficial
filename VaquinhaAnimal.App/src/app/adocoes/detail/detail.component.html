@@ -137,6 +137,29 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-12">
+          <div class="row" style="margin-bottom: 30px; margin-top: 80px;">
+            <div class="col-12">
+              <h5 class="donation-item__title" style="text-align: center;">Ficou Interessado?</h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12" style="display: inline-block; text-align: center;">
+              <a *ngIf="adocao.facebook" target="_blank" href="{{ adocao.facebook }}">
+                <img src="assets/img/facebook_icon.png">
+              </a>
+              <a *ngIf="adocao.instagram" style="margin-left: 10px;" target="_blank" href="{{ adocao.instagram }}">
+                <img src="assets/img/instagram_icon.png">
+              </a>
+              <a *ngIf="adocao.celular" style="margin-left: 10px;" target="_blank" href="https://wa.me/{{adocao.celular}}?text=Ol%C3%A1.+Venho+da+plataforma+Vaquinha+Animal+e+estou+interessado+em+adotar+um+pet+que+voc%C3%AA+est%C3%A1+divulgando.">
+                <img src="assets/img/whatsapp_icon.png">
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div style="text-align: center; margin-top: 50px;">
         <a class="form__submit" href="javascript:history.back()">Voltar</a>
     </div>
