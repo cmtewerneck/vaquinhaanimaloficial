@@ -57,8 +57,8 @@
                     <div class="col-lg-4 space-top-input">
                       <select class="form__field" formControlName="tipo_campanha" style="color: #6e6e6e; margin-bottom: 0;" required="required" (change)="tipoCampanhaSelected($event)">
                         <option value="" disabled selected hidden>Tipo da Campanha *</option>
-                        <option value=1>Única</option>
-                        <option value=2>Recorrente</option>
+                        <option value=1>Única - com duração</option>
+                        <option value=2>Recorrente - sem duração</option>
                       </select>
                       <div class="text-danger alertFormError" *ngIf="this.campanhaForm.get('tipo_campanha')?.hasError('required') && this.campanhaForm.get('tipo_campanha')?.touched">
                         * Campo obrigatório
@@ -135,7 +135,7 @@
                   <!-- LINHA 5 -->
                   <div class="row" style="text-align: left; margin-top: 20px;">
                     <div class="col-lg-12"> 
-                      <label class="form__checkbox-label"><span class="form__label-text">Li e aceito os <a href="#">Termos *</a></span>
+                      <label class="form__checkbox-label"><span class="form__label-text">Li e aceito os <a target="_blank" href="/termos">Termos *</a></span>
                         <input class="form__input-checkbox" style="margin-bottom: 0;" type="checkbox" formControlName="termos"/><span class="form__checkbox-mask form__checkbox-mask"></span>
                       </label>
                       <div class="text-danger alertFormError" style="text-align: left; margin-bottom: 20px;" *ngIf="this.campanhaForm.get('termos')?.hasError('required') && this.campanhaForm.get('termos')?.touched">

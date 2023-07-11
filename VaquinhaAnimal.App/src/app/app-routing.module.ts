@@ -5,10 +5,12 @@ import { CampanhasComponent } from './campanhas/campanhas.component';
 import { BlogComponent } from './blog/blog.component';
 import { ContatoComponent } from './contato/contato.component';
 import { AcessoNegadoComponent } from './acesso-negado/acesso-negado.component';
+import { TermosComponent } from './termos/termos.component';
 
 const routes: Routes = [
   { path: 'homepage', redirectTo: '', pathMatch: 'full' },
   { path: '', component: HomepageComponent },
+  { path: 'termos', component: TermosComponent },
   { path: 'auth',
             loadChildren: () => import('./auth/auth.module')
             .then(m => m.AuthModule)

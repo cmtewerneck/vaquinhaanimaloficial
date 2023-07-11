@@ -23,6 +23,7 @@ import { CampanhaService } from './campanhas/campanha.service';
 import { TagCampanhaPipe } from './campanhas/tag_campanha.pipe';
 import { CampanhasModule } from './campanhas/campanhas.module';
 import { AcessoNegadoComponent } from './acesso-negado/acesso-negado.component';
+import { TermosComponent } from './termos/termos.component';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -32,6 +33,7 @@ registerLocaleData(localePt);
     FooterComponent,
     AcessoNegadoComponent,
     ContatoComponent,
+    TermosComponent,
     BlogComponent,
     HomepageComponent
    ],

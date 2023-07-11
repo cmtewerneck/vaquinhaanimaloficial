@@ -123,10 +123,12 @@ export class EditComponent implements OnInit {
         titulo: this.campanha.titulo,
         valor_desejado: this.campanha.valor_desejado,
         video_url: this.campanha.video_url,
-        duracao_dias: this.campanha.duracao_dias,
+        // duracao_dias: this.campanha.duracao_dias,
         data_inicio: this.campanha.data_inicio,
         data_encerramento: this.campanha.data_encerramento,
       });
+
+      this.patchDuracao();
       
       this.beneficiarioForm.patchValue({
         id: this.campanha.beneficiario.id,
@@ -144,6 +146,15 @@ export class EditComponent implements OnInit {
       this.titulo_card = this.campanha.titulo;
       this.descricao_curta_card = this.campanha.descricao_curta;
       this.tag_campanha = this.campanha.tag_campanha;
+    }
+
+    patchDuracao(){
+      if(this.campanha.tipo_campanha == 1) {
+        this.campanhaForm.get('duracao_dias')?.setValue(this.campanha.duracao_dias);
+        this.campanhaRecorrente = false;
+      } else if(this.campanha.tipo_campanha == 2){
+        this.campanhaRecorrente = true;
+      }
     }
     
     setDocumentValidation(){
