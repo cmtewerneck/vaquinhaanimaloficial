@@ -286,8 +286,8 @@ namespace VaquinhaAnimal.App.V1.Controllers
                 // SPLIT RECEBEDOR PLATAFORMA --> 3% + R$ 0,99
                 order.payments[0].split.Add(new PagarmePedidoSplit
                 {
-                    recipient_id = "rp_V0YW6MvI3I84xj59", // TESTE
-                    //recipient_id = "rp_JW8g38RmcPfqpPxj", // PRODUÇÃO
+                    //recipient_id = "rp_V0YW6MvI3I84xj59", // TESTE
+                    recipient_id = "rp_JW8g38RmcPfqpPxj", // PRODUÇÃO
                     amount = Convert.ToInt32(valorPlataforma * 100),
                     type = "flat",
                     options = new PagarmeSplitOptions
@@ -537,8 +537,8 @@ namespace VaquinhaAnimal.App.V1.Controllers
                 // SPLIT RECEBEDOR PLATAFORMA --> 3%
                 order.payments[0].split.Add(new PagarmePedidoBoletoSplit
                 {
-                    recipient_id = "rp_V0YW6MvI3I84xj59", // TESTE
-                    //recipient_id = "rp_JW8g38RmcPfqpPxj", // PRODUÇÃO
+                    //recipient_id = "rp_V0YW6MvI3I84xj59", // TESTE
+                    recipient_id = "rp_JW8g38RmcPfqpPxj", // PRODUÇÃO
                     amount = Convert.ToInt32(valorPlataforma * 100),
                     type = "flat",
                     options = new PagarmeSplitBoletoOptions
@@ -759,8 +759,8 @@ namespace VaquinhaAnimal.App.V1.Controllers
                 // SPLIT RECEBEDOR PLATAFORMA --> 3%
                 order.payments[0].split.Add(new PagarmePedidoPixSplit
                 {
-                    recipient_id = "rp_V0YW6MvI3I84xj59", // TESTE
-                    //recipient_id = "rp_JW8g38RmcPfqpPxj", // PRODUÇÃO
+                    //recipient_id = "rp_V0YW6MvI3I84xj59", // TESTE
+                    recipient_id = "rp_JW8g38RmcPfqpPxj", // PRODUÇÃO
                     amount = Convert.ToInt32(valorPlataforma * 100),
                     type = "flat",
                     options = new PagarmeSplitPixOptions
@@ -994,8 +994,8 @@ namespace VaquinhaAnimal.App.V1.Controllers
                 // SPLIT RECEBEDOR PLATAFORMA --> 3% + valor doado por fora
                 order.payments[0].split.Add(new PagarmePedidoPixRapidoSplit
                 {
-                    recipient_id = "rp_V0YW6MvI3I84xj59", // TESTE
-                    //recipient_id = "rp_JW8g38RmcPfqpPxj", // PRODUÇÃO
+                    //recipient_id = "rp_V0YW6MvI3I84xj59", // TESTE
+                    recipient_id = "rp_JW8g38RmcPfqpPxj", // PRODUÇÃO
                     amount = Convert.ToInt32(valorPlataforma * 100),
                     type = "flat",
                     options = new PagarmeSplitPixRapidoOptions
@@ -1238,8 +1238,8 @@ namespace VaquinhaAnimal.App.V1.Controllers
                 // SPLIT RECEBEDOR PLATAFORMA --> 3% + R$ 0,99
                 assinaturaToCreate.split.rules.Add(new PagarmeAssinaturaRulesSplit
                 {
-                    recipient_id = "rp_V0YW6MvI3I84xj59", // TESTE
-                    //recipient_id = "rp_JW8g38RmcPfqpPxj", // PRODUÇÃO
+                    //recipient_id = "rp_V0YW6MvI3I84xj59", // TESTE
+                    recipient_id = "rp_JW8g38RmcPfqpPxj", // PRODUÇÃO
                     amount = (int)percentualPlataforma,
                     type = "percentage",
                     options = new PagarmeAssinaturaSplitOptions
