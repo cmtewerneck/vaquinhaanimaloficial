@@ -9,7 +9,9 @@
       <div *ngIf="emailConfirmed" style="text-align: center;">
         <img src="assets/img/confirmed.png" width="20%"/>
         <h3 style="margin-top: 50px;">E-mail confirmado. Faça Login</h3>  
-        <a [routerLink]="['/auth/login']" style="cursor: pointer; margin-top: 25px;" class="get-started-btn-success">Entrar</a>
+        <div class="col-12" style="text-align: center; margin-top: 30px; margin-bottom: 30px;">
+          <button class="form__submit" [routerLink]="['/auth/login']">Acessar a plataforma</button>
+      </div>
       </div>
 
       <div *ngIf="!emailConfirmed" style="text-align: center;">
