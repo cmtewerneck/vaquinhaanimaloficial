@@ -101,8 +101,8 @@ export class RegisterComponent implements OnInit {
       processarSucesso(response: any) {
         this.spinner.hide();
         this.registerForm.reset();
-        this.toastr.success('Cadastro realizado com sucesso', 'Parabéns!');
-        //this.toastr.success('Acesse seu e-mail e ative sua conta', 'Cadastro realizado!');
+        //this.toastr.success('Cadastro realizado com sucesso', 'Parabéns!');
+        this.toastr.success('Acesse seu e-mail e ative sua conta', 'Cadastro realizado!');
         this.errors = [];
         
         this.authService.LocalStorage.salvarDadosLocaisUsuarioSession(response);

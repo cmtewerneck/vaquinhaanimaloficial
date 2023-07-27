@@ -17,6 +17,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { ResetPasswordComponent } from './resetPassword/resetPassword.component';
 import { ResetPasswordUserComponent } from './resetPasswordUser/resetPasswordUser.component';
 import { AuthGuard } from './auth.guard';
+import { EmailConfirmationComponent } from './emailConfirmation/emailConfirmation.component';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { AuthGuard } from './auth.guard';
   declarations: [
     AuthComponent,
     LoginComponent,
+    EmailConfirmationComponent,
     AddCardComponent,
     MyWalletComponent,
     ResetPasswordComponent,

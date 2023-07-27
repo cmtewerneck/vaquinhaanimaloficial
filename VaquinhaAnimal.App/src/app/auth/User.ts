@@ -20,6 +20,11 @@ export class ResetPasswordUser {
     token!: string;
 }
 
+export class ConfirmEmail {
+    username!: string;
+    token!: string;
+}
+
 export class PagarmeCard {
     number!: string;
     holder_name!: string;

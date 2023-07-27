@@ -10,6 +10,7 @@ import { ResetPasswordUserComponent } from './resetPasswordUser/resetPasswordUse
 import { AddCardComponent } from './wallet/addCard.component';
 import { MyWalletComponent } from './wallet/myWallet.component';
 import { AuthGuard } from './auth.guard';
+import { EmailConfirmationComponent } from './emailConfirmation/emailConfirmation.component';
 
 const authRouterConfig: Routes = [
     {
@@ -20,6 +21,7 @@ const authRouterConfig: Routes = [
             { path: 'edit-password', component: EditPasswordComponent },
             { path: 'reset-password', component: ResetPasswordComponent },
             { path: 'reset-password-user/:username/:token', component: ResetPasswordUserComponent },
+            { path: 'email-confirmation/:username/:token', component: EmailConfirmationComponent },
             { path: 'add-card', component: AddCardComponent },
             { path: 'wallet', component: MyWalletComponent }
         ]

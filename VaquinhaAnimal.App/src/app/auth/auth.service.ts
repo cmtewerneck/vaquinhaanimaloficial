@@ -54,6 +54,15 @@ export class AuthService extends BaseService {
     );
   }
 
+  confirmEmail(username: string, token: string): Observable<boolean>{
+    return this.http
+      .post(this.urlServiceV1 + 'confirm-email/' + username + "/" + token, this.obterHeaderJson())
+      .pipe(
+          map(this.extractData),
+          catchError(this.serviceError)
+    );
+  }
+
   logout() {
     this.LocalStorage.limparDadosLocaisUsuarioSession();
     this.userChanged$.next(null);
