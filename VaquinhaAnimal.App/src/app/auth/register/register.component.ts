@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
@@ -12,6 +12,14 @@ import { DOCUMENT } from '@angular/common';
   templateUrl: './register.component.html'
 })
 export class RegisterComponent implements OnInit {
+
+  @ViewChild('divRecaptcha')
+        divRecaptcha!: ElementRef<HTMLDivElement>;
+
+    get grecaptcha(): any {
+      const w = window as any;
+      return w['grecaptcha'];
+    }
   
   registerForm!: FormGroup;
   errors: any[] = [];
@@ -19,14 +27,16 @@ export class RegisterComponent implements OnInit {
   passwordInputType: string = "password";
   document_mask: string = "000.000.000-00";
   document_toggle: string = "CPF";
+  key: string = "6LcbyVwnAAAAAEXUaEsI9VXbxJkFZeDmvcwoNhF5";
   
   constructor(
     private router: Router, 
+    private ngZone: NgZone,
     private toastr: ToastrService,
     private authService: AuthService, 
     private spinner: NgxSpinnerService,
     @Inject(DOCUMENT) private _document: any,
-    public fb: FormBuilder) { }
+    public fb: FormBuilder) { this.renderizarReCaptcha(); }
     
     ngOnInit() {
       if (localStorage.getItem('token') !== null) {
@@ -37,9 +47,35 @@ export class RegisterComponent implements OnInit {
       var window = this._document.defaultView;
       window.scrollTo(0, 0);
     }
+
+    renderizarReCaptcha() {
+      this.ngZone.runOutsideAngular(() => {
+        if (!this.grecaptcha || !this.divRecaptcha) {
+          setTimeout(() => {
+            this.renderizarReCaptcha();
+          }, 500);
+  
+          return;
+        }
+
+        const idElemento =
+          this.divRecaptcha.nativeElement.getAttribute('id');
+  
+        this.grecaptcha.render(idElemento, {
+          sitekey: this.key,
+          callback: (response: string) => {
+            this.ngZone.run(() => {
+              console.log("CAPTCHA: "+response);
+              this.registerForm.get('recaptcha')?.setValue(response);
+            });
+          },
+        });
+      });
+    }
     
     validation() {
       this.registerForm = this.fb.group({
+        recaptcha: [null, Validators.required],
         name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(64)]],
         email: ['', [Validators.required, Validators.minLength(5), Validators.email, Validators.maxLength(64)]],
         type: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(10)]],

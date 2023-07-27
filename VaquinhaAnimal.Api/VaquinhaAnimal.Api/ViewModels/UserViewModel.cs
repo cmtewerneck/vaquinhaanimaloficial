@@ -22,6 +22,7 @@ namespace VaquinhaAnimal.Api.ViewModels
         public string Email { get; set; }
         public string Foto { get; set; }
         public string FotoUpload { get; set; }
+        public string Recaptcha { get; set; }
     }
 
     public class LoginUserViewModel

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -37,6 +38,7 @@ namespace VaquinhaAnimal.Api.V1.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AppSettings _appSettings;
+        private readonly IConfiguration _configuration;
         private readonly IUsuarioService _usuarioService;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
@@ -59,6 +61,7 @@ namespace VaquinhaAnimal.Api.V1.Controllers
             _userManager = userManager;
             _appSettings = appSettings.Value;
             _logger = logger;
+            _configuration = configuration;
             _mapper = mapper;
             _user = user;
             _usuarioService = usuarioService;
@@ -68,96 +71,6 @@ namespace VaquinhaAnimal.Api.V1.Controllers
         #endregion
 
         #region CRUD
-        [HttpPost("nova-conta-2")]
-        public async Task<ActionResult> Registrar(RegisterUserViewModel registerUser)
-        {
-            if (!ModelState.IsValid) return CustomResponse(ModelState);
-
-            // Verifica se há algum usuário já cadastrado com o e-mail
-            var userSameEmail = await _usuarioService.GetUserEmailAsync(registerUser.Email);
-            if (userSameEmail != null)
-            {
-                NotificarErro("Já existe um usuário com este e-mail");
-                return CustomResponse();
-            }
-
-            // Verifica se há algum usuário já cadastrado com o documento
-            var userSameDocument = await _usuarioService.GetUserDocumentAsync(registerUser.Document);
-            if (userSameDocument != null)
-            {
-                NotificarErro("Já existe um usuário com este documento");
-                return CustomResponse();
-            }
-
-            if (registerUser.Type == "individual")
-            {
-                if (registerUser.Document.Length != CpfValidacao.TamanhoCpf)
-                {
-                    NotificarErro("Quantidade de caracteres inválida.");
-                    return CustomResponse();
-                }
-
-                var cpfValido = CpfValidacao.Validar(registerUser.Document);
-
-                if (cpfValido == false)
-                {
-                    NotificarErro("CPF inválido.");
-                    return CustomResponse();
-                }
-            } else if (registerUser.Type == "company")
-            {
-                if (registerUser.Document.Length != CnpjValidacao.TamanhoCnpj)
-                {
-                    NotificarErro("Quantidade de caracteres inválida.");
-                    return CustomResponse();
-                }
-
-                var cnpjValido = CnpjValidacao.Validar(registerUser.Document);
-
-                if (cnpjValido == false)
-                {
-                    NotificarErro("CNPJ inválido.");
-                    return CustomResponse();
-                }
-            }
-
-            var idPagarme = await AddClientPagarme(registerUser);
-
-            if (String.IsNullOrWhiteSpace(idPagarme))
-            {
-                NotificarErro("Não foi possível realizar seu cadastro. Verifique se algo foi preenchido incorretamente.");
-                return CustomResponse();
-            }
-
-            var user = new ApplicationUser
-            {
-                UserName = registerUser.Email,
-                Email = registerUser.Email,
-                Document = registerUser.Document,
-                Type = registerUser.Type,
-                EmailConfirmed = true,
-                Name = registerUser.Name,
-                Code = "",
-                Foto = registerUser.Foto,
-                Codigo_Pagarme = idPagarme
-            };
-
-            var result = await _userManager.CreateAsync(user, registerUser.Password);
-            
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(user, false);
-                SendEmailUsuarioAdicionado(user.Name, user.Email);
-                return CustomResponse(await GerarJwt(user.Email));
-            }
-            foreach (var error in result.Errors)
-            {
-                NotificarErro(error.Description);
-            }
-
-            return CustomResponse(registerUser);
-        }
-
         [HttpPost("nova-conta")]
         public async Task<ActionResult> RegistrarComConfirmacao(RegisterUserViewModel registerUser)
         {
@@ -230,6 +143,32 @@ namespace VaquinhaAnimal.Api.V1.Controllers
                 Foto = registerUser.Foto,
                 Codigo_Pagarme = idPagarme
             };
+
+            // TESTA O RECAPTCHA
+            var url = "https://www.google.com/recaptcha/api/siteverify";
+
+            var formValues = new Dictionary<string, string>
+            {
+                ["secret"] = _configuration["GoogleRecaptcha:Key"],
+                ["response"] = registerUser.Recaptcha,
+                ["remoteip"] = ""
+            };
+
+            var formData = new HttpRequestMessage(HttpMethod.Post, url)
+            {
+                Content = new FormUrlEncodedContent(formValues)
+            };
+
+            var resultGoogle = await client.SendAsync(formData);
+            string responseBody = await resultGoogle.Content.ReadAsStringAsync();
+            JObject obj = JObject.Parse(responseBody);
+            var sucesso = (bool)obj["success"];
+
+            if (!sucesso)
+            {
+                NotificarErro("Tempo do recaptcha expirado");
+                return CustomResponse();
+            }
 
             var result = await _userManager.CreateAsync(user, registerUser.Password);
 
