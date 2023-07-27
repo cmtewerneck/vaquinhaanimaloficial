@@ -25,9 +25,9 @@ namespace VaquinhaAnimal.Data.Repository
             var result = await Db.Adocoes
                 .AsNoTracking()
                 .Where(c => c.Adotado == false)
+                .OrderBy(p => p.NomePet)
                 .Skip((_PageNumber - 1) * _PageSize)
                 .Take(_PageSize)
-                .OrderBy(p => p.NomePet)
                 .ToListAsync();
 
             var resultPaginado = new PagedResult<Adocao>

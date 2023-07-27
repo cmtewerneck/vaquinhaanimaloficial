@@ -852,7 +852,8 @@ namespace VaquinhaAnimal.App.V1.Controllers
                     }
                 }
 
-                return CustomResponse((string)obj.SelectToken("charges[0].last_transaction.qr_code_url"));
+                return CustomResponse(new { url = (string)obj.SelectToken("charges[0].last_transaction.qr_code_url"), copiaCola = (string)obj.SelectToken("charges[0].last_transaction.qr_code") });
+                //return CustomResponse((string)obj.SelectToken("charges[0].last_transaction.qr_code_url"));
             }
             catch (HttpRequestException e)
             {

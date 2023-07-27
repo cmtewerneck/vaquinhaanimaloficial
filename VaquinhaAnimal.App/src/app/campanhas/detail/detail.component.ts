@@ -130,6 +130,7 @@ export class DetailComponent implements OnInit {
     ignoreBackdropClick: true
   };
   qrCodeLink!: string; 
+  qrCodeCopiaCola!: string; 
   hubConnection!: signalR.HubConnection; 
   
   // Variáveis de doação
@@ -1192,7 +1193,8 @@ export class DetailComponent implements OnInit {
       console.log("Link do QR CODE: " + response);
       this.pixForm.reset();
       this.errors = [];
-      this.qrCodeLink = response;
+      this.qrCodeLink = response.data.url;
+      this.qrCodeCopiaCola = response.data.copiaCola;
 
       this.openModal(qrCode);
     }
@@ -1248,7 +1250,9 @@ export class DetailComponent implements OnInit {
       this.customerUserLogadoForm.reset();
       this.pixRapidoUserLogadoForm.reset();
       this.errors = [];
-      this.qrCodeLink = response;
+      console.log("RESPONSE: " + response);
+      this.qrCodeLink = response.url;
+      this.qrCodeCopiaCola = response.copiaCola;
 
       this.openModal(qrCodeUserLogado);
     }
@@ -1258,7 +1262,9 @@ export class DetailComponent implements OnInit {
       this.customerUserLogadoForm.reset();
       this.pixUserLogadoForm.reset();
       this.errors = [];
-      this.qrCodeLink = response;
+      console.log("RESPONSE: " + response);
+      this.qrCodeLink = response.url;
+      this.qrCodeCopiaCola = response.copiaCola;
 
       this.openModal(qrCodeUserLogado);
     }
