@@ -35,6 +35,7 @@ namespace VaquinhaAnimal.App.V1.Controllers
         private readonly IUsuarioService _usuarioService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAssinaturaRepository _assinaturaRepository;
+        private readonly IConfiguration _configuration;
         private readonly ICartaoRepository _cartaoRepository;
         private readonly IDoacaoRepository _doacaoRepository;
         private readonly ICampanhaService _campanhaService;
@@ -68,6 +69,7 @@ namespace VaquinhaAnimal.App.V1.Controllers
             _doacaoService = doacaoService;
             _cartaoService = cartaoService;
             _userManager = userManager;
+            _configuration = configuration;
             _cartaoRepository = cartaoRepository;
             _doacaoRepository = doacaoRepository;
             _campanhaService = campanhaService;
@@ -163,6 +165,15 @@ namespace VaquinhaAnimal.App.V1.Controllers
         [HttpPost("add-order/{campanhaId}")]
         public async Task<ActionResult> AddOrderPagarme(PagarmePedido order, Guid campanhaId)
         {
+            // TESTA O RECAPTCHA
+            var resultTestGoogle = await TesteGoogleRecaptcha(order.recaptcha);
+
+            if (!resultTestGoogle)
+            {
+                NotificarErro("Erro na validação do Recaptcha");
+                return CustomResponse();
+            }
+
             if (order == null)
             {
                 NotificarErro("Ordem nula");
@@ -410,6 +421,15 @@ namespace VaquinhaAnimal.App.V1.Controllers
         [HttpPost("add-order-boleto/{campanhaId}")]
         public async Task<ActionResult> AddOrderPagarmeBoleto(PagarmePedidoBoleto order, Guid campanhaId)
         {
+            // TESTA O RECAPTCHA
+            var resultTestGoogle = await TesteGoogleRecaptcha(order.recaptcha);
+
+            if (!resultTestGoogle)
+            {
+                NotificarErro("Erro na validação do Recaptcha");
+                return CustomResponse();
+            }
+
             if (order == null)
             {
                 NotificarErro("Ordem nula");
@@ -632,6 +652,15 @@ namespace VaquinhaAnimal.App.V1.Controllers
         [HttpPost("add-order-pix/{campanhaId}")]
         public async Task<ActionResult> AddOrderPagarmePix(PagarmePedidoPix order, Guid campanhaId)
         {
+            // TESTA O RECAPTCHA
+            var resultTestGoogle = await TesteGoogleRecaptcha(order.recaptcha);
+
+            if (!resultTestGoogle)
+            {
+                NotificarErro("Erro na validação do Recaptcha");
+                return CustomResponse();
+            }
+
             if (order == null)
             {
                 NotificarErro("Usuário nulo");
@@ -864,6 +893,15 @@ namespace VaquinhaAnimal.App.V1.Controllers
         [HttpPost("add-order-pix-rapido/{campanhaId}")]
         public async Task<ActionResult> AddOrderPagarmePixRapido(PagarmePedidoPixRapido order, Guid campanhaId)
         {
+            // TESTA O RECAPTCHA
+            var resultTestGoogle = await TesteGoogleRecaptcha(order.recaptcha);
+
+            if (!resultTestGoogle)
+            {
+                NotificarErro("Erro na validação do Recaptcha");
+                return CustomResponse();
+            }
+
             if (order == null)
             {
                 NotificarErro("Usuário nulo");
@@ -1091,7 +1129,8 @@ namespace VaquinhaAnimal.App.V1.Controllers
                     }
                 }
 
-                return CustomResponse((string)obj.SelectToken("charges[0].last_transaction.qr_code_url"));
+                return CustomResponse(new { url = (string)obj.SelectToken("charges[0].last_transaction.qr_code_url"), copiaCola = (string)obj.SelectToken("charges[0].last_transaction.qr_code") });
+                //return CustomResponse((string)obj.SelectToken("charges[0].last_transaction.qr_code_url"));
             }
             catch (HttpRequestException e)
             {
@@ -1102,6 +1141,15 @@ namespace VaquinhaAnimal.App.V1.Controllers
         [HttpPost("add-assinatura/{campanhaId}")]
         public async Task<ActionResult> AddAssinatura(AssinaturaCreateViewModel order, Guid campanhaId)
         {
+            // TESTA O RECAPTCHA
+            var resultTestGoogle = await TesteGoogleRecaptcha(order.recaptcha);
+
+            if (!resultTestGoogle)
+            {
+                NotificarErro("Erro na validação do Recaptcha");
+                return CustomResponse();
+            }
+
             var assinaturaToCreate = new PagarmePedidoRecorrencia();
 
             if (order == null)
@@ -1319,6 +1367,15 @@ namespace VaquinhaAnimal.App.V1.Controllers
         [HttpPost("add-recorrencia")]
         public async Task<ActionResult> AddRecorrenciaPagarme(PagarmePedidoRecorrencia recorrencia)
         {
+            // TESTA O RECAPTCHA
+            var resultTestGoogle = await TesteGoogleRecaptcha(recorrencia.recaptcha);
+
+            if (!resultTestGoogle)
+            {
+                NotificarErro("Erro na validação do Recaptcha");
+                return CustomResponse();
+            }
+
             if (recorrencia == null)
             {
                 NotificarErro("Objeto nulo");
@@ -1704,6 +1761,36 @@ namespace VaquinhaAnimal.App.V1.Controllers
         {
             var usuarioId = _user.GetUserId();
             return _identityRepository.GetCodigoPagarme(usuarioId.ToString());
+        }
+
+        private async Task<bool> TesteGoogleRecaptcha(string codigo)
+        {
+            // TESTA O RECAPTCHA
+            var url = "https://www.google.com/recaptcha/api/siteverify";
+
+            var formValues = new Dictionary<string, string>
+            {
+                ["secret"] = _configuration["GoogleRecaptcha:Key"],
+                ["response"] = codigo,
+                ["remoteip"] = ""
+            };
+
+            var formData = new HttpRequestMessage(HttpMethod.Post, url)
+            {
+                Content = new FormUrlEncodedContent(formValues)
+            };
+
+            var resultGoogle = await client.SendAsync(formData);
+            string responseBodyGoogle = await resultGoogle.Content.ReadAsStringAsync();
+            JObject objGoogle = JObject.Parse(responseBodyGoogle);
+            var sucesso = (bool)objGoogle["success"];
+
+            if (!sucesso)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private string GetPagarmeIdNoSigned(string userId)

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnInit, TemplateRef } from '@angular/core';
+import { Component, ElementRef, Inject, NgZone, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -19,6 +19,14 @@ import { DOCUMENT } from '@angular/common';
   templateUrl: './detail.component.html'
 })
 export class DetailComponent implements OnInit {
+
+  @ViewChild('divRecaptcha')
+      divRecaptcha!: ElementRef<HTMLDivElement>;
+
+  get grecaptcha(): any {
+    const w = window as any;
+    return w['grecaptcha'];
+  }
   
   //#region ARRAYS
   get itemsArray(): FormArray {
@@ -115,6 +123,7 @@ export class DetailComponent implements OnInit {
   //#endregion
 
   // VARIAVEIS GERAIS
+  key: string = "6LcbyVwnAAAAAEXUaEsI9VXbxJkFZeDmvcwoNhF5";
   userLogado: boolean = false; 
   localStorage = new LocalStorageUtils; 
   campanha: Campanha; 
@@ -172,6 +181,7 @@ export class DetailComponent implements OnInit {
     private fb: FormBuilder,
     private campanhaService: CampanhaService,
     private toastr: ToastrService,
+    private ngZone: NgZone,
     private spinner: NgxSpinnerService, 
     private modalService: BsModalService,
     @Inject(DOCUMENT) private _document: any,
@@ -222,6 +232,256 @@ export class DetailComponent implements OnInit {
       if(userToken != null){
         this.userLogado = true;
       } else { this.userLogado = false }
+    }
+
+    renderizarReCaptchaBoleto() {
+      this.ngZone.runOutsideAngular(() => {
+        if (!this.grecaptcha || !this.divRecaptcha) {
+          setTimeout(() => {
+            this.renderizarReCaptchaBoleto();
+          }, 500);
+  
+          return;
+        }
+
+        const idElemento =
+          this.divRecaptcha.nativeElement.getAttribute('id');
+  
+        this.grecaptcha.render(idElemento, {
+          sitekey: this.key,
+          callback: (response: string) => {
+            this.ngZone.run(() => {
+              console.log("CAPTCHA: "+response);
+              this.boletoForm.get('recaptcha')?.setValue(response);
+            });
+          },
+        });
+      });
+    }
+
+    renderizarReCaptchaBoletoUserLogado() {
+      this.ngZone.runOutsideAngular(() => {
+        if (!this.grecaptcha || !this.divRecaptcha) {
+          setTimeout(() => {
+            this.renderizarReCaptchaBoletoUserLogado();
+          }, 500);
+  
+          return;
+        }
+
+        const idElemento =
+          this.divRecaptcha.nativeElement.getAttribute('id');
+  
+        this.grecaptcha.render(idElemento, {
+          sitekey: this.key,
+          callback: (response: string) => {
+            this.ngZone.run(() => {
+              console.log("CAPTCHA: "+response);
+              this.boletoUserLogadoForm.get('recaptcha')?.setValue(response);
+            });
+          },
+        });
+      });
+    }
+
+    renderizarReCaptchaCartao() {
+      this.ngZone.runOutsideAngular(() => {
+        if (!this.grecaptcha || !this.divRecaptcha) {
+          setTimeout(() => {
+            this.renderizarReCaptchaCartao();
+          }, 500);
+  
+          return;
+        }
+
+        const idElemento =
+          this.divRecaptcha.nativeElement.getAttribute('id');
+  
+        this.grecaptcha.render(idElemento, {
+          sitekey: this.key,
+          callback: (response: string) => {
+            this.ngZone.run(() => {
+              console.log("CAPTCHA: "+response);
+              this.cartaoForm.get('recaptcha')?.setValue(response);
+            });
+          },
+        });
+      });
+    }
+
+    renderizarReCaptchaPixRapidoUserLogado() {
+      this.ngZone.runOutsideAngular(() => {
+        if (!this.grecaptcha || !this.divRecaptcha) {
+          setTimeout(() => {
+            this.renderizarReCaptchaPixRapidoUserLogado();
+          }, 500);
+  
+          return;
+        }
+
+        const idElemento =
+          this.divRecaptcha.nativeElement.getAttribute('id');
+  
+        this.grecaptcha.render(idElemento, {
+          sitekey: this.key,
+          callback: (response: string) => {
+            this.ngZone.run(() => {
+              console.log("CAPTCHA: "+response);
+              this.pixRapidoUserLogadoForm.get('recaptcha')?.setValue(response);
+            });
+          },
+        });
+      });
+    }
+
+    renderizarReCaptchaPix() {
+      this.ngZone.runOutsideAngular(() => {
+        if (!this.grecaptcha || !this.divRecaptcha) {
+          setTimeout(() => {
+            this.renderizarReCaptchaPix();
+          }, 500);
+  
+          return;
+        }
+
+        const idElemento =
+          this.divRecaptcha.nativeElement.getAttribute('id');
+  
+        this.grecaptcha.render(idElemento, {
+          sitekey: this.key,
+          callback: (response: string) => {
+            this.ngZone.run(() => {
+              console.log("CAPTCHA: "+response);
+              this.pixForm.get('recaptcha')?.setValue(response);
+            });
+          },
+        });
+      });
+    }
+
+    renderizarReCaptchaCartaoNovoUserLogado() {
+      this.ngZone.runOutsideAngular(() => {
+        if (!this.grecaptcha || !this.divRecaptcha) {
+          setTimeout(() => {
+            this.renderizarReCaptchaCartaoNovoUserLogado();
+          }, 500);
+  
+          return;
+        }
+
+        const idElemento =
+          this.divRecaptcha.nativeElement.getAttribute('id');
+  
+        this.grecaptcha.render(idElemento, {
+          sitekey: this.key,
+          callback: (response: string) => {
+            this.ngZone.run(() => {
+              console.log("CAPTCHA: "+response);
+              this.cartaoUserLogadoForm.get('recaptcha')?.setValue(response);
+            });
+          },
+        });
+      });
+    }
+
+    renderizarReCaptchaCartaoCadastradoUserLogado() {
+      this.ngZone.runOutsideAngular(() => {
+        if (!this.grecaptcha || !this.divRecaptcha) {
+          setTimeout(() => {
+            this.renderizarReCaptchaCartaoCadastradoUserLogado();
+          }, 500);
+  
+          return;
+        }
+
+        const idElemento =
+          this.divRecaptcha.nativeElement.getAttribute('id');
+  
+        this.grecaptcha.render(idElemento, {
+          sitekey: this.key,
+          callback: (response: string) => {
+            this.ngZone.run(() => {
+              console.log("CAPTCHA: "+response);
+              this.cartaoCadastradoUserLogadoForm.get('recaptcha')?.setValue(response);
+            });
+          },
+        });
+      });
+    }
+
+    renderizarReCaptchaPixRapido() {
+      this.ngZone.runOutsideAngular(() => {
+        if (!this.grecaptcha || !this.divRecaptcha) {
+          setTimeout(() => {
+            this.renderizarReCaptchaPixRapido();
+          }, 500);
+  
+          return;
+        }
+
+        const idElemento =
+          this.divRecaptcha.nativeElement.getAttribute('id');
+  
+        this.grecaptcha.render(idElemento, {
+          sitekey: this.key,
+          callback: (response: string) => {
+            this.ngZone.run(() => {
+              console.log("CAPTCHA: "+response);
+              this.pixRapidoForm.get('recaptcha')?.setValue(response);
+            });
+          },
+        });
+      });
+    }
+
+    renderizarReCaptchaAssinaturaUserLogado() {
+      this.ngZone.runOutsideAngular(() => {
+        if (!this.grecaptcha || !this.divRecaptcha) {
+          setTimeout(() => {
+            this.renderizarReCaptchaAssinaturaUserLogado();
+          }, 500);
+  
+          return;
+        }
+
+        const idElemento =
+          this.divRecaptcha.nativeElement.getAttribute('id');
+  
+        this.grecaptcha.render(idElemento, {
+          sitekey: this.key,
+          callback: (response: string) => {
+            this.ngZone.run(() => {
+              console.log("CAPTCHA: "+response);
+              this.assinaturaUserLogadoForm.get('recaptcha')?.setValue(response);
+            });
+          },
+        });
+      });
+    }
+
+    renderizarReCaptchaPixUserLogado() {
+      this.ngZone.runOutsideAngular(() => {
+        if (!this.grecaptcha || !this.divRecaptcha) {
+          setTimeout(() => {
+            this.renderizarReCaptchaPixUserLogado();
+          }, 500);
+  
+          return;
+        }
+
+        const idElemento =
+          this.divRecaptcha.nativeElement.getAttribute('id');
+  
+        this.grecaptcha.render(idElemento, {
+          sitekey: this.key,
+          callback: (response: string) => {
+            this.ngZone.run(() => {
+              console.log("CAPTCHA: "+response);
+              this.pixUserLogadoForm.get('recaptcha')?.setValue(response);
+            });
+          },
+        });
+      });
     }
 
     ObterOutrasCampanhas() {
@@ -276,15 +536,18 @@ export class DetailComponent implements OnInit {
     queroDoarPixRapido(){
       if(this.userLogado){
         this.queroDoarPixRapidoUserLogadoToggle = true;
+        this.renderizarReCaptchaPixRapidoUserLogado();
         this.createPixRapidoUserLogadoForm();
       } else {
         this.queroDoarPixRapidoToggle = true;
+        this.renderizarReCaptchaPixRapido();
         this.createPixRapidoForm();
       }
     }
 
     createPixRapidoForm(){
       this.pixRapidoForm = this.fb.group({
+        recaptcha: [null, Validators.required],
         valorPlataforma: [''],
         customer: this.customerForm = this.fb.group({
           name: ['', [Validators.required, Validators.maxLength(64)]],
@@ -299,6 +562,7 @@ export class DetailComponent implements OnInit {
 
     createPixRapidoUserLogadoForm(){
       this.pixRapidoUserLogadoForm = this.fb.group({
+        recaptcha: [null, Validators.required],
         valorPlataforma: [''],
         customer: this.customerUserLogadoForm = this.fb.group({
           name: [''],
@@ -313,6 +577,7 @@ export class DetailComponent implements OnInit {
 
     createPixUserLogadoForm(){
       this.pixUserLogadoForm = this.fb.group({
+        recaptcha: [null, Validators.required],
         valorPlataforma: [''],
         customer: this.customerUserLogadoForm = this.fb.group({
           name: [''],
@@ -619,22 +884,27 @@ export class DetailComponent implements OnInit {
 
       if(this.payment_method_toggle == "billing"){
         if(this.userLogado){
+          this.renderizarReCaptchaBoletoUserLogado();
           this.createBoletoUserLogadoForm();
         } else {
+          this.renderizarReCaptchaBoleto();
           this.createBoletoForm();
         }
       }
 
       if(this.payment_method_toggle == "pix"){
         if(this.userLogado){
+          this.renderizarReCaptchaPixUserLogado();
           this.createPixUserLogadoForm();
         } else {
+          this.renderizarReCaptchaPix();
           this.createPixForm();
         }
       }
 
       if(this.payment_method_toggle == "credit_card"){
         if(!this.userLogado){
+          this.renderizarReCaptchaCartao();
           this.createCartaoForm();
         } 
       }
@@ -647,6 +917,7 @@ export class DetailComponent implements OnInit {
 
       if(card_to_be_used_toggle == "cartaoNovo"){
         this.queroDoarCartaoNovoToggle = true;
+        this.renderizarReCaptchaCartaoNovoUserLogado();
         this.createCartaoUserLogadoForm();
       } 
       else if (card_to_be_used_toggle == "cartaoCadastrado"){
@@ -655,17 +926,20 @@ export class DetailComponent implements OnInit {
         this.campanhaService.obterMeusCartoes()
         .subscribe(cartoes => this.cartoes = cartoes);
 
+        this.renderizarReCaptchaCartaoCadastradoUserLogado();
         this.createCartaoCadastradoUserLogadoForm();
       }
       else if (card_to_be_used_toggle == "assinatura"){
         this.queroAssinarToggle = true;
 
+        this.renderizarReCaptchaAssinaturaUserLogado();
         this.createAssinaturaUserLogadoForm();
       }
     }
 
     createAssinaturaUserLogadoForm(){
       this.assinaturaUserLogadoForm = this.fb.group({
+        recaptcha: [null, Validators.required],
         card_id: [''],
         customer: this.fb.group({
           name: [''],
@@ -705,6 +979,7 @@ export class DetailComponent implements OnInit {
 
     createPixForm(){
       this.pixForm = this.fb.group({
+        recaptcha: [null, Validators.required],
         valorPlataforma: [''],
         customer: this.customerForm = this.fb.group({
           name: ['', [Validators.required, Validators.maxLength(64)]],
@@ -817,6 +1092,7 @@ export class DetailComponent implements OnInit {
 
     createBoletoForm(){
       this.boletoForm = this.fb.group({
+        recaptcha: [null, Validators.required],
         valorPlataforma: [''],
         customer: this.customerForm = this.fb.group({
           name: ['', [Validators.required, Validators.maxLength(64)]],
@@ -831,6 +1107,7 @@ export class DetailComponent implements OnInit {
 
     createCartaoForm(){
       this.cartaoForm = this.fb.group({
+        recaptcha: [null, Validators.required],
         valorPlataforma: [''],
         customer: this.customerForm = this.fb.group({
           name: ['', [Validators.required, Validators.maxLength(64)]],
@@ -845,6 +1122,7 @@ export class DetailComponent implements OnInit {
 
     createCartaoUserLogadoForm(){
       this.cartaoUserLogadoForm = this.fb.group({
+        recaptcha: [null, Validators.required],
         valorPlataforma: [''],
         customer: this.customerUserLogadoForm = this.fb.group({
           name: [''],
@@ -859,6 +1137,7 @@ export class DetailComponent implements OnInit {
 
     createCartaoCadastradoUserLogadoForm(){
       this.cartaoCadastradoUserLogadoForm = this.fb.group({
+        recaptcha: [null, Validators.required],
         valorPlataforma: [''],
         customer: this.customerUserLogadoForm = this.fb.group({
           name: [''],
@@ -873,6 +1152,7 @@ export class DetailComponent implements OnInit {
 
     createBoletoUserLogadoForm(){
       this.boletoUserLogadoForm = this.fb.group({
+        recaptcha: [null, Validators.required],
         valorPlataforma: [''],
         customer: this.customerUserLogadoForm = this.fb.group({
           name: [''],
@@ -1240,7 +1520,9 @@ export class DetailComponent implements OnInit {
       this.customerForm.reset();
       this.pixRapidoForm.reset();
       this.errors = [];
+      console.log("RESPONSE: " + response)
       this.qrCodeLink = response;
+      this.qrCodeCopiaCola = response.copiaCola;
 
       this.openModal(qrCode);
     }

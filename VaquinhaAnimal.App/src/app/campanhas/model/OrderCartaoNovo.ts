@@ -1,4 +1,5 @@
 export class OrderCartaoNovo {
+    recaptcha!: string;
     items!: Items[];
     payments!: Payments[];
     salvarCartao: boolean = false;

@@ -4,6 +4,7 @@ namespace VaquinhaAnimal.Domain.Entities.Pagarme
 {
     public class PagarmePedidoRecorrencia
     {
+        public string recaptcha { get; set; }
         public string payment_method { get; set; }
         public string interval { get; set; }
         public int interval_count { get; set; }

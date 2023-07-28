@@ -192,6 +192,8 @@
                       </div>
                     </div>
                   </div>
+
+                  <div #divRecaptcha id="recaptcha"></div>
                   
                   <!-- BOTOES -->
                   <div style="text-align: center; margin-top: 30px;">
@@ -274,6 +276,8 @@
                       </label>
                     </div>
                   </div>
+
+                  <div #divRecaptcha id="recaptcha"></div>
                   
                   <!-- BOTOES -->
                   <div style="text-align: center; margin-top: 30px;">
@@ -411,6 +415,8 @@
                       </div>
                     </div>
                   </div>
+
+                  <div #divRecaptcha id="recaptcha"></div>
                   
                   <!-- BOTOES -->
                   <div style="text-align: center; margin-top: 30px;">
@@ -489,6 +495,8 @@
                       </label>
                     </div>
                   </div>
+
+                  <div #divRecaptcha id="recaptcha"></div>
                   
                   <!-- BOTOES -->
                   <div style="text-align: center; margin-top: 30px;">
@@ -743,6 +751,8 @@
                       </div>
                     </div>
                   </div>
+
+                  <div #divRecaptcha id="recaptcha"></div>
                   
                   <!-- BOTOES -->
                   <div style="text-align: center; margin-top: 30px;">
@@ -943,6 +953,8 @@
                       </div>
                     </div>
                   </div>
+
+                  <div #divRecaptcha id="recaptcha"></div>
                   
                   <!-- BOTOES -->
                   <div style="text-align: center; margin-top: 30px;">
@@ -1115,6 +1127,8 @@
                       </div>
                     </div>
                   </div>
+
+                  <div #divRecaptcha id="recaptcha"></div>
                   
                   <!-- BOTOES -->
                   <div style="text-align: center; margin-top: 30px;">
@@ -1279,6 +1293,8 @@
                       </div>
                     </div>
                   </div>
+
+                  <div #divRecaptcha id="recaptcha"></div>
                   
                   <!-- BOTOES -->
                   <div style="text-align: center; margin-top: 30px;">
@@ -1427,6 +1443,8 @@
                     </div>
                   </div>
                 </div>
+
+                <div #divRecaptcha id="recaptcha"></div>
                 
                 <!-- BOTOES -->
                 <div style="text-align: center; margin-top: 30px;">
@@ -1509,6 +1527,8 @@
                     {{this.pixRapidoUserLogadoForm.value|json}}
                   </div> -->
                 </div>
+
+                <div #divRecaptcha id="recaptcha"></div>
                 
                 <!-- BOTOES -->
                 <div style="text-align: center; margin-top: 30px;">
@@ -1529,8 +1549,7 @@
     </div>
   </section>
   <!-- donation end-->
-  
-  
+    
   <section  class="section" style="padding-top: 60px;">
     <div class="container">
       <div class="row">
@@ -1594,8 +1613,7 @@
       </div>
     </div>
   </section>
-  
-  
+    
   <!-- causes inner start-->
   <section class="section causes causes--style-2" style="padding-top: 50px;"><img class="causes__bg" src="assets/img/causes_img-2.png" alt="img"/>
     <div class="container" *ngIf="outrasCampanhas">
@@ -1659,7 +1677,11 @@
     </div>
     <div>
       <p>O QR CODE expira em 5 minutos!</p>
-      <p>Só transfira se aparecer Doadores Especiais em seu aplicativo.</p>
+      <h6 style="margin-top: 20px;">Copia e cola</h6>
+      <div>
+        <p style="font-size: 12px;">{{qrCodeCopiaCola}}</p>
+      </div>
+      <p style="font-size: 14px; margin-top: 20px;">Só transfira se aparecer Doadores Especiais em seu aplicativo.</p>
     </div>
   </div>
   <div class="modal-footer">
@@ -1681,7 +1703,11 @@
     </div>
     <div>
       <p>O QR CODE expira em 5 minutos!</p>
-      <p>Só transfira se aparecer Doadores Especiais em seu aplicativo.</p>
+      <h6 style="margin-top: 20px;">Copia e cola</h6>
+      <div>
+        <p style="font-size: 12px;">{{qrCodeCopiaCola}}</p>
+      </div>
+      <p style="font-size: 14px; margin-top: 20px;">Só transfira se aparecer Doadores Especiais em seu aplicativo.</p>
     </div>
   </div>
   <div class="modal-footer">

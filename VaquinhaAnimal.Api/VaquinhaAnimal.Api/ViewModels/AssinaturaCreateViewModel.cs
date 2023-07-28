@@ -4,6 +4,7 @@ namespace VaquinhaAnimal.Api.ViewModels
 {
     public class AssinaturaCreateViewModel
     {
+        public string recaptcha { get; set; }
         public string card_id { get; set; }
         public PagarmeAssinaturaCustomerVM customer { get; set; }
         public List<RecorrenciaItemVM> items { get; set; }

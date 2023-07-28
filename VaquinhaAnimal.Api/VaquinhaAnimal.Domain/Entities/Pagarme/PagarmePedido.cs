@@ -4,6 +4,7 @@ namespace VaquinhaAnimal.Domain.Entities.Pagarme
 {
     public class PagarmePedido
     {
+        public string recaptcha { get; set; }
         public PagarmePedidoCustomer customer { get; set; }
         public List<PagarmePedidoItens> items { get; set; }
         public List<PagarmePedidoPagamentos> payments { get; set; }
