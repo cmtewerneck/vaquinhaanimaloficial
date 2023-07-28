@@ -1473,8 +1473,8 @@ export class DetailComponent implements OnInit {
       console.log("Link do QR CODE: " + response);
       this.pixForm.reset();
       this.errors = [];
-      this.qrCodeLink = response.data.url;
-      this.qrCodeCopiaCola = response.data.copiaCola;
+      this.qrCodeLink = response.url;
+      this.qrCodeCopiaCola = response.copiaCola;
 
       this.openModal(qrCode);
     }
@@ -1521,7 +1521,7 @@ export class DetailComponent implements OnInit {
       this.pixRapidoForm.reset();
       this.errors = [];
       console.log("RESPONSE: " + response)
-      this.qrCodeLink = response;
+      this.qrCodeLink = response.url;
       this.qrCodeCopiaCola = response.copiaCola;
 
       this.openModal(qrCode);

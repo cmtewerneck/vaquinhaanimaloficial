@@ -803,6 +803,7 @@ namespace VaquinhaAnimal.App.V1.Controllers
                 // SPLIT RECEBEDOR BENEFICIÁRIO --> Restante - taxa de 1,19%
                 order.payments[0].split.Add(new PagarmePedidoPixSplit
                 {
+                    //recipient_id = "re_cljqcedqg00sl019toqzo7fp2", // Qualquer pra teste
                     recipient_id = campanhaRecebedora.Beneficiario.RecebedorId,
                     amount = Convert.ToInt32(valorBeneficiario * 100),
                     type = "flat",
@@ -1048,6 +1049,7 @@ namespace VaquinhaAnimal.App.V1.Controllers
                 // SPLIT RECEBEDOR BENEFICIÁRIO --> Restante - taxa de 1,19%
                 order.payments[0].split.Add(new PagarmePedidoPixRapidoSplit
                 {
+                    //recipient_id = "re_cljqcedqg00sl019toqzo7fp2", // Qualquer pra teste
                     recipient_id = campanhaRecebedora.Beneficiario.RecebedorId,
                     amount = Convert.ToInt32(valorBeneficiario * 100),
                     type = "flat",
