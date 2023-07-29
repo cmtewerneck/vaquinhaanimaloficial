@@ -1605,8 +1605,8 @@ export class DetailComponent implements OnInit {
     
     private createConnection = () => {
       this.hubConnection = new signalR.HubConnectionBuilder()
-                              .withUrl('https://localhost:44302/pix-response')
-                              // .withUrl('https://doadoresapi20220707212551.azurewebsites.net/pix-response')
+                              //.withUrl('https://localhost:44302/pix-response')
+                              .withUrl('https://vaquinhaanimal.azurewebsites.net/pix-response')
                               .build();
     }
   
