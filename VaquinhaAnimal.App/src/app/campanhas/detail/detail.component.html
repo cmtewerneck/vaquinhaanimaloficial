@@ -27,7 +27,7 @@
       <div class="row">
         <div class="col-12">
           <div class="donation-item">
-            <div class="donation-item__img" *ngIf="campanha.imagens.length != 0"><img class="img--bg" src="{{ imagens }}{{ campanha.imagens[0].arquivo }}" alt="img"/></div>
+            <div class="donation-item__img" *ngIf="campanha.imagens.length != 0"><img class="img--bg" style="object-fit: fill;" src="{{ imagens }}{{ campanha.imagens[0].arquivo }}" alt="img"/></div>
             <div class="donation-item__img" *ngIf="campanha.imagens.length == 0"><img class="img--bg" src="assets/img/noImage.png" alt="img"/></div>
             <div class="donation-item__body">
               <div class="row">

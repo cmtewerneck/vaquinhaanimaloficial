@@ -74,6 +74,32 @@ namespace VaquinhaAnimal.Api.V1.Controllers
         [HttpPost("nova-conta")]
         public async Task<ActionResult> RegistrarComConfirmacao(RegisterUserViewModel registerUser)
         {
+            // TESTA O RECAPTCHA
+            var url = "https://www.google.com/recaptcha/api/siteverify";
+
+            var formValues = new Dictionary<string, string>
+            {
+                ["secret"] = _configuration["GoogleRecaptcha:Key"],
+                ["response"] = registerUser.Recaptcha,
+                ["remoteip"] = ""
+            };
+
+            var formData = new HttpRequestMessage(HttpMethod.Post, url)
+            {
+                Content = new FormUrlEncodedContent(formValues)
+            };
+
+            var resultGoogle = await client.SendAsync(formData);
+            string responseBody = await resultGoogle.Content.ReadAsStringAsync();
+            JObject obj = JObject.Parse(responseBody);
+            var sucesso = (bool)obj["success"];
+
+            if (!sucesso)
+            {
+                NotificarErro("Erro no recaptcha.");
+                return CustomResponse();
+            }
+
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var userSameEmail = await _usuarioService.GetUserEmailAsync(registerUser.Email);
@@ -143,32 +169,6 @@ namespace VaquinhaAnimal.Api.V1.Controllers
                 Foto = registerUser.Foto,
                 Codigo_Pagarme = idPagarme
             };
-
-            // TESTA O RECAPTCHA
-            var url = "https://www.google.com/recaptcha/api/siteverify";
-
-            var formValues = new Dictionary<string, string>
-            {
-                ["secret"] = _configuration["GoogleRecaptcha:Key"],
-                ["response"] = registerUser.Recaptcha,
-                ["remoteip"] = ""
-            };
-
-            var formData = new HttpRequestMessage(HttpMethod.Post, url)
-            {
-                Content = new FormUrlEncodedContent(formValues)
-            };
-
-            var resultGoogle = await client.SendAsync(formData);
-            string responseBody = await resultGoogle.Content.ReadAsStringAsync();
-            JObject obj = JObject.Parse(responseBody);
-            var sucesso = (bool)obj["success"];
-
-            if (!sucesso)
-            {
-                NotificarErro("Tempo do recaptcha expirado");
-                return CustomResponse();
-            }
 
             var result = await _userManager.CreateAsync(user, registerUser.Password);
 
