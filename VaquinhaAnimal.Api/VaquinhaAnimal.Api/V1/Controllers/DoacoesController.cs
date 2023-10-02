@@ -8,10 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
 using VaquinhaAnimal.Api.Controllers;
 using VaquinhaAnimal.Api.ViewModels;
@@ -249,112 +249,6 @@ namespace VaquinhaAnimal.App.V1.Controllers
             return Ok(result);
         }
 
-        [AllowAnonymous]
-        [HttpGet("comprovante-pdf/{doacaoId:guid}")]
-        public async Task<ActionResult> GerarComprovantePdf(Guid doacaoId)
-        {
-            // PEGAR DOACOES DA CAMPANHA ENVIADA
-            var doacao = await _doacaoRepository.GetDonationsWithCampaignAsync(doacaoId);
-
-            if (doacao == null)
-            {
-                NotificarErro("Doação não encontrada");
-                return CustomResponse();
-            }
-
-            // CONFIGURAÇÃO DO DOCUMENTO
-            var pxPorMm = 72 / 25.2F;
-            var pdf = new Document(PageSize.A4.Rotate(), 15 * pxPorMm, 15 * pxPorMm, 15 * pxPorMm, 20 * pxPorMm);
-            var path = $"comprovante_vaquinha_animal.{DateTime.Now.ToString("dd.MM.yyyy.HH.mm")}.pdf";
-            var arquivo = new FileStream(path, FileMode.Create);
-            var writer = PdfWriter.GetInstance(pdf, arquivo);
-            pdf.Open();
-
-            // ADICIONANDO TÍTULO
-            var fonteTitulo = new Font(fonteBase, 28, Font.NORMAL, BaseColor.Black);
-            var titulo = new Paragraph("Comprovante de Doação\n\n", fonteTitulo);
-            titulo.Alignment = Element.ALIGN_LEFT;
-            titulo.SpacingAfter = 10;
-            pdf.Add(titulo);
-
-            // ADICIONANDO A LOGOMARCA
-            var pathImagem = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/logomarca.png");
-            if (System.IO.File.Exists(pathImagem))
-            {
-                Image logo = Image.GetInstance(pathImagem);
-                float razaoLarguraAltura = logo.Width / logo.Height;
-                float alturaLogo = 60;
-                float larguraLogo = alturaLogo * razaoLarguraAltura;
-                logo.ScaleToFit(larguraLogo, alturaLogo);
-                var margemEsquerda = pdf.PageSize.Width - pdf.RightMargin - larguraLogo;
-                var margemTopo = pdf.PageSize.Height - pdf.TopMargin - 54;
-                logo.SetAbsolutePosition(margemEsquerda, margemTopo);
-                writer.DirectContent.AddImage(logo, false);
-            }
-
-            // ADICIONANDO A TABELA
-            var tabela = new PdfPTable(4);
-            float[] largurasColunas = { 0.5f, 1.5f, 1.0f, 1.2f };
-            tabela.SetWidths(largurasColunas);
-            tabela.DefaultCell.BorderWidth = 0;
-            tabela.WidthPercentage = 100;
-
-            // ADICIONAR TÍTULOS
-            CriarCelulaTexto(tabela, "Data", PdfPCell.ALIGN_LEFT, true);
-            CriarCelulaTexto(tabela, "Campanha", PdfPCell.ALIGN_LEFT, true);
-            CriarCelulaTexto(tabela, "Valor Doado", PdfPCell.ALIGN_CENTER, true);
-            CriarCelulaTexto(tabela, "Forma de Pagamento", PdfPCell.ALIGN_CENTER, true);
-
-            CriarCelulaTexto(tabela, doacao.Data.ToString("dd/MM/yyyy"), PdfPCell.ALIGN_LEFT);
-            CriarCelulaTexto(tabela, doacao.Campanha.Titulo, PdfPCell.ALIGN_LEFT);
-            CriarCelulaTexto(tabela, "R$ " + doacao.Valor.ToString(), PdfPCell.ALIGN_CENTER);
-
-            if (doacao.FormaPagamento == "billing")
-            {
-                CriarCelulaTexto(tabela, "Boleto", PdfPCell.ALIGN_CENTER);
-            }
-            else if (doacao.FormaPagamento == "pix")
-            {
-                CriarCelulaTexto(tabela, "PIX", PdfPCell.ALIGN_CENTER);
-            }
-            else if (doacao.FormaPagamento == "credit_card")
-            {
-                CriarCelulaTexto(tabela, "Cartão de Crédito", PdfPCell.ALIGN_CENTER);
-            }
-
-            pdf.Add(tabela);
-
-            //ADICIONAR CNPJ
-            var fonteDireitosReservados = new Font(fonteBase, 9, Font.NORMAL, BaseColor.Black);
-            Paragraph copyright = new Paragraph("© 2023 Direitos Reservados - Vaquinha Animal - CNPJ: 48.173.612/0001-02 - Grupo Doadores Especiais.", fonteDireitosReservados);
-            PdfPTable footerTbl = new PdfPTable(1);
-            footerTbl.TotalWidth = 500;
-            PdfPCell cell = new PdfPCell(copyright);
-            cell.Border = 1;
-            footerTbl.AddCell(cell);
-            footerTbl.WriteSelectedRows(0, -1, 30, 30, writer.DirectContent);
-
-            // FECHANDO O PDF
-            pdf.Close();
-            arquivo.Close();
-
-            // ABRINDO O ARQUIVO
-            var caminhoPdf = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/docs/" + path);
-            if (System.IO.File.Exists(caminhoPdf))
-            {
-                //Process.Start(new ProcessStartInfo()
-                //{
-                //    Arguments = $"/c start {caminhoPdf}",
-                //    FileName = "cmd.exe",
-                //    CreateNoWindow = true
-                //});
-
-                Process.Start(caminhoPdf);
-            }
-
-            return CustomResponse();
-        }
-
         [HttpGet("relatorio-pdf/{campanhaId:guid}")]
         public async Task<ActionResult> GerarRelatórioPdf(Guid campanhaId)
         {
@@ -474,8 +368,7 @@ namespace VaquinhaAnimal.App.V1.Controllers
             return CustomResponse();
         }
 
-        static void CriarCelulaTexto(PdfPTable tabela, string texto, int alinhamentoHorz = PdfPCell.ALIGN_LEFT,
-                                                 bool negrito = false, bool italico = false, int tamanhoFonte = 10, int alturaCelula = 25)
+        static void CriarCelulaTexto(PdfPTable tabela, string texto, int alinhamentoHorz = PdfPCell.ALIGN_LEFT, bool negrito = false, bool italico = false, int tamanhoFonte = 10, int alturaCelula = 25)
         {
             int estilo = Font.NORMAL;
 
@@ -509,6 +402,113 @@ namespace VaquinhaAnimal.App.V1.Controllers
             tabela.AddCell(celula);
         }
 
+        [AllowAnonymous]
+        [HttpGet("comprovante-pdf/{doacaoId:guid}")]
+        public async Task<ActionResult> GerarComprovantePdf(Guid doacaoId)
+        {
+            #region PEGANDO DOAÇÃO
+            // PEGAR DOACOES DA CAMPANHA ENVIADA
+            var doacao = await _doacaoRepository.GetDonationsWithCampaignAsync(doacaoId);
+
+            if (doacao == null)
+            {
+                NotificarErro("Doação não encontrada");
+                return CustomResponse();
+            }
+            #endregion
+
+            // Create a memory stream to hold the PDF
+            MemoryStream ms = new MemoryStream();
+
+            // CONFIGURAÇÃO DO DOCUMENTO
+            var pxPorMm = 72 / 25.2F;
+            var pdf = new Document(PageSize.A4.Rotate(), 15 * pxPorMm, 15 * pxPorMm, 15 * pxPorMm, 20 * pxPorMm);
+            var writer = PdfWriter.GetInstance(pdf, ms);
+            pdf.Open();
+
+            #region DOCUMENTO EDITADO
+            // ADICIONANDO TÍTULO
+            var fonteTitulo = new Font(fonteBase, 28, Font.NORMAL, BaseColor.Black);
+            var titulo = new Paragraph("Comprovante de Doação\n\n", fonteTitulo);
+            titulo.Alignment = Element.ALIGN_LEFT;
+            titulo.SpacingAfter = 10;
+            pdf.Add(titulo);
+
+            // ADICIONANDO A LOGOMARCA
+            var pathImagem = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/logomarca.png");
+            if (System.IO.File.Exists(pathImagem))
+            {
+                Image logo = Image.GetInstance(pathImagem);
+                float razaoLarguraAltura = logo.Width / logo.Height;
+                float alturaLogo = 60;
+                float larguraLogo = alturaLogo * razaoLarguraAltura;
+                logo.ScaleToFit(larguraLogo, alturaLogo);
+                var margemEsquerda = pdf.PageSize.Width - pdf.RightMargin - larguraLogo;
+                var margemTopo = pdf.PageSize.Height - pdf.TopMargin - 54;
+                logo.SetAbsolutePosition(margemEsquerda, margemTopo);
+                writer.DirectContent.AddImage(logo, false);
+            }
+
+            // ADICIONANDO A TABELA
+            var tabela = new PdfPTable(4);
+            float[] largurasColunas = { 0.5f, 1.5f, 1.0f, 1.2f };
+            tabela.SetWidths(largurasColunas);
+            tabela.DefaultCell.BorderWidth = 0;
+            tabela.WidthPercentage = 100;
+
+            // ADICIONAR TÍTULOS
+            CriarCelulaTexto(tabela, "Data", PdfPCell.ALIGN_LEFT, true);
+            CriarCelulaTexto(tabela, "Campanha", PdfPCell.ALIGN_LEFT, true);
+            CriarCelulaTexto(tabela, "Valor Doado", PdfPCell.ALIGN_CENTER, true);
+            CriarCelulaTexto(tabela, "Forma de Pagamento", PdfPCell.ALIGN_CENTER, true);
+
+            CriarCelulaTexto(tabela, doacao.Data.ToString("dd/MM/yyyy"), PdfPCell.ALIGN_LEFT);
+            CriarCelulaTexto(tabela, doacao.Campanha.Titulo, PdfPCell.ALIGN_LEFT);
+            CriarCelulaTexto(tabela, "R$ " + doacao.Valor.ToString(), PdfPCell.ALIGN_CENTER);
+
+            if (doacao.FormaPagamento == "billing")
+            {
+                CriarCelulaTexto(tabela, "Boleto", PdfPCell.ALIGN_CENTER);
+            }
+            else if (doacao.FormaPagamento == "pix")
+            {
+                CriarCelulaTexto(tabela, "PIX", PdfPCell.ALIGN_CENTER);
+            }
+            else if (doacao.FormaPagamento == "credit_card")
+            {
+                CriarCelulaTexto(tabela, "Cartão de Crédito", PdfPCell.ALIGN_CENTER);
+            }
+
+            pdf.Add(tabela);
+
+            //ADICIONAR CNPJ
+            var fonteDireitosReservados = new Font(fonteBase, 9, Font.NORMAL, BaseColor.Black);
+            Paragraph copyright = new Paragraph("© 2023 Direitos Reservados - Vaquinha Animal - CNPJ: 48.173.612/0001-02 - Grupo Doadores Especiais.", fonteDireitosReservados);
+            PdfPTable footerTbl = new PdfPTable(1);
+            footerTbl.TotalWidth = 500;
+            PdfPCell cell = new PdfPCell(copyright);
+            cell.Border = 1;
+            footerTbl.AddCell(cell);
+            footerTbl.WriteSelectedRows(0, -1, 30, 30, writer.DirectContent);
+            #endregion
+
+            // FECHANDO O PDF
+            pdf.Close();
+            writer.Close();
+
+            // Set the response content type
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            response.Content = new ByteArrayContent(ms.ToArray());
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+
+            // Set the content disposition header for download
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = "Comprovante.pdf"
+            };
+
+            return File(ms.ToArray(), "application/pdf");
+        }
         #endregion
     }
 }

@@ -29,7 +29,7 @@
           <div class="causes-item causes-item--primary">
             <div class="causes-item__body">
               <div class="causes-item__top">
-                <h6 class="causes-item__title" style="text-align: center;"> <a href="cause-details.html" >{{artigo.titulo}}</a></h6>
+                <h6 class="causes-item__title" style="text-align: center;"> <a [routerLink]="['/artigos/detalhes', artigo.url_artigo]">{{artigo.titulo}}</a></h6>
                 <p style="text-align: left; font-size: 12px;">Escrito por {{artigo.escrito_por}}</p>
               </div>
               <div class="causes-item__img">

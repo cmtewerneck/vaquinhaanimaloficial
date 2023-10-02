@@ -82,11 +82,20 @@ export class MinhasDoacoesComponent implements OnInit {
   }
 
   exportToPdf(doacaoId: string) {
-    this.doacaoService.exportToPdf(doacaoId).subscribe(res => {
-        console.log(res);
+    this.doacaoService.exportToPdf(doacaoId).subscribe(response => {
+        console.log(response);
+
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'Comprovante.pdf';
+        link.click();
+        window.URL.revokeObjectURL(url);
+
     }, error => {
         console.log(error);
     });
-}
+  }  
 
 }

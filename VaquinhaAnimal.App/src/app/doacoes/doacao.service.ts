@@ -25,7 +25,9 @@ export class DoacaoService extends BaseService {
 
   exportToPdf(doacaoId: string) {
     return this.http
-        .get(this.urlServiceV1 + 'doacoes/comprovante-pdf/' + doacaoId);
-  }
+        .get(this.urlServiceV1 + 'doacoes/comprovante-pdf/' + doacaoId, { responseType: 'blob' })
+        .pipe(
+          catchError(super.serviceError));
+  }    
 
 }
