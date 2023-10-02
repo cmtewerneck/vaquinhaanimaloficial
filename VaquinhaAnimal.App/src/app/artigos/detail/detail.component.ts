@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageUtils } from 'src/app/_utils/localStorage';
 import { Artigo } from '../model/Artigo';
@@ -7,7 +7,8 @@ import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-detail',
-  templateUrl: './detail.component.html'
+  templateUrl: './detail.component.html',
+  encapsulation: ViewEncapsulation.None,
 })
 export class DetailComponent implements OnInit {
   
