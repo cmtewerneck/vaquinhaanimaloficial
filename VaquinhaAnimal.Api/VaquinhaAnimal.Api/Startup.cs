@@ -1,12 +1,15 @@
-using VaquinhaAnimal.Api.Configuration;
-using VaquinhaAnimal.Api.Configurations;
-using VaquinhaAnimal.Data.Context;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using VaquinhaAnimal.Api.Configuration;
+using VaquinhaAnimal.Api.Configurations;
+using VaquinhaAnimal.Data.Context;
 
 namespace VaquinhaAnimal.Api
 {
@@ -33,13 +36,17 @@ namespace VaquinhaAnimal.Api
             services.AddLoggingConfig(Configuration);
             services.ResolveDependencies();
             services.AddSignalR(); // TESTE SIGNALR
+            services.AddHangfire(op => op.UseMemoryStorage());
+            services.AddHangfireServer();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, IBackgroundJobClient backgroundJobs)
         {
             app.UseApiConfig(env);
             app.UseSwaggerConfig(provider);
             app.UseLoggingConfiguration();
+            app.UseHangfireDashboard();
+            RecurringJob.AddOrUpdate(() => Console.WriteLine(""), Cron.Minutely);
         }
     }
 }

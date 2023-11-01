@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -78,6 +79,7 @@ namespace VaquinhaAnimal.Api.Configurations
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<SignalRHub>("/pix-response");
+                endpoints.MapHangfireDashboard();
             });
 
             return app;
