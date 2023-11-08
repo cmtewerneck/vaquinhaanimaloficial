@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using VaquinhaAnimal.App.V1.Controllers;
 
 namespace VaquinhaAnimal.Api.Configurations
 {

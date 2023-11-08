@@ -79,7 +79,7 @@ namespace VaquinhaAnimal.Api.Configurations
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<SignalRHub>("/pix-response");
-                endpoints.MapHangfireDashboard();
+                //endpoints.MapHangfireDashboard();
             });
 
             return app;
