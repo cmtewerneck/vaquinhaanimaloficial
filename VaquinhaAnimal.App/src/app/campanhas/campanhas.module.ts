@@ -27,6 +27,7 @@ import { ListaAdminComponent } from './lista-admin/listaAdmin.component';
 import { CampanhaAdminGuard } from './campanha.admin.guard';
 import { CampanhaEditGuard } from './campanha.edit.guard';
 import { EditComponent } from './edit/edit.component';
+import { TextFormatPipe } from './textFormat.pipe';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -60,6 +61,7 @@ registerLocaleData(localePt);
     DetailComponent,
     MinhasCampanhasComponent,
     SafePipe,
+    TextFormatPipe,
     StatusCampanhaPipe,
     TagCampanhaPipe
   ],
