@@ -19,8 +19,17 @@ namespace VaquinhaAnimal.Domain.Services
         public async Task<bool> Adicionar(Adocao adocao)
         {
             if (!ExecutarValidacao(new AdocaoValidation(), adocao)) return false;
-
-            await _adocaoRepository.Insert(adocao);
+            try
+            {
+                await _adocaoRepository.Insert(adocao);
+            }
+            catch (Exception ex)
+            {
+                Notificar("dsdasad " + ex);
+                throw;
+            }
+            
+            //await _adocaoRepository.Insert(adocao);
             return true;
         }
 
